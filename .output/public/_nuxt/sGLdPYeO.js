@@ -1,0 +1,1 @@
+import{d as n,h as o}from"./nDu8kgCK.js";const e=n({name:"DocumentDrivenNotFound",render(){return o("div","Document not found")}}),m=Object.assign(e,{__name:"DocumentDrivenNotFound"});export{m as default};

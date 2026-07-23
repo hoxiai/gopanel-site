@@ -1,0 +1,2 @@
+import{useRouter as e,useRoute as t}from"vue-router";import{g as l}from"./server.mjs";const useLocaleRouter=()=>{const o=e();t();const a=l(),localePath=e=>{const t=e.startsWith("/")?e:`/${e}`;return"en"===a.locale.value||t.startsWith(`/${a.locale.value}`)?t:"/"===t?`/${a.locale.value}`:`/${a.locale.value}${t}`};return{localePush:e=>o.push(localePath(e)),localePath:localePath}};export{useLocaleRouter as u};
+//# sourceMappingURL=useLocaleRouter-Bmu-7Nxu.mjs.map

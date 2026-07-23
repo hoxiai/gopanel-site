@@ -1,0 +1,1 @@
+{"version":3,"file":"useLocaleRouter-Bmu-7Nxu.mjs","sources":["../../../../node_modules/.cache/nuxt/.nuxt/dist/server/_nuxt/useLocaleRouter-Bmu-7Nxu.js"],"names":["useLocaleRouter","router","useRouter","useRoute","i18n","useI18n","localePath","path","normalizedPath","startsWith","locale","value","localePush","push"],"mappings":"","x_google_ignoreList":[0]}

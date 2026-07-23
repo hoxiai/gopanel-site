@@ -1,0 +1,1 @@
+{"version":3,"file":"usePagination-BQLeF0Hc.mjs","sources":["../../../../node_modules/.cache/nuxt/.nuxt/dist/server/_nuxt/usePagination-BQLeF0Hc.js"],"names":["usePagination","defaultPageSize","page","ref","pageSize","onPageChange","async","val","refreshCallback","value"],"mappings":"","x_google_ignoreList":[0]}

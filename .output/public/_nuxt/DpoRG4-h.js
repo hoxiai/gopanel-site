@@ -1,0 +1,1 @@
+import{g as u,ar as l,af as n}from"./DccbQD5W.js";const i=()=>{const a=l();n();const t=u(),s=e=>a.push(r(e)),r=e=>{const o=e.startsWith("/")?e:`/${e}`;return t.locale.value!=="en"&&!o.startsWith(`/${t.locale.value}`)?o==="/"?`/${t.locale.value}`:`/${t.locale.value}${o}`:o};return{localePush:s,localePath:r}};export{i as u};

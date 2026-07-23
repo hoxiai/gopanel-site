@@ -1,0 +1,1 @@
+{"version":3,"file":"external.mjs","sources":["../../../../../../server/api/proxy/external.ts"],"names":["external","defineEventHandler","async","event","proxyExternalRequest","requireSession","proxyLabel","userAgent"],"mappings":"g8BAGA,MAAAA,EAAeC,EAAmBC,MAAOC,SAC1BC,EAAqBD,EAAO,CACvCE,gBAAgB,EAChBC,WAAY,QACZC,UAAW"}

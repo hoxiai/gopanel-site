@@ -1,0 +1,1 @@
+{"version":3,"file":"gateway-url.get.mjs","sources":["../../../../../../server/api/proxy/gateway-url.get.ts"],"names":["gatewayUrl_get","defineEventHandler","async","url","getAIGatewayUrl"],"mappings":"g8BAGA,MAAAA,EAAeC,EAAmBC,UAEzB,CAAEC,UADSC"}

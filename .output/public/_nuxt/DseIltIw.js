@@ -1,1 +1,0 @@
-import{_ as o}from"./DlAUqK2U.js";import{af as n,F as r,a5 as s}from"./nDu8kgCK.js";const t={};function a(e,c){return n(),r("code",null,[s(e.$slots,"default")])}const f=Object.assign(o(t,[["render",a]]),{__name:"ProseCodeInline"});export{f as default};

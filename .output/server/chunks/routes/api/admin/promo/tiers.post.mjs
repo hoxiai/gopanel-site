@@ -1,2 +1,67 @@
-import{d as r,c as t,r as i,e as o,b as e,a9 as m}from"../../../../nitro/nitro.mjs";import{eq as p}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const s=r(async r=>{const s=t(r),l=await i(r),n=Number((null==l?void 0:l.id)||0),d={code:String((null==l?void 0:l.code)||"").trim(),name:String((null==l?void 0:l.name)||"").trim(),roleScope:String((null==l?void 0:l.roleScope)||"agent").trim(),level:Number((null==l?void 0:l.level)||1),discountRate:Number((null==l?void 0:l.discountRate)||1),salesThreshold:Number((null==l?void 0:l.salesThreshold)||0),isFixed:!0===(null==l?void 0:l.isFixed),isActive:!1!==(null==l?void 0:l.isActive),description:(null==l?void 0:l.description)?String(l.description):null,updatedAt:new Date};if(!d.code||!d.name)throw o({statusCode:400,statusMessage:"zh"===s?"code 和 name 必填":"code and name are required"});if(n>0)return await e.update(m).set(d).where(p(m.id,n)),{ok:!0,id:n};const a=await e.insert(m).values({...d,createdAt:new Date}).returning();return a[0]||a});export{s as default};
-//# sourceMappingURL=tiers.post.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, e as createError, b as db, aF as promoAgentTiers } from '../../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const tiers_post = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const body = await readBody(event);
+  const id = Number((body == null ? void 0 : body.id) || 0);
+  const payload = {
+    code: String((body == null ? void 0 : body.code) || "").trim(),
+    name: String((body == null ? void 0 : body.name) || "").trim(),
+    roleScope: String((body == null ? void 0 : body.roleScope) || "agent").trim(),
+    level: Number((body == null ? void 0 : body.level) || 1),
+    discountRate: Number((body == null ? void 0 : body.discountRate) || 1),
+    salesThreshold: Number((body == null ? void 0 : body.salesThreshold) || 0),
+    isFixed: (body == null ? void 0 : body.isFixed) === true,
+    isActive: (body == null ? void 0 : body.isActive) !== false,
+    description: (body == null ? void 0 : body.description) ? String(body.description) : null,
+    updatedAt: /* @__PURE__ */ new Date()
+  };
+  if (!payload.code || !payload.name) {
+    throw createError({ statusCode: 400, statusMessage: locale === "zh" ? "code \u548C name \u5FC5\u586B" : "code and name are required" });
+  }
+  if (id > 0) {
+    await db.update(promoAgentTiers).set(payload).where(eq(promoAgentTiers.id, id));
+    return { ok: true, id };
+  }
+  const inserted = await db.insert(promoAgentTiers).values({
+    ...payload,
+    createdAt: /* @__PURE__ */ new Date()
+  }).returning();
+  return inserted[0] || inserted;
+});
+
+export { tiers_post as default };

@@ -1,2 +1,102 @@
-import{b4 as t,g as r,b as e,W as i}from"../../nitro/nitro.mjs";import{count as o,and as p,eq as m,desc as s}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const a=t(async t=>{var a;const l=r(t),d=l.type||"blog",n=Math.max(parseInt(l.page)||1,1),u=Math.min(Math.max(parseInt(l.pageSize)||12,1),100),c=(n-1)*u,g=(null==(a=(await e.select({value:o()}).from(i).where(p(m(i.isActive,!0),m(i.type,d))))[0])?void 0:a.value)||0;return{data:await e.select({id:i.id,key:i.key,sort:i.sort,slug:i.slug,title:i.title,description:i.description,imageUrl:i.imageUrl,type:i.type,views:i.views,createdAt:i.createdAt,updatedAt:i.updatedAt,metaData:i.metaData}).from(i).where(p(m(i.isActive,!0),m(i.type,d))).orderBy(s(i.createdAt)).limit(u).offset(c),total:g,page:n,pageSize:u}},{maxAge:60,swr:!0,name:"posts-list",getKey:t=>{const e=r(t);return`posts-${e.type||"blog"}-page-${e.page||1}-size-${e.pageSize||12}`}});export{a as default};
-//# sourceMappingURL=index.get.mjs.map
+import { bZ as defineCachedEventHandler, g as getQuery, ao as posts, b as db } from '../../nitro/nitro.mjs';
+import { eq, or, like, and, count, desc, asc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const index_get = defineCachedEventHandler(async (event) => {
+  var _a, _b;
+  const query = getQuery(event);
+  const rawType = query.type;
+  const postKey = (_a = query.key) == null ? void 0 : _a.trim();
+  const order = query.order;
+  const includeContent = query.include_content === "1" || query.include_content === "true" || query.content === "1" || query.content === "true";
+  const page = Math.max(parseInt(query.page) || 1, 1);
+  const pageSize = Math.min(Math.max(parseInt(query.pageSize) || 12, 1), 100);
+  const offset = (page - 1) * pageSize;
+  const conditions = [eq(posts.isActive, true)];
+  if (rawType) {
+    conditions.push(eq(posts.type, rawType));
+  } else if (!postKey) {
+    conditions.push(eq(posts.type, "blog"));
+  }
+  if (postKey) {
+    conditions.push(or(eq(posts.key, postKey), like(posts.key, `${postKey}%`)));
+  }
+  const whereClause = and(...conditions);
+  const totalResult = await db.select({ value: count() }).from(posts).where(whereClause);
+  const total = ((_b = totalResult[0]) == null ? void 0 : _b.value) || 0;
+  let orderClause = desc(posts.createdAt);
+  if (order === "sort_asc") {
+    orderClause = asc(posts.sort);
+  } else if (order === "sort_desc") {
+    orderClause = desc(posts.sort);
+  } else if (order === "asc") {
+    orderClause = asc(posts.createdAt);
+  }
+  const selectFields = {
+    id: posts.id,
+    key: posts.key,
+    sort: posts.sort,
+    slug: posts.slug,
+    title: posts.title,
+    description: posts.description,
+    imageUrl: posts.imageUrl,
+    type: posts.type,
+    views: posts.views,
+    createdAt: posts.createdAt,
+    updatedAt: posts.updatedAt,
+    metaData: posts.metaData
+  };
+  if (includeContent) {
+    selectFields.content = posts.content;
+  }
+  const result = await db.select(selectFields).from(posts).where(whereClause).orderBy(orderClause).limit(pageSize).offset(offset);
+  return {
+    data: result,
+    total,
+    page,
+    pageSize
+  };
+}, {
+  maxAge: 60,
+  // cache for 60 seconds
+  swr: true,
+  name: "posts-list",
+  getKey: (event) => {
+    const query = getQuery(event);
+    return `posts-${query.type || ""}-k-${query.key || ""}-c-${query.include_content || query.content || "0"}-o-${query.order || ""}-page-${query.page || 1}-size-${query.pageSize || 12}`;
+  }
+});
+
+export { index_get as default };

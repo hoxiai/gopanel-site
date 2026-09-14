@@ -1,2 +1,41 @@
-import{d as r,aa as t}from"../../../nitro/nitro.mjs";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"drizzle-orm";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const o=r(async()=>({code:0,data:await t()}));export{o as default};
-//# sourceMappingURL=scheduler.get.mjs.map
+import { d as defineEventHandler, aG as listSchedulerStatus } from '../../../nitro/nitro.mjs';
+import 'node:crypto';
+import 'drizzle-orm';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const scheduler_get = defineEventHandler(async () => {
+  return { code: 0, data: await listSchedulerStatus() };
+});
+
+export { scheduler_get as default };

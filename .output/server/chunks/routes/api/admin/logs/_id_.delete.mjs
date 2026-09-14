@@ -1,2 +1,51 @@
-import{d as r,c as t,f as o,e as i,b as e,I as m}from"../../../../nitro/nitro.mjs";import{eq as p}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const s=r(async r=>{const s=t(r),a=o(r,"id");if(!a)throw i({statusCode:400,message:"zh"===s?"缺少日志 ID":"Missing log ID"});try{return await e.delete(m).where(p(m.id,parseInt(a))),{success:!0}}catch(r){throw i({statusCode:500,message:"zh"===s?"删除日志失败":"Failed to delete log"})}});export{s as default};
-//# sourceMappingURL=_id_.delete.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, b as db, X as logs } from '../../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const _id__delete = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const id = getRouterParam(event, "id");
+  if (!id) {
+    throw createError({ statusCode: 400, message: locale === "zh" ? "\u7F3A\u5C11\u65E5\u5FD7 ID" : "Missing log ID" });
+  }
+  try {
+    await db.delete(logs).where(eq(logs.id, parseInt(id)));
+    return { success: true };
+  } catch (error) {
+    throw createError({ statusCode: 500, message: locale === "zh" ? "\u5220\u9664\u65E5\u5FD7\u5931\u8D25" : "Failed to delete log" });
+  }
+});
+
+export { _id__delete as default };

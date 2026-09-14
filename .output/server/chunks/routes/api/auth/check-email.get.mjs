@@ -1,2 +1,65 @@
-import{d as r,c as t,g as o,e as i,b as m,u as e}from"../../../nitro/nitro.mjs";import{eq as p}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const s=r(async r=>{const s=t(r),a=o(r),{email:l}=a;if(!l)throw i({statusCode:400,message:"zh"===s?"邮箱不能为空":"Email is required"});return{success:!0,exists:(await m.select().from(e).where(p(e.email,l)).limit(1)).length>0}});export{s as default};
-//# sourceMappingURL=check-email.get.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, e as createError, bd as validateEmail, b as db, u as users } from '../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const checkEmail_get = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const query = getQuery(event);
+  const { email: rawEmail } = query;
+  if (!rawEmail || typeof rawEmail !== "string") {
+    throw createError({
+      statusCode: 400,
+      message: locale === "zh" ? "\u90AE\u7BB1\u4E0D\u80FD\u4E3A\u7A7A" : "Email is required"
+    });
+  }
+  const validation = validateEmail(rawEmail);
+  if (!validation.valid) {
+    return {
+      success: false,
+      valid: false,
+      exists: false,
+      message: locale === "zh" ? "\u90AE\u7BB1\u683C\u5F0F\u65E0\u6548" : "Invalid email format"
+    };
+  }
+  const email = validation.normalizedEmail;
+  const existingUser = await db.select().from(users).where(eq(users.email, email)).limit(1);
+  return {
+    success: true,
+    valid: true,
+    exists: existingUser.length > 0
+  };
+});
+
+export { checkEmail_get as default };

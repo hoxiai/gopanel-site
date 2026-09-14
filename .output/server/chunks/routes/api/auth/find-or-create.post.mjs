@@ -1,2 +1,108 @@
-import{d as t,c as r,r as i,e,b as a,u as o,j as s,aw as m,ax as p,ay as n,az as l,F as d,av as u}from"../../../nitro/nitro.mjs";import{eq as c}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const h=t(async t=>{const h=r(t),w=await i(t),{email:z,password:y,nickname:f,createApiToken:g=!1,apiTokenExpiresInDays:k,apiTokenName:b}=w;if(!z)throw e({statusCode:400,message:"zh"===h?"邮箱不能为空":"Email is required"});let v,q=!1;const A=await a.select().from(o).where(c(o.email,z)).limit(1);if(A.length>0)v=A[0],q=!1;else{let t=null;y&&(t=await s(y));v=(await a.insert(o).values({email:z,passwordHash:t,nickname:f||z.split("@")[0]}).returning())[0],q=!0}await a.update(o).set({lastLoginAt:new Date}).where(c(o.id,v.id)),await m(t,{visitorId:p(t),userId:v.id,eventName:"auth",eventAction:q?"register":"login"});let j;await n()&&(j=l(),await a.update(o).set({currentSessionId:j}).where(c(o.id,v.id))),await d(t,{user:{id:v.id,email:v.email,nickname:v.nickname,avatarUrl:v.avatarUrl},admin:null,sessionId:j});let x=null;if(g){x=function(){const t=crypto.getRandomValues(new Uint8Array(32));return`aps_${Array.from(t,t=>t.toString(16).padStart(2,"0")).join("")}`}();let t=null;k&&(t=new Date,t.setDate(t.getDate()+Number(k))),await a.insert(u).values({userId:v.id,token:x,name:b||"Auto-generated",expiresAt:t})}return{success:!0,created:q,user:{id:v.id,email:v.email,nickname:v.nickname,avatarUrl:v.avatarUrl},apiToken:x}});export{h as default};
-//# sourceMappingURL=find-or-create.post.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, e as createError, b as db, u as users, j as hashPassword, a5 as emitEvent } from '../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const findOrCreate_post = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const body = await readBody(event);
+  const { email, password, nickname, createApiToken = false } = body;
+  if (!email) {
+    throw createError({
+      statusCode: 400,
+      message: locale === "zh" ? "\u90AE\u7BB1\u4E0D\u80FD\u4E3A\u7A7A" : "Email is required"
+    });
+  }
+  if (createApiToken) {
+    throw createError({
+      statusCode: 403,
+      message: locale === "zh" ? "\u6B64\u8EAB\u4EFD\u89E3\u6790\u63A5\u53E3\u4E0D\u80FD\u521B\u5EFA API Token" : "This identity endpoint cannot create API tokens"
+    });
+  }
+  let user;
+  let created = false;
+  const existingUsers = await db.select().from(users).where(eq(users.email, email)).limit(1);
+  if (existingUsers.length > 0) {
+    user = existingUsers[0];
+    created = false;
+  } else {
+    let passwordHash = null;
+    if (password) {
+      passwordHash = await hashPassword(password);
+    }
+    try {
+      const newUser = await db.insert(users).values({
+        email,
+        passwordHash,
+        nickname: nickname || email.split("@")[0]
+      }).returning();
+      user = newUser[0];
+      created = true;
+    } catch (err) {
+      const racedUsers = await db.select().from(users).where(eq(users.email, email)).limit(1);
+      if (racedUsers.length === 0) {
+        throw err;
+      }
+      console.warn(`[find-or-create] concurrent insert for ${email}, resolved to existing user #${racedUsers[0].id}`);
+      user = racedUsers[0];
+      created = false;
+    }
+  }
+  if (created && user) {
+    try {
+      await emitEvent("user.registered", {
+        id: user.id,
+        userId: user.id,
+        email: user.email,
+        nickname: user.nickname,
+        source: "find_or_create"
+      });
+    } catch (eventErr) {
+      console.error(`[find-or-create] user.registered event failed for #${user.id}:`, eventErr);
+    }
+  }
+  return {
+    success: true,
+    created,
+    user: {
+      id: user.id,
+      email: user.email,
+      nickname: user.nickname,
+      avatarUrl: user.avatarUrl
+    },
+    apiToken: null
+  };
+});
+
+export { findOrCreate_post as default };

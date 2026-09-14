@@ -1,2 +1,78 @@
-import{d as e,c as o,e as t,f as r,b as i,l as m,s}from"../../../../../nitro/nitro.mjs";import{eq as a}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const n=e(async e=>{const n="zh"===o(e)?{tokenManageViaToken:"请使用登录会话管理系统 Token，不能用 Token 本身操作",idRequired:"Token ID 不能为空",notFound:"Token 不存在",revoked:"系统 Token 已吊销",failed:"吊销系统 Token 失败"}:{tokenManageViaToken:"Manage system tokens from a logged-in session, not via another token",idRequired:"Token ID is required",notFound:"Token not found",revoked:"System token revoked",failed:"Failed to revoke system token"};if(e.context.authenticatedFromToken)throw t({statusCode:403,message:n.tokenManageViaToken});try{const o=Number(r(e,"id"));if(!o)throw t({statusCode:400,message:n.idRequired});const p=await i.select({id:m.id,name:m.name}).from(m).where(a(m.id,o)).limit(1);if(0===p.length)throw t({statusCode:404,message:n.notFound});return await i.update(m).set({revoked:!0}).where(a(m.id,o)),s(e,{summary:`Revoked system token "${p[0].name||p[0].id}"`,details:{id:p[0].id,name:p[0].name}}),{code:0,message:n.revoked}}catch(e){throw t({statusCode:e.statusCode||500,message:e.message||n.failed})}});export{n as default};
-//# sourceMappingURL=_id_.delete.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, e as createError, f as getRouterParam, b as db, l as adminTokens, s as setAuditMeta } from '../../../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const _id__delete = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const messages = locale === "zh" ? {
+    tokenManageViaToken: "\u8BF7\u4F7F\u7528\u767B\u5F55\u4F1A\u8BDD\u7BA1\u7406\u7CFB\u7EDF Token\uFF0C\u4E0D\u80FD\u7528 Token \u672C\u8EAB\u64CD\u4F5C",
+    idRequired: "Token ID \u4E0D\u80FD\u4E3A\u7A7A",
+    notFound: "Token \u4E0D\u5B58\u5728",
+    revoked: "\u7CFB\u7EDF Token \u5DF2\u540A\u9500",
+    failed: "\u540A\u9500\u7CFB\u7EDF Token \u5931\u8D25"
+  } : {
+    tokenManageViaToken: "Manage system tokens from a logged-in session, not via another token",
+    idRequired: "Token ID is required",
+    notFound: "Token not found",
+    revoked: "System token revoked",
+    failed: "Failed to revoke system token"
+  };
+  if (event.context.authenticatedFromToken) {
+    throw createError({ statusCode: 403, message: messages.tokenManageViaToken });
+  }
+  try {
+    const id = Number(getRouterParam(event, "id"));
+    if (!id) {
+      throw createError({ statusCode: 400, message: messages.idRequired });
+    }
+    const existing = await db.select({ id: adminTokens.id, name: adminTokens.name }).from(adminTokens).where(eq(adminTokens.id, id)).limit(1);
+    if (existing.length === 0) {
+      throw createError({ statusCode: 404, message: messages.notFound });
+    }
+    await db.update(adminTokens).set({ revoked: true }).where(eq(adminTokens.id, id));
+    setAuditMeta(event, {
+      summary: `Revoked system token "${existing[0].name || existing[0].id}"`,
+      details: { id: existing[0].id, name: existing[0].name }
+    });
+    return { code: 0, message: messages.revoked };
+  } catch (error) {
+    throw createError({
+      statusCode: error.statusCode || 500,
+      message: error.message || messages.failed
+    });
+  }
+});
+
+export { _id__delete as default };

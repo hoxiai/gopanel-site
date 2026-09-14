@@ -1,2 +1,78 @@
-import{aA as r,aB as t,aC as i,aD as o}from"../../../nitro/nitro.mjs";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"drizzle-orm";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const e=r({config:{emailRequired:!0},async onSuccess(r,{user:i,tokens:o}){let e=i.email||"",m=!1;try{const r=await $fetch("https://api.github.com/user/emails",{headers:{"User-Agent":"apay-oauth",Authorization:`token ${o.access_token}`}}),t=r.find(r=>r.primary)||r.find(r=>r.verified);t?(e=t.email,m=!0===t.verified):e&&(m=r.some(r=>r.email===e&&r.verified))}catch{m=!1}return t(r,"github",{id:String(i.id),email:e,name:i.name||i.login,avatar:i.avatar_url||"",emailVerified:m})},onError:async(r,t)=>(await i.error(`GitHub OAuth error: ${t.message}`,{source:"github_oauth",details:{error:t}}),o(r,"/auth/login?error=github_auth_failed"))});export{e as default};
-//# sourceMappingURL=github.get.mjs.map
+import { bm as defineOAuthGitHubEventHandler, bn as handleOAuthLogin, bo as logger, bp as sendLocalizedRedirect } from '../../../nitro/nitro.mjs';
+import 'node:crypto';
+import 'drizzle-orm';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const github_get = defineOAuthGitHubEventHandler({
+  config: {
+    emailRequired: true
+  },
+  async onSuccess(event, { user, tokens }) {
+    let email = user.email || "";
+    let emailVerified = false;
+    try {
+      const emails = await $fetch(
+        "https://api.github.com/user/emails",
+        { headers: { "User-Agent": "apay-oauth", Authorization: `token ${tokens.access_token}` } }
+      );
+      const primary = emails.find((e) => e.primary) || emails.find((e) => e.verified);
+      if (primary) {
+        email = primary.email;
+        emailVerified = primary.verified === true;
+      } else if (email) {
+        emailVerified = emails.some((e) => e.email === email && e.verified);
+      }
+    } catch {
+      emailVerified = false;
+    }
+    return handleOAuthLogin(event, "github", {
+      id: String(user.id),
+      // GitHub returns id as a number, we need it as a string
+      email,
+      name: user.name || user.login,
+      // Fallback to login name if real name is not set
+      avatar: user.avatar_url || "",
+      emailVerified
+    });
+  },
+  async onError(event, error) {
+    await logger.error(`GitHub OAuth error: ${error.message}`, {
+      source: "github_oauth",
+      details: { error }
+    });
+    return sendLocalizedRedirect(event, "/auth/login?error=github_auth_failed");
+  }
+});
+
+export { github_get as default };

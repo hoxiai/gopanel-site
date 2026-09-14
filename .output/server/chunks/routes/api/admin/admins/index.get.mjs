@@ -1,2 +1,75 @@
-import{d as r,c as t,e as o,b as e,l as i,h as m,A as s,k as p}from"../../../../nitro/nitro.mjs";import{eq as a,desc as n}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const d=r(async r=>{const d=t(r);if(r.context.authenticatedFromToken)throw o({statusCode:403,message:"zh"===d?"请使用登录会话管理系统 Token，不能用 Token 本身操作":"Manage system tokens from a logged-in session, not via another token"});try{const r=await e.select({id:i.id,name:i.name,permissions:i.permissions,adminId:i.adminId,adminUsername:m.username,lastUsedAt:i.lastUsedAt,expiresAt:i.expiresAt,revoked:i.revoked,createdAt:i.createdAt}).from(i).leftJoin(m,a(i.adminId,m.id)).orderBy(n(i.createdAt)),t=new Set(s.map(r=>r.code));return{data:r.map(r=>{const o=Array.isArray(r.permissions)?r.permissions:null,e=new Set((o||[]).map(r=>r.split(":")[0]).filter(r=>t.has(r))),i=p(o)?{all:!0,count:s.length}:{all:!1,count:e.size};return{...r,permissionSummary:i}})}}catch(r){throw o({statusCode:500,message:r.message||("zh"===d?"获取系统 Token 列表失败":"Failed to fetch system tokens")})}});export{d as default};
-//# sourceMappingURL=index.get.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, e as createError, b as db, l as adminTokens, h as admins, A as ADMIN_PERMISSIONS, k as hasAllPermissions } from '../../../../nitro/nitro.mjs';
+import { eq, desc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const index_get = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  if (event.context.authenticatedFromToken) {
+    throw createError({
+      statusCode: 403,
+      message: locale === "zh" ? "\u8BF7\u4F7F\u7528\u767B\u5F55\u4F1A\u8BDD\u7BA1\u7406\u7CFB\u7EDF Token\uFF0C\u4E0D\u80FD\u7528 Token \u672C\u8EAB\u64CD\u4F5C" : "Manage system tokens from a logged-in session, not via another token"
+    });
+  }
+  try {
+    const rows = await db.select({
+      id: adminTokens.id,
+      name: adminTokens.name,
+      permissions: adminTokens.permissions,
+      adminId: adminTokens.adminId,
+      adminUsername: admins.username,
+      lastUsedAt: adminTokens.lastUsedAt,
+      expiresAt: adminTokens.expiresAt,
+      revoked: adminTokens.revoked,
+      createdAt: adminTokens.createdAt
+    }).from(adminTokens).leftJoin(admins, eq(adminTokens.adminId, admins.id)).orderBy(desc(adminTokens.createdAt));
+    const moduleCodeSet = new Set(ADMIN_PERMISSIONS.map((p) => p.code));
+    const data = rows.map((r) => {
+      const perms = Array.isArray(r.permissions) ? r.permissions : null;
+      const grantedModules = new Set(
+        (perms || []).map((p) => p.split(":")[0]).filter((base) => moduleCodeSet.has(base))
+      );
+      const summary = hasAllPermissions(perms) ? { all: true, count: ADMIN_PERMISSIONS.length } : { all: false, count: grantedModules.size };
+      return { ...r, permissionSummary: summary };
+    });
+    return { data };
+  } catch (error) {
+    throw createError({
+      statusCode: 500,
+      message: error.message || (locale === "zh" ? "\u83B7\u53D6\u7CFB\u7EDF Token \u5217\u8868\u5931\u8D25" : "Failed to fetch system tokens")
+    });
+  }
+});
+
+export { index_get as default };

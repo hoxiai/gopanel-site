@@ -1,2 +1,80 @@
-import{d as e,c as r,g as i,e as t,b as o,av as s,aN as m,u as a,aD as p}from"../../../nitro/nitro.mjs";import{eq as n}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const d=e(async e=>{const d="zh"===r(e)?{missingToken:"缺少验证令牌",invalidToken:"验证令牌无效或已过期",expiredToken:"验证链接已过期，请重新申请验证邮件。"}:{missingToken:"Missing verification token",invalidToken:"Invalid or expired verification token",expiredToken:"Verification token has expired. Please request a new verification email."},l=i(e).token;if(!l)throw t({statusCode:400,statusMessage:d.missingToken});const u=(await o.select().from(s).where(n(s.token,l)).limit(1))[0];if(!u||u.name!==m)throw t({statusCode:404,statusMessage:d.invalidToken});const h=(await o.select().from(a).where(n(a.id,u.userId)).limit(1))[0];if(!h)throw t({statusCode:404,statusMessage:d.invalidToken});if(h.emailVerifiedAt)return p(e,"/user/dashboard?verified=already");const c=new Date,f=!0===u.revoked||1===u.revoked,k=u.expiresAt&&new Date(u.expiresAt)<c;if(f||k)throw t({statusCode:410,statusMessage:d.expiredToken});return await o.update(a).set({emailVerifiedAt:c}).where(n(a.id,h.id)),await o.update(s).set({revoked:!0,lastUsedAt:c}).where(n(s.id,u.id)),p(e,"/user/dashboard?verified=success")});export{d as default};
-//# sourceMappingURL=verify-email.get.mjs.map
+import { d as defineEventHandler, g as getQuery, c as getRequestLocale, bD as normalizeSupportedLocale, bp as sendLocalizedRedirect, b as db, ba as userTokens, bb as EMAIL_VERIFY_TOKEN_NAME, u as users, aK as getUserSession, T as setUserSession } from '../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const verifyEmail_get = defineEventHandler(async (event) => {
+  const query = getQuery(event);
+  const token = query.token;
+  const rawLang = query.lang || query.locale || getRequestLocale(event);
+  const lang = normalizeSupportedLocale(rawLang);
+  if (!token) {
+    return sendLocalizedRedirect(event, "/auth/login?verified=missing", lang);
+  }
+  const tokenRows = await db.select().from(userTokens).where(eq(userTokens.token, token)).limit(1);
+  const tokenRecord = tokenRows[0];
+  if (!tokenRecord || tokenRecord.name !== EMAIL_VERIFY_TOKEN_NAME) {
+    return sendLocalizedRedirect(event, "/auth/login?verified=invalid", lang);
+  }
+  const userList = await db.select().from(users).where(eq(users.id, tokenRecord.userId)).limit(1);
+  const user = userList[0];
+  if (!user) {
+    return sendLocalizedRedirect(event, "/auth/login?verified=invalid", lang);
+  }
+  if (user.emailVerifiedAt) {
+    return sendLocalizedRedirect(event, "/auth/login?verified=already", lang);
+  }
+  const now = /* @__PURE__ */ new Date();
+  const isRevoked = tokenRecord.revoked === true || tokenRecord.revoked === 1;
+  const isExpired = tokenRecord.expiresAt && new Date(tokenRecord.expiresAt) < now;
+  if (isRevoked || isExpired) {
+    return sendLocalizedRedirect(event, "/auth/login?verified=expired", lang);
+  }
+  await db.update(users).set({ emailVerifiedAt: now }).where(eq(users.id, user.id));
+  await db.update(userTokens).set({ revoked: true, lastUsedAt: now }).where(eq(userTokens.id, tokenRecord.id));
+  const session = await getUserSession(event).catch(() => null);
+  if ((session == null ? void 0 : session.user) && Number(session.user.id) === user.id) {
+    await setUserSession(event, {
+      ...session,
+      user: {
+        ...session.user,
+        emailVerified: true,
+        emailVerifiedAt: now
+      }
+    });
+  }
+  return sendLocalizedRedirect(event, "/auth/login?verified=success", lang);
+});
+
+export { verifyEmail_get as default };

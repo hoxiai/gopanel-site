@@ -1,2 +1,114 @@
-import{d as r,c as t,b as o,P as e,r as i,e as s}from"../../../nitro/nitro.mjs";import m from"fs";import a from"path";import{a as n}from"../../../_/meta.mjs";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"drizzle-orm";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const p=r(async r=>{const p=t(r);if("GET"===r.method){const r=await o.select().from(e),t=a.resolve(process.cwd(),"payments");let i=[];m.existsSync(t)&&(i=m.readdirSync(t).filter(r=>{const o=a.join(t,r);return m.statSync(o).isDirectory()}));const s=r.map(r=>n({...r}));for(const o of i){const e=r.find(r=>r.code===o);if(e)e.hasLocalFiles=!0;else{let r="",e="",i="",p="{}";try{const s=a.join(t,o,"info.html");m.existsSync(s)&&(r=m.readFileSync(s,"utf-8"));const n=a.join(t,o,"callback.js");m.existsSync(n)&&(i=m.readFileSync(n,"utf-8"));const l=a.join(t,o,"create.js");m.existsSync(l)&&(e=m.readFileSync(l,"utf-8"));const c=a.join(t,o,"config.json");m.existsSync(c)&&(p=m.readFileSync(c,"utf-8"))}catch(r){console.error(`Error reading local plugin ${o}:`,r)}s.push(n({id:null,name:o.charAt(0).toUpperCase()+o.slice(1),code:o,iconUrl:"",isActive:!1,supportedLocales:"",configJson:p,info:r,create:e,callback:i,createdAt:new Date,isLocalOnly:!0}))}}return s}if("POST"===r.method){const t={...await i(r)};delete t.id,delete t.createdAt,delete t.isLocalOnly,delete t.hasLocalFiles,void 0===t.info&&(t.info=null),void 0===t.create&&(t.create=null),void 0===t.callback&&(t.callback=null),t.supportedLocales=String(t.supportedLocales||"").trim()||null;try{return await o.insert(e).values(t).returning()}catch(r){throw console.error("Database insert error:",r),s({statusCode:500,message:"zh"===p?`数据库写入失败：${r.message}`:"Failed query: "+r.message})}}});export{p as default};
-//# sourceMappingURL=index3.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, b as db, ak as paymentMethods, am as applyLocalPaymentPluginDefaults, r as readBody, e as createError } from '../../../nitro/nitro.mjs';
+import fs from 'fs';
+import path from 'path';
+import 'node:crypto';
+import 'drizzle-orm';
+import 'crypto';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const index = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  if (event.method === "GET") {
+    const dbMethods = await db.select().from(paymentMethods);
+    const paymentsDir = path.resolve(process.cwd(), "payments");
+    let localPlugins = [];
+    if (fs.existsSync(paymentsDir)) {
+      localPlugins = fs.readdirSync(paymentsDir).filter((item) => {
+        const itemPath = path.join(paymentsDir, item);
+        return fs.statSync(itemPath).isDirectory();
+      });
+    }
+    const mergedMethods = dbMethods.map((method) => applyLocalPaymentPluginDefaults({ ...method }));
+    for (const pluginCode of localPlugins) {
+      const existsInDb = dbMethods.find((m) => m.code === pluginCode);
+      if (!existsInDb) {
+        let info = "";
+        let create = "";
+        let callback = "";
+        let configJson = "{}";
+        try {
+          const infoPath = path.join(paymentsDir, pluginCode, "info.html");
+          if (fs.existsSync(infoPath)) info = fs.readFileSync(infoPath, "utf-8");
+          const callbackPath = path.join(paymentsDir, pluginCode, "callback.js");
+          if (fs.existsSync(callbackPath)) callback = fs.readFileSync(callbackPath, "utf-8");
+          const createPath = path.join(paymentsDir, pluginCode, "create.js");
+          if (fs.existsSync(createPath)) create = fs.readFileSync(createPath, "utf-8");
+          const configPath = path.join(paymentsDir, pluginCode, "config.json");
+          if (fs.existsSync(configPath)) configJson = fs.readFileSync(configPath, "utf-8");
+        } catch (e) {
+          console.error(`Error reading local plugin ${pluginCode}:`, e);
+        }
+        mergedMethods.push(applyLocalPaymentPluginDefaults({
+          id: null,
+          // Null ID indicates it's not in DB yet
+          name: pluginCode.charAt(0).toUpperCase() + pluginCode.slice(1),
+          code: pluginCode,
+          iconUrl: "",
+          isActive: false,
+          supportedLocales: "",
+          configJson,
+          info,
+          create,
+          callback,
+          createdAt: /* @__PURE__ */ new Date(),
+          isLocalOnly: true
+          // custom flag for frontend
+        }));
+      } else {
+        existsInDb.hasLocalFiles = true;
+      }
+    }
+    return mergedMethods;
+  }
+  if (event.method === "POST") {
+    const body = await readBody(event);
+    const insertData = { ...body };
+    delete insertData.id;
+    delete insertData.createdAt;
+    delete insertData.isLocalOnly;
+    delete insertData.hasLocalFiles;
+    if (insertData.info === void 0) insertData.info = null;
+    if (insertData.create === void 0) insertData.create = null;
+    if (insertData.callback === void 0) insertData.callback = null;
+    insertData.supportedLocales = String(insertData.supportedLocales || "").trim() || null;
+    try {
+      return await db.insert(paymentMethods).values(insertData).returning();
+    } catch (e) {
+      console.error("Database insert error:", e);
+      throw createError({
+        statusCode: 500,
+        message: locale === "zh" ? `\u6570\u636E\u5E93\u5199\u5165\u5931\u8D25\uFF1A${e.message}` : "Failed query: " + e.message
+      });
+    }
+  }
+});
+
+export { index as default };

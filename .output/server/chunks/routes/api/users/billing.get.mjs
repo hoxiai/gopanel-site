@@ -1,2 +1,118 @@
-import{d as t,c as r,aF as e,e as o,g as i,b as a,u as p,o as m,p as s}from"../../../nitro/nitro.mjs";import{eq as n,and as d,gte as l,ne as u,desc as c,inArray as h}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const y=t(async t=>{var y,g;const z=r(t),f=await e(t);if(!f||!f.user||!f.user.id)throw o({statusCode:401,message:"zh"===z?"未登录":"Unauthorized"});const b=f.user.id,w=i(t),v=parseInt(w.page)||1,S=parseInt(w.pageSize)||15,k=(v-1)*S,I=w.tab||"pending",q=await a.select().from(p).where(n(p.id,b)).limit(1),A=Number((null==(y=q[0])?void 0:y.CashBalance)||0)/1e8+Number((null==(g=q[0])?void 0:g.GrantBalance)||0)/1e8,D=new Date;D.setDate(D.getDate()-30);const j={available:A,frozen:0,monthlySpend:(await a.select({amount:m.amount}).from(m).where(d(n(m.userId,b),n(m.payStatus,"paid"),l(m.paidAt,D)))).reduce((t,r)=>t+Number(r.amount),0)},N="pending"===I?n(m.payStatus,"pending"):d(n(m.payStatus,"paid"),u(m.payStatus,"refunded")),x=await a.select().from(m).where(d(n(m.userId,b),N)).orderBy(c(m.createdAt)).limit(S).offset(k),B=[...new Set(x.map(t=>t.productId))],M=B.length>0?await a.select({id:s.id,name:s.name,type:s.type}).from(s).where(h(s.id,B)):[],C=new Map(M.map(t=>[t.id,t]));return{wallet:j,records:{list:x.map(t=>{const r=C.get(t.productId);let e="purchase";return"subscription"===(null==r?void 0:r.type)&&(e="subscription"),"recharge"===(null==r?void 0:r.type)&&(e="recharge"),{id:t.id,time:t.paidAt?new Date(t.paidAt).toLocaleString():new Date(t.createdAt).toLocaleString(),type:e,target:(null==r?void 0:r.name)||("zh"===z?"未知商品":"Unknown Product"),amount:Number(t.amount),status:t.payStatus,payMethod:t.payMethod||null}}),total:(await a.select({id:m.id}).from(m).where(d(n(m.userId,b),N))).length}}});export{y as default};
-//# sourceMappingURL=billing.get.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, bx as requireUserSession, e as createError, g as getQuery, c3 as getOrCreateUserWallet, b as db, b2 as userWallets, o as orders, q as aggregateOrderAccountingTotals, p as products, t as toIsoTimestamp } from '../../../nitro/nitro.mjs';
+import { eq, and, gte, ne, desc, inArray } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const billing_get = defineEventHandler(async (event) => {
+  var _a, _b, _c;
+  const locale = getRequestLocale(event);
+  const session = await requireUserSession(event);
+  if (!session || !session.user || !session.user.id) {
+    throw createError({
+      statusCode: 401,
+      message: locale === "zh" ? "\u672A\u767B\u5F55" : "Unauthorized"
+    });
+  }
+  const userId = session.user.id;
+  const query = getQuery(event);
+  const page = parseInt(query.page) || 1;
+  const limit = parseInt(query.pageSize) || 15;
+  const offset = (page - 1) * limit;
+  const tab = query.tab || "pending";
+  const walletRecord = await getOrCreateUserWallet(Number(userId));
+  const userRecord = await db.select().from(userWallets).where(eq(userWallets.id, walletRecord.id)).limit(1);
+  const cash = Number(((_a = userRecord[0]) == null ? void 0 : _a.cashBalance) || 0) / 1e8;
+  const grant = Number(((_b = userRecord[0]) == null ? void 0 : _b.grantBalance) || 0) / 1e8;
+  const availableBalance = cash + grant;
+  const thirtyDaysAgo = /* @__PURE__ */ new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const recentOrders = await db.select({
+    amount: orders.amount,
+    currency: orders.currency,
+    metaData: orders.metaData
+  }).from(orders).where(and(
+    eq(orders.userId, userId),
+    eq(orders.payStatus, "paid"),
+    gte(orders.paidAt, thirtyDaysAgo)
+  ));
+  const monthlySpendByCurrency = aggregateOrderAccountingTotals(recentOrders);
+  const monthlySpend = monthlySpendByCurrency.length === 1 ? ((_c = monthlySpendByCurrency[0]) == null ? void 0 : _c.amount) || 0 : 0;
+  const wallet = {
+    available: availableBalance,
+    frozen: 0,
+    monthlySpend,
+    monthlySpendByCurrency
+  };
+  const payStatusFilter = tab === "pending" ? eq(orders.payStatus, "pending") : and(
+    eq(orders.payStatus, "paid"),
+    ne(orders.payStatus, "refunded")
+  );
+  const records = await db.select().from(orders).where(and(
+    eq(orders.userId, userId),
+    payStatusFilter
+  )).orderBy(desc(orders.createdAt)).limit(limit).offset(offset);
+  const productIds = [...new Set(records.map((r) => r.productId))];
+  const productsList = productIds.length > 0 ? await db.select({ id: products.id, name: products.name, type: products.type }).from(products).where(inArray(products.id, productIds)) : [];
+  const productMap = new Map(productsList.map((p) => [p.id, p]));
+  const formattedRecords = records.map((order) => {
+    const product = productMap.get(order.productId);
+    let displayType = "purchase";
+    if ((product == null ? void 0 : product.type) === "subscription") displayType = "subscription";
+    if ((product == null ? void 0 : product.type) === "recharge") displayType = "recharge";
+    return {
+      id: order.id,
+      time: toIsoTimestamp(order.paidAt || order.createdAt),
+      type: displayType,
+      target: (product == null ? void 0 : product.name) || (locale === "zh" ? "\u672A\u77E5\u5546\u54C1" : "Unknown Product"),
+      amount: Number(order.amount),
+      currency: order.currency,
+      status: order.payStatus,
+      payMethod: order.payMethod || null
+    };
+  });
+  const allUserOrders = await db.select({ id: orders.id }).from(orders).where(and(
+    eq(orders.userId, userId),
+    payStatusFilter
+  ));
+  const total = allUserOrders.length;
+  return {
+    wallet,
+    records: {
+      list: formattedRecords,
+      total
+    }
+  };
+});
+
+export { billing_get as default };

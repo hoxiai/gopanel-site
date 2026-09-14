@@ -1,2 +1,28 @@
-import{unref as e,useSSRContext as r}from"vue";import{ssrRenderAttrs as o}from"vue/server-renderer";const t={__name:"ProseScript",__ssrInlineRender:!0,props:{src:{type:String,required:!0}},setup:r=>(r,t,n,s)=>{e(false)?t(`<div${o(s)}> Rendering the <code>script</code> element is dangerous and is disabled by default. Consider implementing your own <code>ProseScript</code> element to have control over script rendering. </div>`):t("\x3c!----\x3e")}},n=t.setup;t.setup=(e,o)=>{const t=r();return(t.modules||(t.modules=new Set)).add("../node_modules/@nuxt/ui/dist/runtime/components/prose/Script.vue"),n?n(e,o):void 0};export{t as default};
-//# sourceMappingURL=Script-BOX32BRp.mjs.map
+import { unref, useSSRContext } from 'vue';
+import { ssrRenderAttrs } from 'vue/server-renderer';
+
+const _sfc_main = {
+  __name: "ProseScript",
+  __ssrInlineRender: true,
+  props: {
+    src: { type: String, required: true }
+  },
+  setup(__props) {
+    const isDev = false;
+    return (_ctx, _push, _parent, _attrs) => {
+      if (unref(isDev)) {
+        _push(`<div${ssrRenderAttrs(_attrs)}> Rendering the <code>script</code> element is dangerous and is disabled by default. Consider implementing your own <code>ProseScript</code> element to have control over script rendering. </div>`);
+      } else {
+        _push(`<!---->`);
+      }
+    };
+  }
+};
+const _sfc_setup = _sfc_main.setup;
+_sfc_main.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("../node_modules/@nuxt/ui/dist/runtime/components/prose/Script.vue");
+  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
+};
+
+export { _sfc_main as default };

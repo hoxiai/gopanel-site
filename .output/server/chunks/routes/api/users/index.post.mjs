@@ -1,2 +1,115 @@
-import{d as t,c as r,aF as e,e as o,r as i,b as s,av as m,aN as a}from"../../../nitro/nitro.mjs";import p from"crypto";import{z as n}from"zod";import{count as l,and as d,eq as u,or as c,isNull as h,ne as z}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const f=n.object({name:n.string().trim().min(1).max(100),expiresInDays:n.union([n.literal(30),n.literal(90),n.literal(365),n.null()]).optional()}),k=t(async t=>{const n=r(t),k=(await e(t)).user.id;if(t.context.authenticatedFromToken)throw o({statusCode:403,message:"zh"===n?"请使用登录会话管理 API Token，不能用 Token 本身操作":"Manage API tokens from a logged-in session, not via another token"});const y=f.safeParse(await i(t));if(!y.success)throw o({statusCode:400,message:"zh"===n?"请求参数无效":"Invalid request"});const{name:g,expiresInDays:b}=y.data,[{value:v}]=await s.select({value:l()}).from(m).where(d(u(m.userId,k),u(m.revoked,!1),c(h(m.name),z(m.name,a))));if(v>=20)throw o({statusCode:400,message:"zh"===n?"最多只能创建 20 个有效 Token，请先吊销一些":"You can have at most 20 active tokens — revoke one first"});const w=`apay_${p.randomBytes(32).toString("base64url")}`,x=b?new Date(Date.now()+86400*b*1e3):null,q=await s.insert(m).values({userId:k,token:w,name:g,expiresAt:x}).returning();return{token:w,data:{id:q[0].id,name:q[0].name,expiresAt:q[0].expiresAt,createdAt:q[0].createdAt}}});export{k as default};
-//# sourceMappingURL=index.post.mjs.map
+import { d as defineEventHandler, aK as getUserSession, e as createError, r as readBody, cc as diagnoseTicketIssue, b as db, b0 as tickets, b1 as ticketMessages } from '../../../nitro/nitro.mjs';
+import 'node:crypto';
+import 'drizzle-orm';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const index_post = defineEventHandler(async (event) => {
+  const session = await getUserSession(event).catch(() => null);
+  const user = session == null ? void 0 : session.user;
+  const userId = user == null ? void 0 : user.id;
+  if (!userId) {
+    throw createError({ statusCode: 401, statusMessage: "Unauthorized" });
+  }
+  const body = await readBody(event);
+  const title = String(body.title || "").trim();
+  const content = String(body.content || "").trim();
+  const category = String(body.category || "other").trim();
+  const priority = String(body.priority || "normal").trim();
+  const context = body.context && typeof body.context === "object" ? body.context : null;
+  const attachments = Array.isArray(body.attachments) ? body.attachments : null;
+  if (!title) {
+    throw createError({ statusCode: 400, statusMessage: "\u5DE5\u5355\u6807\u9898\u4E0D\u80FD\u4E3A\u7A7A" });
+  }
+  if (!content) {
+    throw createError({ statusCode: 400, statusMessage: "\u5DE5\u5355\u5185\u5BB9\u63CF\u8FF0\u4E0D\u80FD\u4E3A\u7A7A" });
+  }
+  const dateStr = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10).replace(/-/g, "");
+  const randomSuffix = Math.floor(1e3 + Math.random() * 9e3);
+  const ticketNo = `TK-${dateStr}-${randomSuffix}`;
+  const diagnosis = diagnoseTicketIssue({
+    category,
+    title,
+    content,
+    context
+  });
+  const initialStatus = diagnosis.matched && diagnosis.suggestAutoResolved ? "auto_resolved" : "open";
+  const finalPriority = diagnosis.suggestPriority || priority;
+  const lastRepliedBy = diagnosis.matched ? "bot" : "user";
+  const userName = (user == null ? void 0 : user.nickName) || (user == null ? void 0 : user.nickname) || (user == null ? void 0 : user.email) || "\u7528\u6237";
+  const [createdTicket] = await db.insert(tickets).values({
+    ticketNo,
+    userId,
+    category,
+    title,
+    status: initialStatus,
+    priority: finalPriority,
+    context,
+    lastRepliedAt: /* @__PURE__ */ new Date(),
+    lastRepliedBy,
+    createdAt: /* @__PURE__ */ new Date(),
+    updatedAt: /* @__PURE__ */ new Date()
+  }).returning();
+  const ticketId = createdTicket == null ? void 0 : createdTicket.id;
+  await db.insert(ticketMessages).values({
+    ticketId,
+    senderType: "user",
+    senderId: userId,
+    senderName: userName,
+    content,
+    attachments,
+    createdAt: /* @__PURE__ */ new Date()
+  });
+  if (diagnosis.matched && diagnosis.botReply) {
+    await db.insert(ticketMessages).values({
+      ticketId,
+      senderType: "bot",
+      senderId: null,
+      senderName: "\u8F7B\u94FAAI \u667A\u80FD\u8BCA\u65AD\u52A9\u624B",
+      content: diagnosis.botReply,
+      attachments: null,
+      createdAt: new Date(Date.now() + 1e3)
+      // 稍晚1秒体现先后次序
+    });
+  }
+  return {
+    code: 200,
+    message: "\u5DE5\u5355\u63D0\u4EA4\u6210\u529F",
+    data: {
+      ...createdTicket,
+      autoDiagnosed: diagnosis.matched
+    }
+  };
+});
+
+export { index_post as default };

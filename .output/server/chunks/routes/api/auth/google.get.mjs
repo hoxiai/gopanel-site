@@ -1,2 +1,59 @@
-import{aE as r,aB as o,aC as i,aD as t}from"../../../nitro/nitro.mjs";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"drizzle-orm";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const e=r({config:{emailRequired:!0},onSuccess:async(r,{user:i})=>o(r,"google",{id:i.sub,email:i.email||"",name:i.name||"",avatar:i.picture||"",emailVerified:!0===i.email_verified||"true"===i.email_verified}),onError:async(r,o)=>(await i.error(`Google OAuth error: ${o.message}`,{source:"google_oauth",details:{error:o}}),t(r,"/auth/login?error=google_auth_failed"))});export{e as default};
-//# sourceMappingURL=google.get.mjs.map
+import { bq as defineOAuthGoogleEventHandler, bn as handleOAuthLogin, bo as logger, bp as sendLocalizedRedirect } from '../../../nitro/nitro.mjs';
+import 'node:crypto';
+import 'drizzle-orm';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const google_get = defineOAuthGoogleEventHandler({
+  async onSuccess(event, { user }) {
+    return handleOAuthLogin(event, "google", {
+      id: user.sub,
+      // Google's unique ID for the user
+      email: user.email || "",
+      name: user.name || "",
+      avatar: user.picture || "",
+      // Google's userinfo endpoint returns this per the OIDC standard claim set.
+      emailVerified: user.email_verified === true || user.email_verified === "true"
+    });
+  },
+  // Optional: Handle errors
+  async onError(event, error) {
+    await logger.error(`Google OAuth error: ${error.message}`, {
+      source: "google_oauth",
+      details: { error }
+    });
+    return sendLocalizedRedirect(event, "/auth/login?error=google_auth_failed");
+  }
+});
+
+export { google_get as default };

@@ -1,2 +1,65 @@
-import{b4 as r,g as t,b as o,p as i}from"../../nitro/nitro.mjs";import{count as e,eq as m,desc as p}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const s=r(async r=>{var s;const a=t(r),l=Math.max(parseInt(a.page)||1,1),n=Math.min(Math.max(parseInt(a.pageSize)||100,1),200),d=(l-1)*n,h=(null==(s=(await o.select({value:e()}).from(i).where(m(i.isActive,!0)))[0])?void 0:s.value)||0;return{data:await o.select().from(i).where(m(i.isActive,!0)).orderBy(p(i.sortOrder),p(i.id)).limit(n).offset(d),total:h,page:l,pageSize:n}},{maxAge:60,swr:!0,name:"products-list",getKey:r=>{const o=t(r);return`page-${o.page||1}-size-${o.pageSize||100}`}});export{s as default};
-//# sourceMappingURL=index.get2.mjs.map
+import { bZ as defineCachedEventHandler, g as getQuery, p as products, b as db } from '../../nitro/nitro.mjs';
+import { and, eq, count, desc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const index_get = defineCachedEventHandler(async (event) => {
+  var _a;
+  const query = getQuery(event);
+  const page = Math.max(parseInt(query.page) || 1, 1);
+  const pageSize = Math.min(Math.max(parseInt(query.pageSize) || 100, 1), 200);
+  const offset = (page - 1) * pageSize;
+  const isPublicCondition = and(eq(products.status, "active"), eq(products.isActive, true));
+  const totalResult = await db.select({ value: count() }).from(products).where(isPublicCondition);
+  const total = ((_a = totalResult[0]) == null ? void 0 : _a.value) || 0;
+  const result = await db.select().from(products).where(isPublicCondition).orderBy(desc(products.sortOrder), desc(products.id)).limit(pageSize).offset(offset);
+  return {
+    data: result,
+    total,
+    page,
+    pageSize
+  };
+}, {
+  maxAge: 60,
+  // cache for 60 seconds
+  swr: true,
+  // serve stale content while revalidating
+  name: "products-list",
+  getKey: (event) => {
+    const query = getQuery(event);
+    return `page-${query.page || 1}-size-${query.pageSize || 100}`;
+  }
+});
+
+export { index_get as default };

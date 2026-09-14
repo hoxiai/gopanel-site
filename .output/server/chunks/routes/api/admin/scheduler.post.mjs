@@ -1,2 +1,94 @@
-import{d as t,c as r,r as o,e as i,ab as e,ac as s,ad as m}from"../../../nitro/nitro.mjs";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"drizzle-orm";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const a=t(async t=>{const a=r(t),p=await o(t).catch(()=>({}));if("save"===(null==p?void 0:p.action)){const t=Array.isArray(p.jobs)?p.jobs:null;if(!t)throw i({statusCode:400,message:"zh"===a?"jobs 必须是数组":"jobs must be an array"});const r=new Set,o=[];for(const e of t){const t=String((null==e?void 0:e.name)||"").trim(),s=String((null==e?void 0:e.path)||"").trim(),m=null==e?void 0:e.schedule;if(!t)throw i({statusCode:400,message:"zh"===a?"任务名称不能为空":"Job name is required"});if(r.has(t))throw i({statusCode:400,message:"zh"===a?`任务名称重复：${t}`:`Duplicate job name: ${t}`});if(!s.startsWith("/"))throw i({statusCode:400,message:"zh"===a?`路径必须以 / 开头：${t}`:`Path must start with /: ${t}`});if(!("hourly"===m||"daily"===m||"weekly"===m||"number"==typeof m&&Number.isFinite(m)&&m>=1))throw i({statusCode:400,message:"zh"===a?`周期不合法：${t}`:`Invalid schedule: ${t}`});r.add(t),o.push({name:t,path:s,schedule:m,...(null==e?void 0:e.method)?{method:String(e.method).toUpperCase()}:{},enabled:!1!==(null==e?void 0:e.enabled)})}return await e(o),{code:0,message:"zh"===a?"已保存":"saved",count:o.length}}if("trigger"===(null==p?void 0:p.action)){const t=String((null==p?void 0:p.name)||"").trim(),r=(await s()).find(r=>r.name===t);if(!r)throw i({statusCode:404,message:"zh"===a?`任务不存在：${t}`:`Job not found: ${t}`});return{code:0,data:await m(r)}}throw i({statusCode:400,message:"zh"===a?"未知操作":"Unknown action"})});export{a as default};
-//# sourceMappingURL=scheduler.post.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, e as createError, aH as saveSchedulerJobs, aI as loadSchedulerJobs, aJ as runSchedulerJob } from '../../../nitro/nitro.mjs';
+import 'node:crypto';
+import 'drizzle-orm';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const scheduler_post = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const body = await readBody(event).catch(() => ({}));
+  if ((body == null ? void 0 : body.action) === "save") {
+    const rawJobs = Array.isArray(body.jobs) ? body.jobs : null;
+    if (!rawJobs) {
+      throw createError({ statusCode: 400, message: locale === "zh" ? "jobs \u5FC5\u987B\u662F\u6570\u7EC4" : "jobs must be an array" });
+    }
+    const seen = /* @__PURE__ */ new Set();
+    const jobs = [];
+    for (const raw of rawJobs) {
+      const name = String((raw == null ? void 0 : raw.name) || "").trim();
+      const path = String((raw == null ? void 0 : raw.path) || "").trim();
+      const schedule = raw == null ? void 0 : raw.schedule;
+      if (!name) {
+        throw createError({ statusCode: 400, message: locale === "zh" ? "\u4EFB\u52A1\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A" : "Job name is required" });
+      }
+      if (seen.has(name)) {
+        throw createError({ statusCode: 400, message: locale === "zh" ? `\u4EFB\u52A1\u540D\u79F0\u91CD\u590D\uFF1A${name}` : `Duplicate job name: ${name}` });
+      }
+      if (!path.startsWith("/")) {
+        throw createError({ statusCode: 400, message: locale === "zh" ? `\u8DEF\u5F84\u5FC5\u987B\u4EE5 / \u5F00\u5934\uFF1A${name}` : `Path must start with /: ${name}` });
+      }
+      const method = String((raw == null ? void 0 : raw.method) || "POST").toUpperCase();
+      if (method !== "GET" && method !== "POST") {
+        throw createError({ statusCode: 400, message: locale === "zh" ? `\u8BF7\u6C42\u65B9\u6CD5\u4E0D\u5408\u6CD5\uFF1A${name}` : `Invalid method: ${name}` });
+      }
+      const validSchedule = schedule === "hourly" || schedule === "daily" || schedule === "weekly" || typeof schedule === "number" && Number.isFinite(schedule) && schedule >= 1;
+      if (!validSchedule) {
+        throw createError({ statusCode: 400, message: locale === "zh" ? `\u5468\u671F\u4E0D\u5408\u6CD5\uFF1A${name}` : `Invalid schedule: ${name}` });
+      }
+      seen.add(name);
+      jobs.push({
+        name,
+        path,
+        schedule,
+        method,
+        enabled: (raw == null ? void 0 : raw.enabled) !== false,
+        useCronSecret: (raw == null ? void 0 : raw.useCronSecret) === true
+      });
+    }
+    await saveSchedulerJobs(jobs);
+    return { code: 0, message: locale === "zh" ? "\u5DF2\u4FDD\u5B58" : "saved", count: jobs.length };
+  }
+  if ((body == null ? void 0 : body.action) === "trigger") {
+    const name = String((body == null ? void 0 : body.name) || "").trim();
+    const jobs = await loadSchedulerJobs();
+    const job = jobs.find((item) => item.name === name);
+    if (!job) {
+      throw createError({ statusCode: 404, message: locale === "zh" ? `\u4EFB\u52A1\u4E0D\u5B58\u5728\uFF1A${name}` : `Job not found: ${name}` });
+    }
+    const result = await runSchedulerJob(job);
+    return { code: 0, data: result };
+  }
+  throw createError({ statusCode: 400, message: locale === "zh" ? "\u672A\u77E5\u64CD\u4F5C" : "Unknown action" });
+});
+
+export { scheduler_post as default };

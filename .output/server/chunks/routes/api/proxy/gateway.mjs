@@ -1,2 +1,95 @@
-import{d as t,c as r,g as o,e,b6 as i,r as s}from"../../../nitro/nitro.mjs";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"drizzle-orm";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const p=t(async t=>{var p;const a=r(t),m=o(t).path;if(!m)throw e({statusCode:400,statusMessage:"zh"===a?"缺少 path 参数":"Missing path parameter"});const n=t.node.req.headers["x-api-key"];if(!n)throw e({statusCode:401,statusMessage:"zh"===a?"缺少 API Key（x-api-key 请求头）":"Missing API key (x-api-key header)"});const h=await i();let d;try{const t=new URL(h),r=new URL(m.startsWith("/")?m:`/${m}`,t);if(r.protocol!==t.protocol||r.host!==t.host)throw new Error("cross-host");d=r.toString()}catch{throw e({statusCode:400,statusMessage:"zh"===a?"无效的 path 参数":"Invalid path parameter"})}const l=t.node.req.method||"POST";let c;["POST","PUT","PATCH"].includes(l)&&(c=await s(t).catch(()=>{}));const u=await fetch(d,{method:l,headers:{"Content-Type":"application/json",Authorization:`Bearer ${n}`},body:c?JSON.stringify(c):void 0,signal:AbortSignal.timeout(12e4)}),y=await u.text();if(!u.ok){let t=y.slice(0,300);try{const r=JSON.parse(t);t=(null==(p=r.error)?void 0:p.message)||r.message||t}catch{}throw e({statusCode:502,statusMessage:"zh"===a?`网关上游错误：${t}`:`Gateway upstream error: ${t}`})}try{return JSON.parse(y)}catch{return y}});export{p as default};
-//# sourceMappingURL=gateway.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, e as createError, b_ as getAIGatewayUrl, r as readBody } from '../../../nitro/nitro.mjs';
+import 'node:crypto';
+import 'drizzle-orm';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const gateway = defineEventHandler(async (event) => {
+  var _a;
+  const locale = getRequestLocale(event);
+  const query = getQuery(event);
+  const path = query.path;
+  if (!path) {
+    throw createError({ statusCode: 400, statusMessage: locale === "zh" ? "\u7F3A\u5C11 path \u53C2\u6570" : "Missing path parameter" });
+  }
+  const apiKey = event.node.req.headers["x-api-key"];
+  if (!apiKey) {
+    throw createError({ statusCode: 401, statusMessage: locale === "zh" ? "\u7F3A\u5C11 API Key\uFF08x-api-key \u8BF7\u6C42\u5934\uFF09" : "Missing API key (x-api-key header)" });
+  }
+  const gatewayUrl = await getAIGatewayUrl();
+  let targetUrl;
+  try {
+    const base = new URL(gatewayUrl);
+    const resolved = new URL(path.startsWith("/") ? path : `/${path}`, base);
+    if (resolved.protocol !== base.protocol || resolved.host !== base.host) {
+      throw new Error("cross-host");
+    }
+    targetUrl = resolved.toString();
+  } catch {
+    throw createError({ statusCode: 400, statusMessage: locale === "zh" ? "\u65E0\u6548\u7684 path \u53C2\u6570" : "Invalid path parameter" });
+  }
+  const method = event.node.req.method || "POST";
+  let body;
+  if (["POST", "PUT", "PATCH"].includes(method)) {
+    body = await readBody(event).catch(() => void 0);
+  }
+  const response = await fetch(targetUrl, {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`
+    },
+    body: body ? JSON.stringify(body) : void 0,
+    signal: AbortSignal.timeout(12e4)
+  });
+  const text = await response.text();
+  if (!response.ok) {
+    let errorDetail = text.slice(0, 300);
+    try {
+      const parsed = JSON.parse(errorDetail);
+      errorDetail = ((_a = parsed.error) == null ? void 0 : _a.message) || parsed.message || errorDetail;
+    } catch {
+    }
+    throw createError({
+      statusCode: 502,
+      statusMessage: locale === "zh" ? `\u7F51\u5173\u4E0A\u6E38\u9519\u8BEF\uFF1A${errorDetail}` : `Gateway upstream error: ${errorDetail}`
+    });
+  }
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
+});
+
+export { gateway as default };

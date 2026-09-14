@@ -1,2 +1,82 @@
-import{d as t,c as r,g as o,e as i,ae as e,aU as a,o as m,b as s,p}from"../../../nitro/nitro.mjs";import{or as d,eq as n,and as u}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const l=t(async t=>{var l;const c="zh"===r(t)?{missingOrderId:"缺少订单 ID",unauthorized:"未登录，且未找到访客凭证",orderNotFound:"订单不存在"}:{missingOrderId:"Missing order id",unauthorized:"Unauthorized: No user session or visitor cookie found",orderNotFound:"Order not found"},h=o(t).orderId;if(!h)throw i({statusCode:400,message:c.missingOrderId});const y=await e(t),z=null==(l=null==y?void 0:y.user)?void 0:l.id,f=a(t,"visitor_id");if(!z&&!f)throw i({statusCode:401,message:c.unauthorized});const g=z?d(n(m.userId,z),n(m.visitorId,f||"")):n(m.visitorId,f),b=(await s.select({id:m.id,amount:m.amount,status:m.status,payStatus:m.payStatus,createdAt:m.createdAt,paidAt:m.paidAt,tradeNo:m.tradeNo,payMethod:m.payMethod,contactEmail:m.contactEmail,deliveryInfo:m.deliveryInfo,metaData:m.metaData,productName:p.name,productImageUrl:p.imageUrl,productType:p.type,productSlug:p.slug}).from(m).leftJoin(p,n(m.productId,p.id)).where(u(n(m.id,h),g)).limit(1))[0];if(!b)throw i({statusCode:404,message:c.orderNotFound});let v=null;if(b.metaData)try{v="string"==typeof b.metaData?JSON.parse(b.metaData):b.metaData}catch(t){console.error("Failed to parse metaData JSON",t)}return{...b,metaData:v}});export{l as default};
-//# sourceMappingURL=detail.get.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, e as createError, bL as requireOrderOwnership, b as db, p as products } from '../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const detail_get = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const orderId = getQuery(event).orderId;
+  if (!orderId) {
+    throw createError({ statusCode: 400, message: locale === "zh" ? "\u7F3A\u5C11\u8BA2\u5355 ID" : "Missing order id" });
+  }
+  const order = await requireOrderOwnership(event, orderId);
+  let product = null;
+  if (order.productId) {
+    const productRows = await db.select({
+      name: products.name,
+      imageUrl: products.imageUrl,
+      type: products.type,
+      slug: products.slug
+    }).from(products).where(eq(products.id, order.productId)).limit(1);
+    product = productRows[0] || null;
+  }
+  let parsedMetaData = null;
+  if (order.metaData) {
+    try {
+      parsedMetaData = typeof order.metaData === "string" ? JSON.parse(order.metaData) : order.metaData;
+    } catch (e) {
+      console.error("Failed to parse metaData JSON", e);
+    }
+  }
+  return {
+    id: order.id,
+    amount: order.amount,
+    currency: order.currency,
+    status: order.status,
+    payStatus: order.payStatus,
+    createdAt: order.createdAt,
+    paidAt: order.paidAt,
+    tradeNo: order.tradeNo,
+    payMethod: order.payMethod,
+    contactEmail: order.contactEmail,
+    deliveryInfo: order.deliveryInfo,
+    metaData: parsedMetaData,
+    productName: (product == null ? void 0 : product.name) || null,
+    productImageUrl: (product == null ? void 0 : product.imageUrl) || null,
+    productType: (product == null ? void 0 : product.type) || null,
+    productSlug: (product == null ? void 0 : product.slug) || null
+  };
+});
+
+export { detail_get as default };

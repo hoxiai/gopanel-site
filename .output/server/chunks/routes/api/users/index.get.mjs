@@ -1,2 +1,101 @@
-import{d as r,ae as t,g as e,ba as o,aU as i,b as p}from"../../../nitro/nitro.mjs";import{eq as a,and as m,count as s,desc as n}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const resolveNotificationTargetPath=r=>{if("string"==typeof r.targetPath&&r.targetPath.trim())return r.targetPath.trim();const t="string"==typeof r.orderId?r.orderId.trim():"";return t?"pending"===r.payStatus?`/payment/${t}`:`/user/orders/${t}`:null},d=r(async r=>{var d,l;const u=await t(r).catch(()=>null),c=null==(d=null==u?void 0:u.user)?void 0:d.id,h=e(r),f=parseInt(h.page)||1,g=parseInt(h.pageSize)||20,y=(f-1)*g,z="1"===h.unread,b=[];if(c)b.push(a(o.userId,c));else{const t=i(r,"visitorId")||"";if(!t)return{data:[],total:0,page:f,pageSize:g};b.push(a(o.visitorId,t))}z&&b.push(a(o.isRead,!1));const v=m(...b),I=(null==(l=(await p.select({value:s()}).from(o).where(v))[0])?void 0:l.value)||0;return{data:(await p.select().from(o).where(v).orderBy(n(o.createdAt)).limit(g).offset(y)).map(r=>{const t=(r=>{if(!r)return{};if("string"==typeof r)try{return JSON.parse(r)}catch{return{}}return"object"==typeof r?r:{}})(r.data);return{...r,data:t,targetPath:resolveNotificationTargetPath(t),createdAt:r.createdAt?new Date(r.createdAt).toISOString():null}}),total:I,page:f,pageSize:g}});export{d as default};
-//# sourceMappingURL=index.get.mjs.map
+import { d as defineEventHandler, aK as getUserSession, g as getQuery, b5 as notifications, bM as getCookie, b as db } from '../../../nitro/nitro.mjs';
+import { eq, and, count, desc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const normalizeNotificationData = (value) => {
+  if (!value) return {};
+  if (typeof value === "string") {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return {};
+    }
+  }
+  if (typeof value === "object") {
+    return value;
+  }
+  return {};
+};
+const resolveNotificationTargetPath = (data) => {
+  if (typeof data.targetPath === "string" && data.targetPath.trim()) {
+    return data.targetPath.trim();
+  }
+  const orderId = typeof data.orderId === "string" ? data.orderId.trim() : "";
+  if (!orderId) return null;
+  if (data.payStatus === "pending") {
+    return `/payment/${orderId}`;
+  }
+  return `/user/orders/${orderId}`;
+};
+const index_get = defineEventHandler(async (event) => {
+  var _a, _b;
+  const session = await getUserSession(event).catch(() => null);
+  const userId = (_a = session == null ? void 0 : session.user) == null ? void 0 : _a.id;
+  const query = getQuery(event);
+  const page = parseInt(query.page) || 1;
+  const pageSize = parseInt(query.pageSize) || 20;
+  const offset = (page - 1) * pageSize;
+  const unreadOnly = query.unread === "1";
+  const conditions = [];
+  if (userId) {
+    conditions.push(eq(notifications.userId, userId));
+  } else {
+    const visitorId = getCookie(event, "visitorId") || "";
+    if (visitorId) {
+      conditions.push(eq(notifications.visitorId, visitorId));
+    } else {
+      return { data: [], total: 0, page, pageSize };
+    }
+  }
+  if (unreadOnly) {
+    conditions.push(eq(notifications.isRead, false));
+  }
+  const filter = and(...conditions);
+  const totalResult = await db.select({ value: count() }).from(notifications).where(filter);
+  const total = ((_b = totalResult[0]) == null ? void 0 : _b.value) || 0;
+  const rows = await db.select().from(notifications).where(filter).orderBy(desc(notifications.createdAt)).limit(pageSize).offset(offset);
+  const data = rows.map((row) => {
+    const normalizedData = normalizeNotificationData(row.data);
+    return {
+      ...row,
+      data: normalizedData,
+      targetPath: resolveNotificationTargetPath(normalizedData),
+      createdAt: row.createdAt ? new Date(row.createdAt).toISOString() : null
+    };
+  });
+  return { data, total, page, pageSize };
+});
+
+export { index_get as default };

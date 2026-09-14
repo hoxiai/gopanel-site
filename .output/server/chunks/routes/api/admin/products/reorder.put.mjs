@@ -1,2 +1,61 @@
-import{d as r,c as t,r as o,e as i,b as e,p as m}from"../../../../nitro/nitro.mjs";import{eq as p}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const s=r(async r=>{const s=t(r),a=(await o(r)).items;if(!Array.isArray(a))throw i({statusCode:400,message:"zh"===s?"请求体无效，预期为数组 items":"Invalid request body, expected an array of items"});const d=[];for(const r of a)void 0!==r.id&&void 0!==r.sortOrder&&d.push(e.update(m).set({sortOrder:r.sortOrder}).where(p(m.id,r.id)));return d.length>0&&await Promise.all(d),{success:!0,updated:d.length}});export{s as default};
-//# sourceMappingURL=reorder.put.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, e as createError, b as db, p as products } from '../../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const reorder_put = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const body = await readBody(event);
+  const items = body.items;
+  if (!Array.isArray(items)) {
+    throw createError({
+      statusCode: 400,
+      message: locale === "zh" ? "\u8BF7\u6C42\u4F53\u65E0\u6548\uFF0C\u9884\u671F\u4E3A\u6570\u7EC4 items" : "Invalid request body, expected an array of items"
+    });
+  }
+  const updates = [];
+  for (const item of items) {
+    if (item.id !== void 0 && item.sortOrder !== void 0) {
+      updates.push(
+        db.update(products).set({ sortOrder: item.sortOrder }).where(eq(products.id, item.id))
+      );
+    }
+  }
+  if (updates.length > 0) {
+    await Promise.all(updates);
+  }
+  return { success: true, updated: updates.length };
+});
+
+export { reorder_put as default };

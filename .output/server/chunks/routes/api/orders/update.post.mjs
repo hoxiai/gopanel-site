@@ -1,2 +1,68 @@
-import{d as r,c as t,r as o,aZ as e,O as i,b as s,o as m}from"../../../nitro/nitro.mjs";import{eq as p}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const a=r(async r=>{const a="zh"===t(r)?{required:"订单 ID 和交易号不能为空",alreadyPaid:"订单已支付",success:"成功",internalError:"服务器内部错误"}:{required:"Order ID and Trade No are required",alreadyPaid:"Order already paid",success:"success",internalError:"Internal server error"};try{const t=await o(r),{orderId:d,tradeNo:n,payMethod:l}=t;if(!d||!n)return{code:1,message:a.required};const u=await e(r,String(d));return u.payStatus===i.PAID?{code:1,message:a.alreadyPaid}:(await s.update(m).set({payMethod:l}).where(p(m.id,u.id)),{code:0,message:a.success})}catch(r){if(null==r?void 0:r.statusCode)throw r;return{code:1,message:r.message||a.internalError}}});export{a as default};
-//# sourceMappingURL=update.post.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, bL as requireOrderOwnership, O as ORDER_PAY_STATUS, b as db, o as orders } from '../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const update_post = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const messages = locale === "zh" ? {
+    required: "\u8BA2\u5355 ID \u548C\u4EA4\u6613\u53F7\u4E0D\u80FD\u4E3A\u7A7A",
+    alreadyPaid: "\u8BA2\u5355\u5DF2\u652F\u4ED8",
+    success: "\u6210\u529F",
+    internalError: "\u670D\u52A1\u5668\u5185\u90E8\u9519\u8BEF"
+  } : {
+    required: "Order ID and Trade No are required",
+    alreadyPaid: "Order already paid",
+    success: "success",
+    internalError: "Internal server error"
+  };
+  try {
+    const body = await readBody(event);
+    const { orderId, tradeNo, payMethod } = body;
+    if (!orderId || !tradeNo) {
+      return { code: 1, message: messages.required };
+    }
+    const order = await requireOrderOwnership(event, String(orderId));
+    if (order.payStatus === ORDER_PAY_STATUS.PAID) {
+      return { code: 1, message: messages.alreadyPaid };
+    }
+    await db.update(orders).set({ payMethod }).where(eq(orders.id, order.id));
+    return { code: 0, message: messages.success };
+  } catch (error) {
+    if (error == null ? void 0 : error.statusCode) throw error;
+    return { code: 1, message: error.message || messages.internalError };
+  }
+});
+
+export { update_post as default };

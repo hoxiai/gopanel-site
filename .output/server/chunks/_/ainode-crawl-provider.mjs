@@ -1,2 +1,278 @@
-import{bI as e,bJ as r,bK as t}from"../nitro/nitro.mjs";import{registerCollectProvider as o}from"./registry.mjs";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"drizzle-orm";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const a=(process.env.AINODE_BASE_URL||process.env.AI_GATEWAY_URL||"https://api.ainode.run").trim().replace(/\/+$/,""),asRecord=e=>e&&"object"==typeof e&&!Array.isArray(e)?e:null,cleanText=e=>String(null!=e?e:"").replace(/^[\s`'"]+|[\s`'"]+$/g,"").trim(),reportDebugEvent=async(e,r,t,o)=>{var a,i,s,n;let l="http://127.0.0.1:7777/event",d="ainode-crawl-no-response";try{const{readFile:e}=await import("node:fs/promises"),r=await e(".dbg/ainode-crawl-no-response.env","utf8");l=(null==(i=null==(a=r.match(/DEBUG_SERVER_URL=(.+)/))?void 0:a[1])?void 0:i.trim())||l,d=(null==(n=null==(s=r.match(/DEBUG_SESSION_ID=(.+)/))?void 0:s[1])?void 0:n.trim())||d}catch{}try{await fetch(l,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:d,runId:"pre-fix",hypothesisId:e,location:r,msg:`[DEBUG] ${t}`,data:o||{},ts:Date.now()})})}catch{}},build1688DetailUrl=e=>`https://detail.1688.com/offer/${encodeURIComponent(e)}.html`,callAinodeCrawl1688=async(r,t)=>{var o;const{baseUrl:i,apiKey:s}=await(async r=>{const t=await e(r),o={baseUrl:(i=null==t?void 0:t.generalModelBaseUrl,cleanText(i).replace(/\/+$/,"")||a),apiKey:cleanText(null==t?void 0:t.generalModelApiKey)};var i;return reportDebugEvent("A","ainode-crawl.ts:resolveAinodeCrawlConfig","resolved listing model settings",{userId:r,hasApiKey:Boolean(o.apiKey),baseUrl:o.baseUrl,modelBaseUrlRaw:cleanText(null==t?void 0:t.generalModelBaseUrl)}),o})(r);if(!s)return reportDebugEvent("A","ainode-crawl.ts:callAinodeCrawl1688","missing api key before request",{userId:r,numIid:t,baseUrl:i}),{data:null,error:"ainode missing api key"};const n=`${i}/ai/crawl`,l={model:"collector-1688",channel:"1688",url:build1688DetailUrl(t)};let d;const m=Date.now();reportDebugEvent("B","ainode-crawl.ts:callAinodeCrawl1688","starting crawl request",{userId:r,numIid:t,url:n,payload:l,timeoutMs:2e4});try{d=await fetch(n,{method:"POST",headers:{Authorization:`Bearer ${s}`,"Content-Type":"application/json"},body:JSON.stringify(l),signal:AbortSignal.timeout(2e4)})}catch(e){const o=e instanceof Error&&"TimeoutError"===e.name?"timeout":"transport_error";return reportDebugEvent("C","ainode-crawl.ts:callAinodeCrawl1688","crawl request threw before response",{userId:r,numIid:t,url:n,kind:o,elapsedMs:Date.now()-m,errorName:e instanceof Error?e.name:typeof e,errorMessage:e instanceof Error?e.message:String(e)}),{data:null,error:`ainode ${o}`}}let u;reportDebugEvent("B","ainode-crawl.ts:callAinodeCrawl1688","received crawl response headers",{userId:r,numIid:t,url:n,status:d.status,ok:d.ok,elapsedMs:Date.now()-m});try{u=await d.json()}catch{return reportDebugEvent("D","ainode-crawl.ts:callAinodeCrawl1688","response json parse failed",{userId:r,numIid:t,url:n,status:d.status,elapsedMs:Date.now()-m}),{data:null,error:"ainode invalid json"}}if(!d.ok){const e=cleanText(null==u?void 0:u.error)||cleanText(null==(o=asRecord(null==u?void 0:u.error))?void 0:o.message)||cleanText(null==u?void 0:u.message)||`http ${d.status}`;return reportDebugEvent("D","ainode-crawl.ts:callAinodeCrawl1688","response returned non-2xx status",{userId:r,numIid:t,url:n,status:d.status,elapsedMs:Date.now()-m,detail:e}),{data:null,error:`ainode ${e}`}}const p=asRecord(null==u?void 0:u.data);return p?(reportDebugEvent("D","ainode-crawl.ts:callAinodeCrawl1688","response json parsed successfully",{userId:r,numIid:t,url:n,status:d.status,elapsedMs:Date.now()-m,dataKeys:Object.keys(p),hasTitle:Boolean(cleanText(p.title))}),{data:p,error:null}):(reportDebugEvent("D","ainode-crawl.ts:callAinodeCrawl1688","response json missing data payload",{userId:r,numIid:t,url:n,status:d.status,elapsedMs:Date.now()-m,topLevelKeys:Object.keys(u||{})}),{data:null,error:"ainode empty data"})},sleep=e=>new Promise(r=>setTimeout(r,e)),isWarmupError=e=>{const r=(e||"").toLowerCase();return r.includes("timeout")||r.includes("transport_error")||r.includes("empty data")||r.includes("temporarily unavailable")||r.includes("bad gateway")||r.includes("http 5")};o({id:"ainode-crawl-1688",platform:"1688",matchUrl:e=>t(e),async collect({userId:e,url:t,sourceProductId:o,productId:a}){var i,s;const{item:n,error:l}=await(async(e,r)=>{var t,o;const a=[2e3,6e3];let i=null;for(let s=0;s<=a.length;s++){const n=s>0&&null!=(t=a[s-1])?t:0;reportDebugEvent("E","ainode-crawl.ts:fetchAinodeCrawl1688Item","starting fetch attempt",{userId:e,numIid:r,attempt:s,retryDelayMs:n}),n>0&&await sleep(n);const{data:l,error:d}=await callAinodeCrawl1688(e,r);if(d){if(i=d,reportDebugEvent("E","ainode-crawl.ts:fetchAinodeCrawl1688Item","attempt finished with error",{userId:e,numIid:r,attempt:s,error:d,willRetry:isWarmupError(d)}),isWarmupError(d))continue;return{item:null,error:d}}const m=asRecord(null==l?void 0:l.raw),u=asRecord(null==m?void 0:m.product),p=cleanText(null!=(o=null==l?void 0:l.title)?o:null==u?void 0:u.title);if(p)return reportDebugEvent("E","ainode-crawl.ts:fetchAinodeCrawl1688Item","attempt succeeded",{userId:e,numIid:r,attempt:s,title:p}),{item:l,error:null};i="ainode empty item",reportDebugEvent("E","ainode-crawl.ts:fetchAinodeCrawl1688Item","attempt got payload but title was empty",{userId:e,numIid:r,attempt:s,dataKeys:l?Object.keys(l):[]})}return{item:null,error:`${i||"ainode crawl failed"}(上游抓取预热中,稍后重试该链接通常即成功)`}})(e,o);if(!n||l)return{ok:!1,error:l||"empty item"};const d=r(n,t,{productId:a}),m=(null==(i=d.media.images.find(e=>"main"===e.role))?void 0:i.originalUrl)||(null==(s=d.media.images[0])?void 0:s.originalUrl)||null;return{ok:!0,input:{productId:a,sourcePlatform:"1688",sourceUrl:t,sourceProductId:o,title:d.basic.title,mainImageUrl:m,skuCount:d.variants.length,preprocessStatus:"pending",canonical:d,schemaVersion:1,clientUpdatedAt:(new Date).toISOString()}}}});
-//# sourceMappingURL=ainode-crawl-provider.mjs.map
+import { cB as getListingModelSettingsByUser, cC as getQingpuAINodeBaseUrl, cD as normalizeAinodeCrawl1688Product, cE as extract1688OfferId } from '../nitro/nitro.mjs';
+import { registerCollectProvider } from './registry.mjs';
+import 'node:crypto';
+import 'drizzle-orm';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const AINODE_CRAWL_PATH = "/ai/crawl";
+const REQUEST_TIMEOUT_MS = 2e4;
+const asRecord = (value) => value && typeof value === "object" && !Array.isArray(value) ? value : null;
+const cleanText = (value) => (typeof value === "string" ? value : "").replace(/^[\s`'"]+|[\s`'"]+$/g, "").trim();
+const cleanScalarText = (value) => typeof value === "number" || typeof value === "boolean" ? String(value) : cleanText(value);
+const resolveAinodeCrawlConfig = async (userId) => {
+  const [modelSettings, baseUrl] = await Promise.all([
+    getListingModelSettingsByUser(userId),
+    getQingpuAINodeBaseUrl()
+  ]);
+  const resolved = {
+    baseUrl,
+    apiKey: cleanText(modelSettings == null ? void 0 : modelSettings.generalModelApiKey)
+  };
+  return resolved;
+};
+const build1688DetailUrl = (numIid) => `https://detail.1688.com/offer/${encodeURIComponent(numIid)}.html`;
+const callAinodeCrawl1688 = async (userId, numIid) => {
+  const { baseUrl, apiKey } = await resolveAinodeCrawlConfig(userId);
+  if (!apiKey) {
+    return { data: null, error: "AINode missing api key" };
+  }
+  const url = `${baseUrl}${AINODE_CRAWL_PATH}`;
+  const payload = {
+    model: "collector-1688",
+    channel: "1688",
+    url: build1688DetailUrl(numIid)
+  };
+  let response;
+  try {
+    response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
+    });
+  } catch (err) {
+    const kind = err instanceof Error && err.name === "TimeoutError" ? `timeout ${REQUEST_TIMEOUT_MS}ms` : `transport_error ${cleanText(err instanceof Error ? err.message : "") || "unknown"}`;
+    return { data: null, error: `AINode ${kind}` };
+  }
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    return { data: null, error: `AINode invalid json (http ${response.status})` };
+  }
+  if (!response.ok) {
+    const errObj = asRecord(data == null ? void 0 : data.error);
+    const message = cleanText(data == null ? void 0 : data.error) || cleanText(errObj == null ? void 0 : errObj.message) || cleanText(data == null ? void 0 : data.message);
+    const code = cleanText(errObj == null ? void 0 : errObj.code) || cleanText(errObj == null ? void 0 : errObj.type);
+    const detail = [`http ${response.status}`, code, message].filter(Boolean).join(" ");
+    return { data: null, error: `AINode ${detail}` };
+  }
+  const crawlData = asRecord(data == null ? void 0 : data.data);
+  if (!crawlData) {
+    return { data: null, error: `AINode empty data (keys: ${Object.keys(data || {}).join(",") || "none"})` };
+  }
+  return { data: crawlData, error: null };
+};
+const DEFAULT_FALLBACK_PACKAGING = {
+  grossWeight: "0.2",
+  packageSize: {
+    length: "15",
+    width: "10",
+    height: "5"
+  }
+};
+const sanitizeAinodeCrawlTitle = (rawTitle, sourceProductId) => {
+  let text = cleanScalarText(rawTitle);
+  text = text.replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200D\uFEFF]/g, "");
+  text = text.replace(/\s+/g, " ").trim();
+  if (!text) {
+    return sourceProductId ? `\u5546\u54C1_${sourceProductId}` : "\u5546\u54C1";
+  }
+  if (/^\d+$/.test(text)) {
+    return `\u5546\u54C1 ${text}`;
+  }
+  if (/^[\p{P}\p{S}]+$/u.test(text)) {
+    return sourceProductId ? `\u5546\u54C1_${sourceProductId}` : "\u5546\u54C1";
+  }
+  return text;
+};
+const hasValidPackaging = (pkg) => {
+  if (!pkg || typeof pkg !== "object") return false;
+  const p = pkg;
+  const weight = Number(p.grossWeight);
+  const size = p.packageSize;
+  const l = Number(size == null ? void 0 : size.length);
+  const w = Number(size == null ? void 0 : size.width);
+  const h = Number(size == null ? void 0 : size.height);
+  const hasWeight = Number.isFinite(weight) && weight > 0;
+  const hasSize = Number.isFinite(l) && l > 0 && Number.isFinite(w) && w > 0 && Number.isFinite(h) && h > 0;
+  return hasWeight || hasSize;
+};
+const sanitizeAinodeCrawlItem = (item, sourceProductId) => {
+  var _a, _b, _c, _d, _e, _f;
+  if (!item || typeof item !== "object") return item;
+  const raw = asRecord(item.raw) || {};
+  const product = asRecord(raw.product) || {};
+  const resolvedOriginId = cleanScalarText((_c = (_b = (_a = item.origin_id) != null ? _a : item.sourceProductId) != null ? _b : product.sourceProductId) != null ? _c : sourceProductId);
+  const cleanTitle = sanitizeAinodeCrawlTitle((_d = item.title) != null ? _d : product.title, resolvedOriginId);
+  item.title = cleanTitle;
+  if (product.title !== void 0) {
+    product.title = cleanTitle;
+  }
+  const rawSkuList = Array.isArray(raw.skuList) ? raw.skuList : [];
+  const skus = Array.isArray(item.skus) ? item.skus : [];
+  const itemHasPkg = hasValidPackaging(item.packaging);
+  const prodHasPkg = hasValidPackaging(product.packaging);
+  const skuListHasPkg = rawSkuList.some((s) => {
+    var _a2;
+    return hasValidPackaging((_a2 = asRecord(s)) == null ? void 0 : _a2.packaging);
+  });
+  const skusHasPkg = skus.some((s) => hasValidPackaging(s == null ? void 0 : s.packaging));
+  const anyPackagingExists = itemHasPkg || prodHasPkg || skuListHasPkg || skusHasPkg;
+  if (!anyPackagingExists) {
+    item.packaging = { ...DEFAULT_FALLBACK_PACKAGING };
+    product.packaging = { ...DEFAULT_FALLBACK_PACKAGING };
+  }
+  const basePrice = Number((_e = item.price) != null ? _e : product.price) || 1;
+  const baseStock = Number((_f = item.stock) != null ? _f : product.stock) || 999;
+  if (skus.length === 0) {
+    item.skus = [
+      {
+        sku_id: resolvedOriginId || "default",
+        skuId: resolvedOriginId || "default",
+        price: basePrice,
+        stock: baseStock,
+        spec_combination: "\u9ED8\u8BA4:\u5355\u54C1",
+        specCombination: "\u9ED8\u8BA4:\u5355\u54C1",
+        packaging: item.packaging
+      }
+    ];
+  } else {
+    item.skus = skus.map((sku, idx) => {
+      var _a2, _b2;
+      const skuRecord = asRecord(sku) || {};
+      const skuId = cleanScalarText((_a2 = skuRecord.sku_id) != null ? _a2 : skuRecord.skuId) || `${resolvedOriginId || "sku"}_${idx}`;
+      const skuPrice = Number(skuRecord.price) > 0 ? skuRecord.price : basePrice;
+      const skuStock = Number(skuRecord.stock) > 0 ? Number(skuRecord.stock) : baseStock;
+      const specComb = cleanScalarText((_b2 = skuRecord.spec_combination) != null ? _b2 : skuRecord.specCombination) || `\u89C4\u683C:${idx + 1}`;
+      return {
+        ...skuRecord,
+        sku_id: skuId,
+        skuId,
+        price: skuPrice,
+        stock: skuStock,
+        spec_combination: specComb,
+        specCombination: specComb,
+        packaging: skuRecord.packaging || item.packaging
+      };
+    });
+  }
+  const cleanUrl = (u) => {
+    if (typeof u !== "string") return "";
+    const trimmed = u.trim();
+    if (trimmed.startsWith("//")) return `https:${trimmed}`;
+    return /^https?:\/\//.test(trimmed) ? trimmed : "";
+  };
+  const images = (Array.isArray(item.images) ? item.images : []).map(cleanUrl).filter(Boolean);
+  const seenImages = /* @__PURE__ */ new Set();
+  const dedupedImages = [];
+  for (const img of images) {
+    if (!seenImages.has(img)) {
+      seenImages.add(img);
+      dedupedImages.push(img);
+    }
+  }
+  const mainImage = cleanUrl(item.main_image) || dedupedImages[0] || "";
+  if (mainImage && !seenImages.has(mainImage)) {
+    dedupedImages.unshift(mainImage);
+    seenImages.add(mainImage);
+  }
+  item.images = dedupedImages;
+  item.main_image = mainImage || dedupedImages[0] || "";
+  raw.product = product;
+  item.raw = raw;
+  return item;
+};
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const isWarmupError = (error) => {
+  const text = (error || "").toLowerCase();
+  return text.includes("timeout") || text.includes("transport_error") || text.includes("empty data") || text.includes("temporarily unavailable") || text.includes("bad gateway") || text.includes("http 5");
+};
+const fetchAinodeCrawl1688Item = async (userId, numIid) => {
+  var _a, _b;
+  const retryDelaysMs = [2e3, 6e3];
+  let lastError = null;
+  for (let attempt = 0; attempt <= retryDelaysMs.length; attempt++) {
+    const retryDelayMs = attempt > 0 ? (_a = retryDelaysMs[attempt - 1]) != null ? _a : 0 : 0;
+    if (retryDelayMs > 0) await sleep(retryDelayMs);
+    const { data, error } = await callAinodeCrawl1688(userId, numIid);
+    if (error) {
+      lastError = error;
+      if (isWarmupError(error)) continue;
+      return { item: null, error };
+    }
+    const raw = asRecord(data == null ? void 0 : data.raw);
+    const product = asRecord(raw == null ? void 0 : raw.product);
+    const title = cleanScalarText((_b = data == null ? void 0 : data.title) != null ? _b : product == null ? void 0 : product.title);
+    if (!title) {
+      lastError = "AINode empty item";
+      continue;
+    }
+    const sanitized = sanitizeAinodeCrawlItem(data, numIid);
+    return { item: sanitized, error: null };
+  }
+  return { item: null, error: `${lastError || "AINode crawl failed"} (warmup)` };
+};
+
+registerCollectProvider({
+  id: "ainode-crawl-1688",
+  platform: "1688",
+  matchUrl: (url) => extract1688OfferId(url),
+  async collect({ userId, url, sourceProductId, productId }) {
+    var _a, _b;
+    const { item, error } = await fetchAinodeCrawl1688Item(userId, sourceProductId);
+    if (!item || error) return { ok: false, error: error || "empty item" };
+    const sanitizedItem = sanitizeAinodeCrawlItem(item, sourceProductId);
+    const canonical = normalizeAinodeCrawl1688Product(sanitizedItem, url, { productId });
+    const mainImage = ((_a = canonical.media.images.find((image) => image.role === "main")) == null ? void 0 : _a.originalUrl) || ((_b = canonical.media.images[0]) == null ? void 0 : _b.originalUrl) || null;
+    const title = canonical.basic.title || `\u5546\u54C1_${sourceProductId}`;
+    const input = {
+      productId,
+      sourcePlatform: "1688",
+      sourceUrl: url,
+      sourceProductId,
+      title,
+      mainImageUrl: mainImage,
+      skuCount: Math.max(1, canonical.variants.length),
+      preprocessStatus: "pending",
+      canonical,
+      schemaVersion: 1,
+      clientUpdatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    return { ok: true, input };
+  }
+});

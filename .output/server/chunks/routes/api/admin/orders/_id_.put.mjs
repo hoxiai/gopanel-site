@@ -1,2 +1,97 @@
-import{d as t,c as r,f as o,e as i,r as s,b as a,o as e,s as m,O as p,K as d,L as n,M as u,N as l}from"../../../../nitro/nitro.mjs";import{eq as y}from"drizzle-orm";import{s as h}from"../../../../_/notify.mjs";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const f=t(async t=>{const f=r(t),c=o(t,"id");if(!c)throw i({statusCode:400,message:"zh"===f?"缺少 ID":"Missing id"});const z=await s(t),b=await a.select({status:e.status,payStatus:e.payStatus}).from(e).where(y(e.id,c)).limit(1),g={};z.status&&(g.status=z.status),z.payStatus&&(g.payStatus=z.payStatus),void 0!==z.deliveryInfo&&(g.deliveryInfo=z.deliveryInfo);const w=await a.update(e).set(g).where(y(e.id,c)).returning();m(t,{summary:`Updated order ${c}`,details:{before:b[0]?{status:b[0].status,payStatus:b[0].payStatus}:null,after:g}});const v=b.length>0&&b[0].payStatus===p.PAID;if(z.payStatus===p.PAID&&!v){const t=w[0];await d({orderId:c,buyerUserId:null==t?void 0:t.userId,metaData:null==t?void 0:t.metaData});const r=await n(c);r&&(await u(c),await h(r),await l("order.paid",r))}return w[0]});export{f as default};
-//# sourceMappingURL=_id_.put.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, r as readBody, b as db, o as orders, s as setAuditMeta, O as ORDER_PAY_STATUS, Z as isMinimalCheckoutRelayOrder, _ as readMinimalCheckoutBridgeMeta, $ as createOrderAttribution, a0 as settlePaidTopup, a1 as recoverCreditedApayTopup, a2 as fulfillMinimalCheckoutRelay, a3 as fulfillOrder, a4 as settlePromoCommission, a5 as emitEvent, a6 as cancelPromoCommission, a7 as refundTopup } from '../../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const _id__put = defineEventHandler(async (event) => {
+  var _a, _b;
+  const locale = getRequestLocale(event);
+  const id = getRouterParam(event, "id");
+  if (!id) throw createError({ statusCode: 400, message: locale === "zh" ? "\u7F3A\u5C11 ID" : "Missing id" });
+  const body = await readBody(event);
+  const existing = await db.select({ status: orders.status, payStatus: orders.payStatus }).from(orders).where(eq(orders.id, id)).limit(1);
+  const updateData = {};
+  if (body.status) updateData.status = body.status;
+  if (body.payStatus) updateData.payStatus = body.payStatus;
+  if (body.deliveryInfo !== void 0) updateData.deliveryInfo = body.deliveryInfo;
+  const result = await db.update(orders).set(updateData).where(eq(orders.id, id)).returning();
+  setAuditMeta(event, {
+    summary: `Updated order ${id}`,
+    details: {
+      before: existing[0] ? { status: existing[0].status, payStatus: existing[0].payStatus } : null,
+      after: updateData
+    }
+  });
+  const wasAlreadyPaid = existing.length > 0 && existing[0].payStatus === ORDER_PAY_STATUS.PAID;
+  if (body.payStatus === ORDER_PAY_STATUS.PAID) {
+    const updatedOrder = result[0];
+    const isMinimalRelay = isMinimalCheckoutRelayOrder(updatedOrder);
+    const isApayTopup = ((_b = (_a = readMinimalCheckoutBridgeMeta(updatedOrder == null ? void 0 : updatedOrder.metaData)) == null ? void 0 : _a.attach) == null ? void 0 : _b.walletOwner) === "apay";
+    if (!wasAlreadyPaid) {
+      await createOrderAttribution({
+        orderId: id,
+        buyerUserId: updatedOrder == null ? void 0 : updatedOrder.userId,
+        metaData: updatedOrder == null ? void 0 : updatedOrder.metaData
+      });
+    }
+    if (isApayTopup) {
+      await settlePaidTopup(id);
+      await recoverCreditedApayTopup(id);
+    } else if (!wasAlreadyPaid) {
+      const fulfilledOrder = isMinimalRelay ? await fulfillMinimalCheckoutRelay(id) : await fulfillOrder(id);
+      if (fulfilledOrder) {
+        await settlePromoCommission(id);
+        await emitEvent("order.paid", fulfilledOrder);
+      }
+    }
+  }
+  if (body.payStatus === ORDER_PAY_STATUS.REFUNDED || body.payStatus === ORDER_PAY_STATUS.CANCELLED) {
+    const refundedOrder = result[0];
+    await cancelPromoCommission(id, `admin_${body.payStatus}`);
+    if (body.payStatus === ORDER_PAY_STATUS.REFUNDED && (refundedOrder == null ? void 0 : refundedOrder.userId)) {
+      try {
+        const clawback = await refundTopup(id);
+        if (clawback.shortfall > 0) {
+          console.warn(`[Balance] refund clawback short by ${clawback.shortfall} for order ${id} (user ${refundedOrder.userId})`);
+        }
+      } catch (error) {
+        console.error(`[Balance] failed to claw back refunded order ${id}:`, error);
+        throw error;
+      }
+    }
+  }
+  return result[0];
+});
+
+export { _id__put as default };

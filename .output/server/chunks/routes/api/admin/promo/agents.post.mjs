@@ -1,2 +1,63 @@
-import{d as r,c as t,r as o,e as i,b as e,u as m,Z as p}from"../../../../nitro/nitro.mjs";import{eq as s}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const a=r(async r=>{const a=t(r),l=await o(r),n=String((null==l?void 0:l.email)||"").trim().toLowerCase(),d=String((null==l?void 0:l.role)||"agent").trim(),u=Number((null==l?void 0:l.parentAgentUserId)||0)||null;if(!n)throw i({statusCode:400,message:"zh"===a?"邮箱不能为空":"Email is required"});if("agent"!==d&&"master_agent"!==d)throw i({statusCode:400,message:"zh"===a?"角色无效":"Invalid role"});const h=await e.select({id:m.id,email:m.email}).from(m).where(s(m.email,n)).limit(1);if(!h.length)throw i({statusCode:404,message:"zh"===a?"用户不存在":"User not found"});return p({userId:h[0].id,role:d,parentAgentUserId:u})});export{a as default};
-//# sourceMappingURL=agents.post.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, e as createError, b as db, u as users, ar as assignPromoAgentByUserId } from '../../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const agents_post = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const body = await readBody(event);
+  const email = String((body == null ? void 0 : body.email) || "").trim().toLowerCase();
+  const role = String((body == null ? void 0 : body.role) || "agent").trim();
+  const parentAgentUserId = Number((body == null ? void 0 : body.parentAgentUserId) || 0) || null;
+  if (!email) {
+    throw createError({ statusCode: 400, message: locale === "zh" ? "\u90AE\u7BB1\u4E0D\u80FD\u4E3A\u7A7A" : "Email is required" });
+  }
+  if (role !== "agent" && role !== "master_agent") {
+    throw createError({ statusCode: 400, message: locale === "zh" ? "\u89D2\u8272\u65E0\u6548" : "Invalid role" });
+  }
+  const userRows = await db.select({
+    id: users.id,
+    email: users.email
+  }).from(users).where(eq(users.email, email)).limit(1);
+  if (!userRows.length) {
+    throw createError({ statusCode: 404, message: locale === "zh" ? "\u7528\u6237\u4E0D\u5B58\u5728" : "User not found" });
+  }
+  return assignPromoAgentByUserId({
+    userId: userRows[0].id,
+    role,
+    parentAgentUserId
+  });
+});
+
+export { agents_post as default };

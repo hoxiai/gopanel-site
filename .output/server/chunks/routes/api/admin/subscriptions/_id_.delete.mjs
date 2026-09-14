@@ -1,2 +1,76 @@
-import{d as t,c as r,f as i,e as o,b as e,ap as s,o as m,aq as p,ar as a,as as n,T as d}from"../../../../nitro/nitro.mjs";import{eq as c}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const l=t(async t=>{const l=r(t),u=i(t,"id");if(!u)throw o({statusCode:400,message:"zh"===l?"缺少订阅 ID":"Missing subscription id"});const h=await e.select().from(s).where(c(s.id,u)).limit(1);if(!h.length)throw o({statusCode:404,message:"zh"===l?"订阅不存在":"Subscription not found"});const z=h[0];await e.update(s).set({status:"canceled",cancelAtPeriodEnd:!0,updatedAt:new Date}).where(c(s.id,u));const f=await e.select({id:m.id}).from(m).where(c(m.subscriptionId,u));for(const t of f)await e.update(m).set({status:p.EXPIRED}).where(c(m.id,t.id));const[b,w]=await Promise.all([a(),n()]);if(b&&w&&z.userId){const t=`sub:cancel:${u}:${Date.now()}`;d(b,{event:"subscription.cancel",timestamp:(new Date).toISOString(),data:{eventId:t,userId:Number(z.userId),sourceId:u,remark:"zh"===l?"管理员取消了订阅":"Admin cancelled subscription"}},{headers:{Authorization:`Bearer ${w}`}})}return{code:0,message:"zh"===l?"订阅已取消":"Subscription cancelled"}});export{l as default};
-//# sourceMappingURL=_id_.delete.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, b as db, z as subscriptions, o as orders, ah as ORDER_STATUS, aZ as getWebhookSubscriptionUrl, a_ as getIntegrationToken, a$ as sendHttpWebhook } from '../../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const _id__delete = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const id = getRouterParam(event, "id");
+  if (!id) throw createError({ statusCode: 400, message: locale === "zh" ? "\u7F3A\u5C11\u8BA2\u9605 ID" : "Missing subscription id" });
+  const existing = await db.select().from(subscriptions).where(eq(subscriptions.id, id)).limit(1);
+  if (!existing.length) {
+    throw createError({ statusCode: 404, message: locale === "zh" ? "\u8BA2\u9605\u4E0D\u5B58\u5728" : "Subscription not found" });
+  }
+  const sub = existing[0];
+  await db.update(subscriptions).set({
+    status: "canceled",
+    cancelAtPeriodEnd: true,
+    updatedAt: /* @__PURE__ */ new Date()
+  }).where(eq(subscriptions.id, id));
+  const relatedOrders = await db.select({ id: orders.id }).from(orders).where(eq(orders.subscriptionId, id));
+  for (const order of relatedOrders) {
+    await db.update(orders).set({ status: ORDER_STATUS.EXPIRED }).where(eq(orders.id, order.id));
+  }
+  const [webhookUrl, ainodeToken] = await Promise.all([getWebhookSubscriptionUrl(), getIntegrationToken()]);
+  if (webhookUrl && ainodeToken && sub.userId) {
+    const eventId = `sub:cancel:${id}:${Date.now()}`;
+    sendHttpWebhook(
+      webhookUrl,
+      {
+        event: "subscription.cancel",
+        timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+        data: {
+          eventId,
+          userId: Number(sub.userId),
+          sourceId: id,
+          remark: locale === "zh" ? "\u7BA1\u7406\u5458\u53D6\u6D88\u4E86\u8BA2\u9605" : "Admin cancelled subscription"
+        }
+      },
+      { headers: { Authorization: `Bearer ${ainodeToken}` } }
+    );
+  }
+  return { code: 0, message: locale === "zh" ? "\u8BA2\u9605\u5DF2\u53D6\u6D88" : "Subscription cancelled" };
+});
+
+export { _id__delete as default };

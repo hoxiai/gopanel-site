@@ -1,2 +1,58 @@
-import{d as r,c as t,ae as o,ba as i,aU as m,e,b as p}from"../../../../nitro/nitro.mjs";import{eq as s,and as a}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const d=r(async r=>{var d;const l=t(r),n=await o(r).catch(()=>null),u=null==(d=null==n?void 0:n.user)?void 0:d.id,h=[];if(u)h.push(s(i.userId,u));else{const t=m(r,"visitorId")||"";if(!t)throw e({statusCode:401,message:"zh"===l?"未登录":"Unauthorized"});h.push(s(i.visitorId,t))}return h.push(s(i.isRead,!1)),await p.update(i).set({isRead:!0}).where(a(...h)),{ok:!0}});export{d as default};
-//# sourceMappingURL=read-all.put.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, aK as getUserSession, b5 as notifications, bM as getCookie, e as createError, b as db } from '../../../../nitro/nitro.mjs';
+import { eq, and } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const readAll_put = defineEventHandler(async (event) => {
+  var _a;
+  const locale = getRequestLocale(event);
+  const session = await getUserSession(event).catch(() => null);
+  const userId = (_a = session == null ? void 0 : session.user) == null ? void 0 : _a.id;
+  const conditions = [];
+  if (userId) {
+    conditions.push(eq(notifications.userId, userId));
+  } else {
+    const visitorId = getCookie(event, "visitorId") || "";
+    if (visitorId) {
+      conditions.push(eq(notifications.visitorId, visitorId));
+    } else {
+      throw createError({ statusCode: 401, message: locale === "zh" ? "\u672A\u767B\u5F55" : "Unauthorized" });
+    }
+  }
+  conditions.push(eq(notifications.isRead, false));
+  await db.update(notifications).set({ isRead: true }).where(and(...conditions));
+  return { ok: true };
+});
+
+export { readAll_put as default };

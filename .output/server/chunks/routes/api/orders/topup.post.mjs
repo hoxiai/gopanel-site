@@ -1,2 +1,227 @@
-import{d as e,c as t,aF as r,e as o,b as a,u as i,H as n,aR as s,r as m,aV as p,aW as d,aX as u,aY as c,ax as l,aG as g,aH as y,aI as h,o as w,O as f,aq as z,K as C,aw as b,aT as v}from"../../../nitro/nitro.mjs";import q from"crypto";import{z as $}from"zod";import{eq as I}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const T=$.object({currency:$.string().min(1).max(8),amount:$.number().positive()}),S=new Map,k=e(async e=>{var $,k,A,D;const M=t(e),x="zh"===M?{loginRequired:"请先登录后再充值",tooManyRequests:"请求过于频繁，请稍后再试。",pendingTitle:"充值订单待支付",pendingMessage:(e,t,r,o)=>`您的充值订单已创建，待支付 ${e} ${t}，到账 ${r} ${o}。`,created:"充值订单创建成功"}:{loginRequired:"Please log in before topping up",tooManyRequests:"Too many requests. Please try again later.",pendingTitle:"Top-up Payment Pending",pendingMessage:(e,t,r,o)=>`Your top-up order has been created. ${e} ${t} is pending payment, and ${r} ${o} will be credited after payment.`,created:"Top-up order created successfully"},R=await r(e).catch(()=>null),_=null==($=null==R?void 0:R.user)?void 0:$.id;if(!_)throw o({statusCode:401,message:x.loginRequired});if(0===(await a.select({id:i.id}).from(i).where(I(i.id,_)).limit(1)).length)throw await n(e).catch(()=>null),o({statusCode:401,message:x.loginRequired});const N=s(e,{xForwardedFor:!0})||"unknown",P=Date.now(),j=S.get(N);if(!j||j.resetTime<P)S.set(N,{count:1,resetTime:P+6e4});else if(j.count++,j.count>5)throw o({statusCode:429,message:x.tooManyRequests});const U=T.safeParse(await m(e));if(!U.success)throw o({statusCode:400,message:"zh"===M?"充值参数无效":"Invalid top-up request"});const E=U.data,F=await p();let B;try{B=d(F,E.currency,E.amount,M)}catch(e){if(e instanceof u)throw o({statusCode:400,message:e.message});throw e}const H=await c(),O=l(e),Y=String((null==(k=null==R?void 0:R.user)?void 0:k.email)||"").trim()||`${O}@example.com`,G=g(h(e),await y(e)),X={recharge_amount:B.rechargeAmount,balance_type:"cash",display_unit:B.accountingCurrency,topup:{currency:B.currency,paidAmount:B.amount,rate:null!=(D=null==(A=F.options[B.currency])?void 0:A.rate)?D:1,accountingCurrency:B.accountingCurrency},...G.inviteCode?{inviteCode:G.inviteCode}:{},...G.promoCode?{promoCode:G.promoCode}:{},...G.agentCode?{agentCode:G.agentCode}:{}},J=new Date,K=`TU${`${J.getFullYear()}${String(J.getMonth()+1).padStart(2,"0")}${String(J.getDate()).padStart(2,"0")}`}${String(Date.now()).slice(-6)}${q.randomBytes(4).toString("hex").toUpperCase()}`;return await a.insert(w).values({id:K,productId:H.id,amount:B.amount,currency:B.currency,status:z.NONE,payStatus:f.PENDING,contactEmail:Y,payMethod:"none",visitorId:O,userId:_,metaData:process.env.NUXT_HUB_DATABASE?X:JSON.stringify(X),createdAt:new Date}),await C({orderId:K,buyerUserId:_,metaData:X}),await b(e,{visitorId:O,userId:_,orderId:K,productId:H.id,eventName:"begin_checkout"}),await v({userId:_,visitorId:O,type:"order_pending",title:x.pendingTitle,message:x.pendingMessage(B.amount,B.currency,B.rechargeAmount,B.accountingCurrency),data:{orderId:K,payStatus:"pending",targetPath:`/payment/${K}`}}),{code:0,message:x.created,data:{id:K,amount:B.amount,currency:B.currency,rechargeAmount:B.rechargeAmount,accountingCurrency:B.accountingCurrency}}});export{k as default};
-//# sourceMappingURL=topup.post.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, bx as requireUserSession, e as createError, b as db, u as users, W as clearUserSession, bG as getRequestIP, r as readBody, bN as getTopupRules, bO as buildTopupQuote, bP as TopupValidationError, bQ as ensureTopupCarrierProduct, bu as ensureVisitorId, by as mergePromoTracking, bz as capturePromoTracking, bA as readPromoTracking, ad as getMinimalCheckoutAdminConfig, ae as buildMinimalCheckoutBridgeMeta, af as mergeMinimalCheckoutMeta, o as orders, O as ORDER_PAY_STATUS, ah as ORDER_STATUS, ag as prepareOrderMetaForInsert, bR as createTopupRecord, $ as createOrderAttribution, be as trackVisitorEvent, bK as createNotification } from '../../../nitro/nitro.mjs';
+import crypto from 'crypto';
+import { z } from 'zod';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const bodySchema = z.object({
+  currency: z.string().min(1).max(8),
+  amount: z.number().positive()
+});
+const rateLimitMap = /* @__PURE__ */ new Map();
+const topup_post = defineEventHandler(async (event) => {
+  var _a, _b, _c, _d, _e, _f;
+  const locale = getRequestLocale(event);
+  const messages = locale === "zh" ? {
+    loginRequired: "\u8BF7\u5148\u767B\u5F55\u540E\u518D\u5145\u503C",
+    tooManyRequests: "\u8BF7\u6C42\u8FC7\u4E8E\u9891\u7E41\uFF0C\u8BF7\u7A0D\u540E\u518D\u8BD5\u3002",
+    pendingTitle: "\u5145\u503C\u8BA2\u5355\u5F85\u652F\u4ED8",
+    pendingMessage: (amount, currency, rechargeAmount, accountingCurrency) => `\u60A8\u7684\u5145\u503C\u8BA2\u5355\u5DF2\u521B\u5EFA\uFF0C\u5F85\u652F\u4ED8 ${amount} ${currency}\uFF0C\u5230\u8D26 ${rechargeAmount} ${accountingCurrency}\u3002`,
+    created: "\u5145\u503C\u8BA2\u5355\u521B\u5EFA\u6210\u529F"
+  } : {
+    loginRequired: "Please log in before topping up",
+    tooManyRequests: "Too many requests. Please try again later.",
+    pendingTitle: "Top-up Payment Pending",
+    pendingMessage: (amount, currency, rechargeAmount, accountingCurrency) => `Your top-up order has been created. ${amount} ${currency} is pending payment, and ${rechargeAmount} ${accountingCurrency} will be credited after payment.`,
+    created: "Top-up order created successfully"
+  };
+  const session = await requireUserSession(event).catch(() => null);
+  const userId = (_a = session == null ? void 0 : session.user) == null ? void 0 : _a.id;
+  if (!userId) {
+    throw createError({ statusCode: 401, message: messages.loginRequired });
+  }
+  const userExists = await db.select({ id: users.id }).from(users).where(eq(users.id, userId)).limit(1);
+  if (userExists.length === 0) {
+    await clearUserSession(event).catch(() => null);
+    throw createError({ statusCode: 401, message: messages.loginRequired });
+  }
+  const ip = getRequestIP(event, { xForwardedFor: true }) || "unknown";
+  const now = Date.now();
+  const rateData = rateLimitMap.get(ip);
+  if (!rateData || rateData.resetTime < now) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + 6e4 });
+  } else {
+    rateData.count++;
+    if (rateData.count > 5) {
+      throw createError({ statusCode: 429, message: messages.tooManyRequests });
+    }
+  }
+  const parsedBody = bodySchema.safeParse(await readBody(event));
+  if (!parsedBody.success) {
+    throw createError({
+      statusCode: 400,
+      message: locale === "zh" ? "\u5145\u503C\u53C2\u6570\u65E0\u6548" : "Invalid top-up request"
+    });
+  }
+  const body = parsedBody.data;
+  const rules = await getTopupRules();
+  let quote;
+  try {
+    quote = buildTopupQuote(rules, body.currency, body.amount, locale);
+  } catch (error) {
+    if (error instanceof TopupValidationError) {
+      throw createError({ statusCode: 400, message: error.message });
+    }
+    throw error;
+  }
+  const carrier = await ensureTopupCarrierProduct();
+  const visitorId = ensureVisitorId(event);
+  const contactEmail = String(((_b = session == null ? void 0 : session.user) == null ? void 0 : _b.email) || "").trim() || `${visitorId}@example.com`;
+  const promoTracking = mergePromoTracking(
+    readPromoTracking(event),
+    await capturePromoTracking(event)
+  );
+  const orderMetaObj = {
+    recharge_amount: quote.rechargeAmount,
+    balance_type: "cash",
+    display_unit: quote.accountingCurrency,
+    topup: {
+      currency: quote.currency,
+      paidAmount: quote.amount,
+      rate: (_d = (_c = rules.options[quote.currency]) == null ? void 0 : _c.rate) != null ? _d : 1,
+      accountingCurrency: quote.accountingCurrency
+    },
+    ...promoTracking.inviteCode ? { inviteCode: promoTracking.inviteCode } : {},
+    ...promoTracking.promoCode ? { promoCode: promoTracking.promoCode } : {},
+    ...promoTracking.agentCode ? { agentCode: promoTracking.agentCode } : {}
+  };
+  const date = /* @__PURE__ */ new Date();
+  const dateStr = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`;
+  const orderId = `TU${dateStr}${String(Date.now()).slice(-6)}${crypto.randomBytes(4).toString("hex").toUpperCase()}`;
+  const exchangeRate = quote.rechargeAmount > 0 ? Math.round(quote.amount / quote.rechargeAmount * 1e8) / 1e8 : 1;
+  const minimalCheckoutConfig = await getMinimalCheckoutAdminConfig();
+  const bridgeMeta = buildMinimalCheckoutBridgeMeta({
+    externalOrderId: orderId,
+    sourceProductId: carrier.id,
+    amount: quote.amount,
+    currency: quote.currency,
+    sourceAmount: quote.rechargeAmount,
+    sourceCurrency: quote.accountingCurrency,
+    exchangeRate,
+    rechargeAmount: quote.rechargeAmount,
+    rechargeCurrency: quote.accountingCurrency,
+    balanceType: "cash",
+    notifyUrl: minimalCheckoutConfig.defaultNotifyUrl || void 0,
+    returnUrl: minimalCheckoutConfig.defaultReturnUrl || void 0,
+    cancelUrl: minimalCheckoutConfig.defaultCancelUrl || void 0,
+    customerEmail: contactEmail,
+    attach: {
+      channel: "wallet",
+      businessType: "topup",
+      walletOwner: "apay",
+      sourceProductId: carrier.id,
+      productName: carrier.name,
+      productMeta: carrier.metaData,
+      userId,
+      topupRate: (_f = (_e = rules.options[quote.currency]) == null ? void 0 : _e.rate) != null ? _f : 1,
+      topupRateDirection: "payment_to_recharge"
+    }
+  });
+  const relayOrderMeta = mergeMinimalCheckoutMeta({
+    ...orderMetaObj,
+    currencySnapshot: {
+      baseAmount: quote.rechargeAmount,
+      baseCurrency: quote.accountingCurrency,
+      amount: quote.amount,
+      currency: quote.currency,
+      exchangeRate,
+      source: "topup-rules"
+    }
+  }, bridgeMeta);
+  await db.insert(orders).values({
+    id: orderId,
+    productId: carrier.id,
+    amount: quote.amount,
+    currency: quote.currency,
+    source: "minimal_checkout",
+    externalOrderId: orderId,
+    status: ORDER_STATUS.NONE,
+    payStatus: ORDER_PAY_STATUS.PENDING,
+    contactEmail,
+    payMethod: "none",
+    visitorId,
+    userId,
+    metaData: prepareOrderMetaForInsert(relayOrderMeta),
+    createdAt: /* @__PURE__ */ new Date()
+  });
+  try {
+    await createTopupRecord({
+      orderId,
+      userId: Number(userId),
+      paymentAmount: quote.amount,
+      paymentCurrency: quote.currency,
+      creditAmount: quote.rechargeAmount,
+      creditCurrency: quote.accountingCurrency,
+      exchangeRate,
+      balanceType: "cash",
+      source: "quick_topup",
+      createdAt: /* @__PURE__ */ new Date()
+    });
+  } catch (error) {
+    await db.update(orders).set({ payStatus: ORDER_PAY_STATUS.FAILED, status: ORDER_STATUS.FAILED }).where(eq(orders.id, orderId));
+    throw error;
+  }
+  await createOrderAttribution({
+    orderId,
+    buyerUserId: userId,
+    metaData: relayOrderMeta
+  });
+  await trackVisitorEvent(event, {
+    visitorId,
+    userId,
+    orderId,
+    productId: carrier.id,
+    eventName: "begin_checkout"
+  });
+  await createNotification({
+    userId,
+    visitorId,
+    type: "order_pending",
+    title: messages.pendingTitle,
+    message: messages.pendingMessage(quote.amount, quote.currency, quote.rechargeAmount, quote.accountingCurrency),
+    data: { orderId, payStatus: "pending", targetPath: `/payment/${orderId}` }
+  });
+  return {
+    code: 0,
+    message: messages.created,
+    data: {
+      id: orderId,
+      amount: quote.amount,
+      currency: quote.currency,
+      rechargeAmount: quote.rechargeAmount,
+      accountingCurrency: quote.accountingCurrency
+    }
+  };
+});
+
+export { topup_post as default };

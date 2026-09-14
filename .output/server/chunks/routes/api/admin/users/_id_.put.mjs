@@ -1,2 +1,89 @@
-import{d as r,c as e,f as t,e as i,r as o,b as s,u as m,j as a}from"../../../../nitro/nitro.mjs";import{and as p,eq as d,ne as l}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const u=r(async r=>{const u="zh"===e(r)?{userIdRequired:"用户 ID 不能为空",emailRequired:"邮箱不能为空",emailTaken:"该邮箱已被其他用户占用",updated:"用户更新成功",failed:"更新用户失败"}:{userIdRequired:"User ID is required",emailRequired:"Email is required",emailTaken:"Email already taken by another user",updated:"User updated successfully",failed:"Failed to update user"};try{const e=t(r,"id");if(!e)throw i({statusCode:400,message:u.userIdRequired});const n=await o(r),{username:h,password:c}=n,f=String(h||"").trim();if(!f)throw i({statusCode:400,message:u.emailRequired});if((await s.select().from(m).where(p(d(m.email,f),l(m.id,Number(e))))).length>0)throw i({statusCode:400,message:u.emailTaken});const z={email:f,nickname:f.split("@")[0]||f};return c&&(z.passwordHash=await a(c)),await s.update(m).set(z).where(d(m.id,Number(e))),{code:0,message:u.updated}}catch(r){throw i({statusCode:r.statusCode||500,message:r.message||u.failed})}});export{u as default};
-//# sourceMappingURL=_id_.put.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, r as readBody, b as db, u as users, j as hashPassword } from '../../../../nitro/nitro.mjs';
+import { and, eq, ne } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const _id__put = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const messages = locale === "zh" ? {
+    userIdRequired: "\u7528\u6237 ID \u4E0D\u80FD\u4E3A\u7A7A",
+    emailRequired: "\u90AE\u7BB1\u4E0D\u80FD\u4E3A\u7A7A",
+    emailTaken: "\u8BE5\u90AE\u7BB1\u5DF2\u88AB\u5176\u4ED6\u7528\u6237\u5360\u7528",
+    updated: "\u7528\u6237\u66F4\u65B0\u6210\u529F",
+    failed: "\u66F4\u65B0\u7528\u6237\u5931\u8D25"
+  } : {
+    userIdRequired: "User ID is required",
+    emailRequired: "Email is required",
+    emailTaken: "Email already taken by another user",
+    updated: "User updated successfully",
+    failed: "Failed to update user"
+  };
+  try {
+    const id = getRouterParam(event, "id");
+    if (!id) {
+      throw createError({ statusCode: 400, message: messages.userIdRequired });
+    }
+    const body = await readBody(event);
+    const { username, password } = body;
+    const email = String(username || "").trim();
+    if (!email) {
+      throw createError({ statusCode: 400, message: messages.emailRequired });
+    }
+    const existingUser = await db.select().from(users).where(
+      and(
+        eq(users.email, email),
+        ne(users.id, Number(id))
+      )
+    );
+    if (existingUser.length > 0) {
+      throw createError({ statusCode: 400, message: messages.emailTaken });
+    }
+    const updateData = {
+      email,
+      nickname: email.split("@")[0] || email
+    };
+    if (password) {
+      updateData.passwordHash = await hashPassword(password);
+    }
+    await db.update(users).set(updateData).where(eq(users.id, Number(id)));
+    return { code: 0, message: messages.updated };
+  } catch (error) {
+    throw createError({
+      statusCode: error.statusCode || 500,
+      message: error.message || messages.failed
+    });
+  }
+});
+
+export { _id__put as default };

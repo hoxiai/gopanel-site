@@ -1,2 +1,57 @@
-import{d as r,ae as t,ba as o,aU as i,b as m}from"../../../../nitro/nitro.mjs";import{eq as e,count as p,and as s}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const a=r(async r=>{var a,l;const n=await t(r).catch(()=>null),d=null==(a=null==n?void 0:n.user)?void 0:a.id,u=[];if(d)u.push(e(o.userId,d));else{const t=i(r,"visitorId")||"";if(!t)return{unreadCount:0};u.push(e(o.visitorId,t))}u.push(e(o.isRead,!1));return{unreadCount:(null==(l=(await m.select({value:p()}).from(o).where(s(...u)))[0])?void 0:l.value)||0}});export{a as default};
-//# sourceMappingURL=count.get.mjs.map
+import { d as defineEventHandler, aK as getUserSession, b5 as notifications, bM as getCookie, b as db } from '../../../../nitro/nitro.mjs';
+import { eq, count, and } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const count_get = defineEventHandler(async (event) => {
+  var _a, _b;
+  const session = await getUserSession(event).catch(() => null);
+  const userId = (_a = session == null ? void 0 : session.user) == null ? void 0 : _a.id;
+  const conditions = [];
+  if (userId) {
+    conditions.push(eq(notifications.userId, userId));
+  } else {
+    const visitorId = getCookie(event, "visitorId") || "";
+    if (visitorId) {
+      conditions.push(eq(notifications.visitorId, visitorId));
+    } else {
+      return { unreadCount: 0 };
+    }
+  }
+  conditions.push(eq(notifications.isRead, false));
+  const result = await db.select({ value: count() }).from(notifications).where(and(...conditions));
+  return { unreadCount: ((_b = result[0]) == null ? void 0 : _b.value) || 0 };
+});
+
+export { count_get as default };

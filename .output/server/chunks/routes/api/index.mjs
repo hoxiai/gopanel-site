@@ -1,2 +1,82 @@
-import{d as r,c as t,g as o,ae as i,aU as e,e as m,o as p,b as s,u as a,p as d}from"../../nitro/nitro.mjs";import{or as l,eq as n,count as u,desc as c}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const h=r(async r=>{var h,z;const f=t(r),y=o(r),g=parseInt(y.page)||1,v=parseInt(y.pageSize)||15,b=(g-1)*v,I=await i(r),k=null==(h=null==I?void 0:I.user)?void 0:h.id,w=e(r,"visitor_id");if(!k&&!w)throw m({statusCode:401,message:"zh"===f?"未登录，且未找到访客凭证":"Unauthorized: No user session or visitor cookie found"});const q=k?l(n(p.userId,k),n(p.visitorId,w||"")):n(p.visitorId,w),N=(null==(z=(await s.select({value:u()}).from(p).where(q))[0])?void 0:z.value)||0;return{data:await s.select({id:p.id,amount:p.amount,status:p.status,contactEmail:p.contactEmail,payMethod:p.payMethod,tradeNo:p.tradeNo,visitorId:p.visitorId,createdAt:p.createdAt,productName:d.name,productSlug:d.slug,productId:d.id,productImage:d.imageUrl,productType:d.type,userNickname:a.nickname,userEmail:a.email}).from(p).leftJoin(d,n(p.productId,d.id)).leftJoin(a,n(p.userId,a.id)).where(q).orderBy(c(p.createdAt)).limit(v).offset(b),total:N,page:g,pageSize:v}});export{h as default};
-//# sourceMappingURL=index.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, aK as getUserSession, bM as getCookie, e as createError, o as orders, b as db, u as users, p as products } from '../../nitro/nitro.mjs';
+import { or, eq, count, desc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const index = defineEventHandler(async (event) => {
+  var _a, _b;
+  const locale = getRequestLocale(event);
+  const query = getQuery(event);
+  const page = parseInt(query.page) || 1;
+  const pageSize = parseInt(query.pageSize) || 15;
+  const offset = (page - 1) * pageSize;
+  const session = await getUserSession(event);
+  const userId = (_a = session == null ? void 0 : session.user) == null ? void 0 : _a.id;
+  const visitorId = getCookie(event, "visitor_id");
+  if (!userId && !visitorId) {
+    throw createError({
+      statusCode: 401,
+      message: locale === "zh" ? "\u672A\u767B\u5F55\uFF0C\u4E14\u672A\u627E\u5230\u8BBF\u5BA2\u51ED\u8BC1" : "Unauthorized: No user session or visitor cookie found"
+    });
+  }
+  const authCondition = userId ? or(eq(orders.userId, userId), eq(orders.visitorId, visitorId || "")) : eq(orders.visitorId, visitorId);
+  const totalResult = await db.select({ value: count() }).from(orders).where(authCondition);
+  const total = ((_b = totalResult[0]) == null ? void 0 : _b.value) || 0;
+  const result = await db.select({
+    id: orders.id,
+    amount: orders.amount,
+    currency: orders.currency,
+    status: orders.status,
+    contactEmail: orders.contactEmail,
+    payMethod: orders.payMethod,
+    tradeNo: orders.tradeNo,
+    visitorId: orders.visitorId,
+    createdAt: orders.createdAt,
+    productName: products.name,
+    productSlug: products.slug,
+    productId: products.id,
+    productImage: products.imageUrl,
+    productType: products.type,
+    userNickname: users.nickname,
+    userEmail: users.email
+  }).from(orders).leftJoin(products, eq(orders.productId, products.id)).leftJoin(users, eq(orders.userId, users.id)).where(authCondition).orderBy(desc(orders.createdAt)).limit(pageSize).offset(offset);
+  return {
+    data: result,
+    total,
+    page,
+    pageSize
+  };
+});
+
+export { index as default };

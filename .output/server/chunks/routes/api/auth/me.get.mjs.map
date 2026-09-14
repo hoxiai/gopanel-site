@@ -1,1 +1,0 @@
-{"version":3,"file":"me.get.mjs","sources":["../../../../../../server/api/auth/me.get.ts"],"names":["me_get","defineEventHandler","async","event","user","requireUserSession"],"mappings":"8kCAAA,MAAAA,EAAAC,EAAAC,MAAAC,IAGA,CACAC,YAHAC,EAAAF,IAGAC"}

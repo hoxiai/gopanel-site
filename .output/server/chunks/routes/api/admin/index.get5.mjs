@@ -1,2 +1,63 @@
-import{d as r,g as t,b as o,I as e,t as i}from"../../../nitro/nitro.mjs";import{count as m,desc as p}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const s=r(async r=>{const s=t(r),a=parseInt(s.page)||1,l=parseInt(s.pageSize)||50,d=(a-1)*l,[{value:n}]=await o.select({value:m()}).from(e);return{logs:(await o.select({id:e.id,level:e.level,message:e.message,details:e.details,source:e.source,createdAt:e.createdAt}).from(e).orderBy(p(e.createdAt)).limit(l).offset(d)).map(r=>({...r,createdAt:i(r.createdAt)})),total:n,page:a,pageSize:l}});export{s as default};
-//# sourceMappingURL=index.get5.mjs.map
+import { d as defineEventHandler, g as getQuery, b as db, X as logs, t as toIsoTimestamp } from '../../../nitro/nitro.mjs';
+import { count, desc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const index_get = defineEventHandler(async (event) => {
+  const query = getQuery(event);
+  const page = parseInt(query.page) || 1;
+  const pageSize = parseInt(query.pageSize) || 50;
+  const offset = (page - 1) * pageSize;
+  const [{ value: total }] = await db.select({ value: count() }).from(logs);
+  const result = await db.select({
+    id: logs.id,
+    level: logs.level,
+    message: logs.message,
+    details: logs.details,
+    source: logs.source,
+    createdAt: logs.createdAt
+  }).from(logs).orderBy(desc(logs.createdAt)).limit(pageSize).offset(offset);
+  const normalizedLogs = result.map((log) => ({
+    ...log,
+    createdAt: toIsoTimestamp(log.createdAt)
+  }));
+  return {
+    logs: normalizedLogs,
+    total,
+    page,
+    pageSize
+  };
+});
+
+export { index_get as default };

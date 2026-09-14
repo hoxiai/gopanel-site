@@ -1,2 +1,121 @@
-import{d as r,c as t,g as e,u as o,b as i,e as m}from"../../../nitro/nitro.mjs";import{sql as p,count as s,or as a,like as l,desc as d}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const n=r(async r=>{var n;const c=t(r),u=e(r),h=parseInt(u.page)||1,z=parseInt(u.pageSize)||15,f=(h-1)*z,y=String(u.q||u.keyword||"").trim(),g=y?`%${y.toLowerCase()}%`:"",b=p`lower(${o.email})`,w=p`lower(coalesce(${o.nickname}, ''))`,k=p`lower(cast(${o.id} as text))`,q=i.select({value:s()}).from(o),v=(null==(n=(y?await q.where(a(l(b,g),l(w,g),l(k,g))):await q)[0])?void 0:n.value)||0;try{let r=i.select({id:o.id,username:o.email,email:o.email,nickname:o.nickname,createdAt:o.createdAt,status:o.status}).from(o);y&&(r=r.where(a(l(b,g),l(w,g),l(k,g))));return{data:await r.orderBy(d(o.createdAt)).limit(z).offset(f),total:v,page:h,pageSize:z}}catch(r){throw m({statusCode:500,message:r.message||("zh"===c?"获取用户列表失败":"Failed to fetch users")})}});export{n as default};
-//# sourceMappingURL=index.get9.mjs.map
+import { d as defineEventHandler, g as getQuery, b0 as tickets, u as users, b as db } from '../../../nitro/nitro.mjs';
+import { eq, or, like, and, desc, count } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const index_get = defineEventHandler(async (event) => {
+  var _a;
+  const query = getQuery(event);
+  const page = Math.max(parseInt(query.page) || 1, 1);
+  const pageSize = Math.min(Math.max(parseInt(query.pageSize) || 15, 1), 100);
+  const offset = (page - 1) * pageSize;
+  const status = typeof query.status === "string" && query.status.trim() ? query.status.trim() : "";
+  const category = typeof query.category === "string" && query.category.trim() ? query.category.trim() : "";
+  const priority = typeof query.priority === "string" && query.priority.trim() ? query.priority.trim() : "";
+  const keyword = typeof query.keyword === "string" && query.keyword.trim() ? query.keyword.trim() : "";
+  const conditions = [];
+  if (status) {
+    conditions.push(eq(tickets.status, status));
+  }
+  if (category) {
+    conditions.push(eq(tickets.category, category));
+  }
+  if (priority) {
+    conditions.push(eq(tickets.priority, priority));
+  }
+  if (keyword) {
+    const pattern = `%${keyword}%`;
+    conditions.push(
+      or(
+        like(tickets.ticketNo, pattern),
+        like(tickets.title, pattern),
+        like(users.email, pattern)
+      )
+    );
+  }
+  const whereClause = conditions.length > 0 ? and(...conditions) : void 0;
+  const queryBuilder = db.select({
+    id: tickets.id,
+    ticketNo: tickets.ticketNo,
+    userId: tickets.userId,
+    userEmail: users.email,
+    userNickname: users.nickname,
+    category: tickets.category,
+    title: tickets.title,
+    status: tickets.status,
+    priority: tickets.priority,
+    context: tickets.context,
+    lastRepliedAt: tickets.lastRepliedAt,
+    lastRepliedBy: tickets.lastRepliedBy,
+    createdAt: tickets.createdAt,
+    updatedAt: tickets.updatedAt
+  }).from(tickets).leftJoin(users, eq(tickets.userId, users.id)).where(whereClause).orderBy(desc(tickets.lastRepliedAt)).limit(pageSize).offset(offset);
+  const [totalResult, list, statusCounts] = await Promise.all([
+    db.select({ total: count() }).from(tickets).leftJoin(users, eq(tickets.userId, users.id)).where(whereClause),
+    queryBuilder,
+    db.select({
+      status: tickets.status,
+      count: count()
+    }).from(tickets).groupBy(tickets.status)
+  ]);
+  const total = Number(((_a = totalResult[0]) == null ? void 0 : _a.total) || 0);
+  const summary = {
+    all: 0,
+    open: 0,
+    in_progress: 0,
+    auto_resolved: 0,
+    resolved: 0,
+    closed: 0
+  };
+  for (const item of statusCounts) {
+    const cnt = Number(item.count || 0);
+    summary.all += cnt;
+    if (item.status in summary) {
+      summary[item.status] = cnt;
+    }
+  }
+  return {
+    code: 200,
+    data: list,
+    summary,
+    pagination: {
+      page,
+      pageSize,
+      total,
+      totalPages: Math.ceil(total / pageSize)
+    }
+  };
+});
+
+export { index_get as default };

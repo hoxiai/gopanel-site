@@ -1,2 +1,136 @@
-import{d as r,g as t,b as e,p as i,r as o,e as m,c as p}from"../../../nitro/nitro.mjs";import{count as a,desc as s}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const n=r(async r=>{var n;if("GET"===r.method){const o=t(r),m=parseInt(o.page)||1,p=parseInt(o.pageSize)||15,l=(m-1)*p,d=(null==(n=(await e.select({value:a()}).from(i))[0])?void 0:n.value)||0;return{data:await e.select().from(i).orderBy(i.sortOrder,s(i.id)).limit(p).offset(l),total:d,page:m,pageSize:p}}if("POST"===r.method){const t=await o(r),{id:a,...s}=t;if(void 0!==s.price){const t=Number(s.price);if(!Number.isFinite(t)||t<0)throw m({statusCode:400,message:"zh"===p(r)?"价格不能为负数":"Price cannot be negative"})}return!s.slug&&s.name&&(s.slug=s.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)+/g,"")),s.imageUrls=(r=>{if(null==r||""===r)return[];if("string"==typeof r)try{const t=JSON.parse(r);return Array.isArray(t)?t:[]}catch{return[]}return Array.isArray(r)?r:[]})(s.imageUrls),s.metaData=(r=>{if(null==r||""===r)return{};if("string"==typeof r)try{const t=JSON.parse(r);return t&&"object"==typeof t?t:{}}catch{return{}}return r&&"object"==typeof r?r:{}})(s.metaData),s.createdAt&&delete s.createdAt,await e.insert(i).values(s).returning()}});export{n as default};
-//# sourceMappingURL=index4.mjs.map
+import { d as defineEventHandler, g as getQuery, p as products, b as db, r as readBody, e as createError, c as getRequestLocale } from '../../../nitro/nitro.mjs';
+import { or, like, sql, and, count, desc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const normalizeImageUrls = (value) => {
+  if (value === null || value === void 0 || value === "") {
+    return [];
+  }
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return Array.isArray(value) ? value : [];
+};
+const normalizeMetaData = (value) => {
+  if (value === null || value === void 0 || value === "") {
+    return {};
+  }
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch {
+      return {};
+    }
+  }
+  return value && typeof value === "object" ? value : {};
+};
+const index = defineEventHandler(async (event) => {
+  var _a;
+  if (event.method === "GET") {
+    const query = getQuery(event);
+    const page = parseInt(query.page) || 1;
+    const pageSize = parseInt(query.pageSize) || 15;
+    const search = String(query.search || "").trim();
+    const type = String(query.type || "").trim();
+    const offset = (page - 1) * pageSize;
+    const conditions = [];
+    if (search) {
+      conditions.push(or(
+        like(products.name, `%${search}%`),
+        like(products.description, `%${search}%`),
+        like(products.slug, `%${search}%`)
+      ));
+    }
+    if (type && type !== "all") {
+      conditions.push(sql`${products.type} = ${type}`);
+    }
+    const whereClause = conditions.length === 1 ? conditions[0] : conditions.length > 1 ? and(...conditions) : void 0;
+    let countQuery = db.select({ value: count() }).from(products);
+    if (whereClause) {
+      countQuery = countQuery.where(whereClause);
+    }
+    const totalResult = await countQuery;
+    const total = ((_a = totalResult[0]) == null ? void 0 : _a.value) || 0;
+    let selectQuery = db.select().from(products).orderBy(products.sortOrder, desc(products.id)).limit(pageSize).offset(offset);
+    if (whereClause) {
+      selectQuery = selectQuery.where(whereClause);
+    }
+    const result = await selectQuery;
+    return {
+      data: result,
+      total,
+      page,
+      pageSize
+    };
+  }
+  if (event.method === "POST") {
+    const body = await readBody(event);
+    const { id, ...insertData } = body;
+    if (insertData.price !== void 0) {
+      const price = Number(insertData.price);
+      if (!Number.isFinite(price) || price < 0) {
+        throw createError({
+          statusCode: 400,
+          message: getRequestLocale(event) === "zh" ? "\u4EF7\u683C\u4E0D\u80FD\u4E3A\u8D1F\u6570" : "Price cannot be negative"
+        });
+      }
+    }
+    if (!insertData.slug && insertData.name) {
+      insertData.slug = insertData.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+    }
+    insertData.imageUrls = normalizeImageUrls(insertData.imageUrls);
+    insertData.metaData = normalizeMetaData(insertData.metaData);
+    if (insertData.status) {
+      insertData.isActive = insertData.status !== "inactive";
+    } else if (insertData.isActive !== void 0) {
+      insertData.status = insertData.isActive ? "active" : "inactive";
+    } else {
+      insertData.status = "active";
+      insertData.isActive = true;
+    }
+    if (insertData.createdAt) {
+      delete insertData.createdAt;
+    }
+    return await db.insert(products).values(insertData).returning();
+  }
+});
+
+export { index as default };

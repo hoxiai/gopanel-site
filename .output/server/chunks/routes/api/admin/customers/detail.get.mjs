@@ -1,2 +1,111 @@
-import{d as t,c as r,g as i,e as o,o as e,b as m,p as a,v as s,u as p}from"../../../../nitro/nitro.mjs";import{and as d,or as l,isNull as n,eq as u,desc as c}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const h=t(async t=>{var h;const y=r(t),f=i(t),z=String(f.email||"").trim(),g=String(f.visitorId||"").trim(),v=!z||"Anonymous"===z||"匿名访客"===z;if(!z&&!g)throw o({statusCode:400,message:"zh"===y?"缺少客户标识":"Missing customer identifier"});try{const t=v?d(l(n(e.contactEmail),u(e.contactEmail,"")),u(e.visitorId,g)):u(e.contactEmail,z),r=await m.select({id:e.id,amount:e.amount,currency:e.currency,status:e.status,payStatus:e.payStatus,payMethod:e.payMethod,tradeNo:e.tradeNo,visitorId:e.visitorId,createdAt:e.createdAt,paidAt:e.paidAt,productId:a.id,productName:a.name,productSlug:a.slug,productImage:a.imageUrl}).from(e).leftJoin(a,u(e.productId,a.id)).where(t).orderBy(c(e.createdAt)),i=r.reduce((t,r)=>(t.totalOrders+=1,"paid"===r.payStatus?t.totalSpent+=Number(r.amount||0):t.unpaidOrders+=1,t),{totalOrders:0,totalSpent:0,unpaidOrders:0}),o=g||(null==(h=r.find(t=>t.visitorId))?void 0:h.visitorId)||"",y=o?await m.select().from(s).where(u(s.visitorId,o)).limit(1):[],f=v?[]:await m.select({id:p.id,email:p.email,nickname:p.nickname,avatarUrl:p.avatarUrl,createdAt:p.createdAt,status:p.status}).from(p).where(u(p.email,z)).limit(1);return{identity:{email:v?null:z,visitorId:o||null,isAnonymous:v},stats:i,profile:y[0]||null,registeredUser:f[0]||null,orders:r}}catch(t){throw o({statusCode:500,message:t.message||("zh"===y?"获取客户详情失败":"Failed to fetch customer detail")})}});export{h as default};
-//# sourceMappingURL=detail.get.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, e as createError, o as orders, b as db, p as products, q as aggregateOrderAccountingTotals, v as visitorProfiles, u as users } from '../../../../nitro/nitro.mjs';
+import { and, or, isNull, eq, desc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const detail_get = defineEventHandler(async (event) => {
+  var _a, _b;
+  const locale = getRequestLocale(event);
+  const query = getQuery(event);
+  const email = String(query.email || "").trim();
+  const visitorId = String(query.visitorId || "").trim();
+  const isAnonymous = !email || email === "Anonymous" || email === "\u533F\u540D\u8BBF\u5BA2";
+  if (!email && !visitorId) {
+    throw createError({
+      statusCode: 400,
+      message: locale === "zh" ? "\u7F3A\u5C11\u5BA2\u6237\u6807\u8BC6" : "Missing customer identifier"
+    });
+  }
+  try {
+    const orderWhere = isAnonymous ? and(
+      or(isNull(orders.contactEmail), eq(orders.contactEmail, "")),
+      eq(orders.visitorId, visitorId)
+    ) : eq(orders.contactEmail, email);
+    const orderRows = await db.select({
+      id: orders.id,
+      amount: orders.amount,
+      currency: orders.currency,
+      metaData: orders.metaData,
+      status: orders.status,
+      payStatus: orders.payStatus,
+      payMethod: orders.payMethod,
+      tradeNo: orders.tradeNo,
+      visitorId: orders.visitorId,
+      createdAt: orders.createdAt,
+      paidAt: orders.paidAt,
+      productId: products.id,
+      productName: products.name,
+      productSlug: products.slug,
+      productImage: products.imageUrl
+    }).from(orders).leftJoin(products, eq(orders.productId, products.id)).where(orderWhere).orderBy(desc(orders.createdAt));
+    const typedOrderRows = orderRows;
+    const paidOrders = typedOrderRows.filter((order) => order.payStatus === "paid");
+    const totalSpentByCurrency = aggregateOrderAccountingTotals(paidOrders);
+    const stats = {
+      totalOrders: typedOrderRows.length,
+      totalSpent: totalSpentByCurrency.length === 1 ? ((_a = totalSpentByCurrency[0]) == null ? void 0 : _a.amount) || 0 : 0,
+      totalSpentByCurrency,
+      unpaidOrders: typedOrderRows.length - paidOrders.length
+    };
+    const attributionVisitorId = visitorId || ((_b = typedOrderRows.find((order) => order.visitorId)) == null ? void 0 : _b.visitorId) || "";
+    const profileRows = attributionVisitorId ? await db.select().from(visitorProfiles).where(eq(visitorProfiles.visitorId, attributionVisitorId)).limit(1) : [];
+    const registeredUserRows = !isAnonymous ? await db.select({
+      id: users.id,
+      email: users.email,
+      nickname: users.nickname,
+      avatarUrl: users.avatarUrl,
+      createdAt: users.createdAt,
+      status: users.status
+    }).from(users).where(eq(users.email, email)).limit(1) : [];
+    const responseOrders = typedOrderRows.map(({ metaData: _metaData, ...order }) => order);
+    return {
+      identity: {
+        email: isAnonymous ? null : email,
+        visitorId: attributionVisitorId || null,
+        isAnonymous
+      },
+      stats,
+      profile: profileRows[0] || null,
+      registeredUser: registeredUserRows[0] || null,
+      orders: responseOrders
+    };
+  } catch (error) {
+    throw createError({
+      statusCode: 500,
+      message: error.message || (locale === "zh" ? "\u83B7\u53D6\u5BA2\u6237\u8BE6\u60C5\u5931\u8D25" : "Failed to fetch customer detail")
+    });
+  }
+});
+
+export { detail_get as default };

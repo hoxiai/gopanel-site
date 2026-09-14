@@ -1,2 +1,71 @@
-import{b4 as t,f as r,c as o,e as i,b as e,W as m}from"../../../nitro/nitro.mjs";import{and as s,or as p,eq as a,sql as l}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const n=t(async t=>{const n=o(t),d=r(t,"slug");if(!d)throw i({statusCode:400,message:"zh"===n?"缺少文章 slug":"Missing post slug"});const u=(await e.select().from(m).where(s(p(a(m.slug,d),a(m.key,d)),a(m.isActive,!0))).limit(1))[0];if(!u)throw i({statusCode:404,message:"zh"===n?"文章不存在":"Post not found"});t.waitUntil(e.update(m).set({views:l`${m.views} + 1`}).where(a(m.id,u.id)).execute().catch(t=>console.error("Failed to increment post views:",t)));let c=null;if(u.metaData)try{c="string"==typeof u.metaData?JSON.parse(u.metaData):u.metaData}catch(t){console.error("Failed to parse metaData JSON",t)}return{...u,metaData:c}},{maxAge:60,swr:!0,name:"post-detail",getKey:t=>r(t,"slug")||"unknown"});export{n as default};
-//# sourceMappingURL=_slug_.get.mjs.map
+import { bZ as defineCachedEventHandler, f as getRouterParam, c as getRequestLocale, e as createError, b as db, ao as posts } from '../../../nitro/nitro.mjs';
+import { and, or, eq, sql } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const _slug__get = defineCachedEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const slug = getRouterParam(event, "slug");
+  if (!slug) {
+    throw createError({ statusCode: 400, message: locale === "zh" ? "\u7F3A\u5C11\u6587\u7AE0 slug" : "Missing post slug" });
+  }
+  const postList = await db.select().from(posts).where(and(or(eq(posts.slug, slug), eq(posts.key, slug)), eq(posts.isActive, true))).limit(1);
+  const post = postList[0];
+  if (!post) {
+    throw createError({ statusCode: 404, message: locale === "zh" ? "\u6587\u7AE0\u4E0D\u5B58\u5728" : "Post not found" });
+  }
+  event.waitUntil(
+    db.update(posts).set({ views: sql`${posts.views} + 1` }).where(eq(posts.id, post.id)).execute().catch((error) => console.error("Failed to increment post views:", error))
+  );
+  let parsedMetaData = null;
+  if (post.metaData) {
+    try {
+      parsedMetaData = typeof post.metaData === "string" ? JSON.parse(post.metaData) : post.metaData;
+    } catch (e) {
+      console.error("Failed to parse metaData JSON", e);
+    }
+  }
+  return {
+    ...post,
+    metaData: parsedMetaData
+  };
+}, {
+  maxAge: 60,
+  // 1 minute
+  swr: true,
+  name: "post-detail",
+  getKey: (event) => getRouterParam(event, "slug") || "unknown"
+});
+
+export { _slug__get as default };

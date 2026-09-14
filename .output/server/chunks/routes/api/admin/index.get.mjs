@@ -1,6 +1,98 @@
-import{d as t,g as r,a as e,b as o,t as i}from"../../../nitro/nitro.mjs";import{sql as p,count as m,desc as s}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const a=t(async t=>{const a=r(t),d=parseInt(a.page)||1,n=parseInt(a.pageSize)||50,l="string"==typeof a.path?a.path.trim():"",u="string"==typeof a.method?a.method.trim().toUpperCase():"",h="string"==typeof a.status?a.status.trim():"",c="string"==typeof a.search?a.search.trim():"",f=(d-1)*n,g=[];l&&g.push(p`${e.path} LIKE ${`%${l}%`}`),u&&g.push(p`${e.method} = ${u}`),h&&g.push(p`CAST(${e.statusCode} AS TEXT) LIKE ${`${h}%`}`),c&&g.push(p`(
-      ${e.path} LIKE ${`%${c}%`}
-      OR ${e.ip} LIKE ${`%${c}%`}
-      OR ${e.visitorId} LIKE ${`%${c}%`}
-    )`);const y=g.length>0?g.reduce((t,r)=>p`${t} AND ${r}`):void 0,z=y?await o.select({value:m()}).from(e).where(y):await o.select({value:m()}).from(e),[{value:$}]=z;let b=o.select({id:e.id,path:e.path,method:e.method,ip:e.ip,userAgent:e.userAgent,referrer:e.referrer,country:e.country,region:e.region,city:e.city,statusCode:e.statusCode,duration:e.duration,visitorId:e.visitorId,userId:e.userId,createdAt:e.createdAt}).from(e).orderBy(s(e.createdAt)).limit(n).offset(f);y&&(b=b.where(y));return{logs:(await b).map(t=>({...t,createdAt:i(t.createdAt)})),total:$,page:d,pageSize:n}});export{a as default};
-//# sourceMappingURL=index.get.mjs.map
+import { d as defineEventHandler, g as getQuery, a as accessLogs, b as db, t as toIsoTimestamp } from '../../../nitro/nitro.mjs';
+import { sql, count, desc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const index_get = defineEventHandler(async (event) => {
+  const query = getQuery(event);
+  const page = parseInt(query.page) || 1;
+  const pageSize = parseInt(query.pageSize) || 50;
+  const pathFilter = typeof query.path === "string" ? query.path.trim() : "";
+  const methodFilter = typeof query.method === "string" ? query.method.trim().toUpperCase() : "";
+  const statusFilter = typeof query.status === "string" ? query.status.trim() : "";
+  const search = typeof query.search === "string" ? query.search.trim() : "";
+  const offset = (page - 1) * pageSize;
+  const conditions = [];
+  if (pathFilter) {
+    conditions.push(sql`${accessLogs.path} LIKE ${`%${pathFilter}%`}`);
+  }
+  if (methodFilter) {
+    conditions.push(sql`${accessLogs.method} = ${methodFilter}`);
+  }
+  if (statusFilter) {
+    conditions.push(sql`CAST(${accessLogs.statusCode} AS TEXT) LIKE ${`${statusFilter}%`}`);
+  }
+  if (search) {
+    conditions.push(sql`(
+      ${accessLogs.path} LIKE ${`%${search}%`}
+      OR ${accessLogs.ip} LIKE ${`%${search}%`}
+      OR ${accessLogs.visitorId} LIKE ${`%${search}%`}
+    )`);
+  }
+  const where = conditions.length > 0 ? conditions.reduce((acc, c) => sql`${acc} AND ${c}`) : void 0;
+  const countResult = where ? await db.select({ value: count() }).from(accessLogs).where(where) : await db.select({ value: count() }).from(accessLogs);
+  const [{ value: total }] = countResult;
+  let queryBuilder = db.select({
+    id: accessLogs.id,
+    path: accessLogs.path,
+    method: accessLogs.method,
+    ip: accessLogs.ip,
+    userAgent: accessLogs.userAgent,
+    referrer: accessLogs.referrer,
+    country: accessLogs.country,
+    region: accessLogs.region,
+    city: accessLogs.city,
+    statusCode: accessLogs.statusCode,
+    duration: accessLogs.duration,
+    visitorId: accessLogs.visitorId,
+    userId: accessLogs.userId,
+    createdAt: accessLogs.createdAt
+  }).from(accessLogs).orderBy(desc(accessLogs.createdAt)).limit(pageSize).offset(offset);
+  if (where) {
+    queryBuilder = queryBuilder.where(where);
+  }
+  const result = await queryBuilder;
+  const normalizedLogs = result.map((log) => ({
+    ...log,
+    createdAt: toIsoTimestamp(log.createdAt)
+  }));
+  return {
+    logs: normalizedLogs,
+    total,
+    page,
+    pageSize
+  };
+});
+
+export { index_get as default };

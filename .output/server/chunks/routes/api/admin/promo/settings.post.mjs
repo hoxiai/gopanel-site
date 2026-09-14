@@ -1,2 +1,57 @@
-import{d as r,r as t,b as o,a6 as i}from"../../../../nitro/nitro.mjs";import{eq as e}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const m=r(async r=>{const m=await t(r),p={promo_invite_reward_amount:String((null==m?void 0:m.promo_invite_reward_amount)||"0")};for(const[r,t]of Object.entries(p)){(await o.select().from(i).where(e(i.key,r)).limit(1)).length>0?await o.update(i).set({value:t}).where(e(i.key,r)):await o.insert(i).values({key:r,value:t})}return{ok:!0}});export{m as default};
-//# sourceMappingURL=settings.post.mjs.map
+import { d as defineEventHandler, r as readBody, b as db, aC as settings } from '../../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const settings_post = defineEventHandler(async (event) => {
+  var _a, _b;
+  const body = await readBody(event);
+  const payload = {
+    promo_default_commission_rate: String((_a = body == null ? void 0 : body.promo_default_commission_rate) != null ? _a : "15"),
+    promo_invite_reward_amount: String((_b = body == null ? void 0 : body.promo_invite_reward_amount) != null ? _b : "0"),
+    promo_access_mode: String((body == null ? void 0 : body.promo_access_mode) || "paid_active"),
+    promo_min_spend_amount: String((body == null ? void 0 : body.promo_min_spend_amount) || "49")
+  };
+  for (const [key, value] of Object.entries(payload)) {
+    const existing = await db.select().from(settings).where(eq(settings.key, key)).limit(1);
+    if (existing.length > 0) {
+      await db.update(settings).set({ value }).where(eq(settings.key, key));
+    } else {
+      await db.insert(settings).values({ key, value });
+    }
+  }
+  return { ok: true };
+});
+
+export { settings_post as default };

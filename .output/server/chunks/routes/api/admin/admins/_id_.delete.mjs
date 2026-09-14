@@ -1,2 +1,85 @@
-import{d as e,c as t,e as r,f as o,b as i,h as m,s}from"../../../../nitro/nitro.mjs";import{eq as a}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const d=e(async e=>{var d;const n=t(e),p="zh"===n?{adminIdRequired:"管理员 ID 不能为空",adminNotFound:"管理员不存在",cannotDeleteMain:"不能删除主管理员账号",deleted:"管理员删除成功",failed:"删除管理员失败"}:{adminIdRequired:"Admin ID is required",adminNotFound:"Admin not found",cannotDeleteMain:"Cannot delete the main admin account",deleted:"Admin deleted successfully",failed:"Failed to delete admin"};if(e.context.authenticatedFromToken)throw r({statusCode:403,message:"zh"===n?"请使用登录会话管理管理员账号，不能用系统 Token 操作":"Manage admin accounts from a logged-in session, not via a system token"});try{const t=o(e,"id");if(!t)throw r({statusCode:400,message:p.adminIdRequired});const n=await i.select().from(m).where(a(m.id,Number(t)));if(0===n.length)throw r({statusCode:404,message:p.adminNotFound});if("admin"===n[0].username)throw r({statusCode:403,message:p.cannotDeleteMain});return await i.delete(m).where(a(m.id,Number(t))),s(e,{summary:`Deleted admin "${n[0].username}"`,details:{username:n[0].username,permissions:null!=(d=n[0].permissions)?d:null}}),{code:0,message:p.deleted}}catch(e){throw r({statusCode:e.statusCode||500,message:e.message||p.failed})}});export{d as default};
-//# sourceMappingURL=_id_.delete.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, e as createError, f as getRouterParam, b as db, h as admins, s as setAuditMeta } from '../../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const _id__delete = defineEventHandler(async (event) => {
+  var _a;
+  const locale = getRequestLocale(event);
+  const messages = locale === "zh" ? {
+    adminIdRequired: "\u7BA1\u7406\u5458 ID \u4E0D\u80FD\u4E3A\u7A7A",
+    adminNotFound: "\u7BA1\u7406\u5458\u4E0D\u5B58\u5728",
+    cannotDeleteMain: "\u4E0D\u80FD\u5220\u9664\u4E3B\u7BA1\u7406\u5458\u8D26\u53F7",
+    deleted: "\u7BA1\u7406\u5458\u5220\u9664\u6210\u529F",
+    failed: "\u5220\u9664\u7BA1\u7406\u5458\u5931\u8D25"
+  } : {
+    adminIdRequired: "Admin ID is required",
+    adminNotFound: "Admin not found",
+    cannotDeleteMain: "Cannot delete the main admin account",
+    deleted: "Admin deleted successfully",
+    failed: "Failed to delete admin"
+  };
+  if (event.context.authenticatedFromToken) {
+    throw createError({
+      statusCode: 403,
+      message: locale === "zh" ? "\u8BF7\u4F7F\u7528\u767B\u5F55\u4F1A\u8BDD\u7BA1\u7406\u7BA1\u7406\u5458\u8D26\u53F7\uFF0C\u4E0D\u80FD\u7528\u7CFB\u7EDF Token \u64CD\u4F5C" : "Manage admin accounts from a logged-in session, not via a system token"
+    });
+  }
+  try {
+    const id = getRouterParam(event, "id");
+    if (!id) {
+      throw createError({ statusCode: 400, message: messages.adminIdRequired });
+    }
+    const user = await db.select().from(admins).where(eq(admins.id, Number(id)));
+    if (user.length === 0) {
+      throw createError({ statusCode: 404, message: messages.adminNotFound });
+    }
+    if (user[0].username === "admin") {
+      throw createError({ statusCode: 403, message: messages.cannotDeleteMain });
+    }
+    await db.delete(admins).where(eq(admins.id, Number(id)));
+    setAuditMeta(event, {
+      summary: `Deleted admin "${user[0].username}"`,
+      details: { username: user[0].username, permissions: (_a = user[0].permissions) != null ? _a : null }
+    });
+    return { code: 0, message: messages.deleted };
+  } catch (error) {
+    throw createError({
+      statusCode: error.statusCode || 500,
+      message: error.message || messages.failed
+    });
+  }
+});
+
+export { _id__delete as default };

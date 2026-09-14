@@ -1,2 +1,47 @@
-import{d as r,c as t,b as o,I as i,e as m}from"../../../../nitro/nitro.mjs";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"drizzle-orm";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const e=r(async r=>{const e=t(r);try{return await o.delete(i),{success:!0,message:"zh"===e?"日志已全部清空":"All logs cleared successfully"}}catch(r){throw m({statusCode:500,message:"zh"===e?"清空日志失败":"Failed to clear logs"})}});export{e as default};
-//# sourceMappingURL=clear.delete.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, b as db, X as logs, e as createError } from '../../../../nitro/nitro.mjs';
+import 'node:crypto';
+import 'drizzle-orm';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const clear_delete = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  try {
+    await db.delete(logs);
+    return { success: true, message: locale === "zh" ? "\u65E5\u5FD7\u5DF2\u5168\u90E8\u6E05\u7A7A" : "All logs cleared successfully" };
+  } catch (error) {
+    throw createError({ statusCode: 500, message: locale === "zh" ? "\u6E05\u7A7A\u65E5\u5FD7\u5931\u8D25" : "Failed to clear logs" });
+  }
+});
+
+export { clear_delete as default };

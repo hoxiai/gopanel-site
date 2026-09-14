@@ -1,2 +1,75 @@
-import{d as t,c as r,r as i,b as o,B as e,e as m}from"../../../../nitro/nitro.mjs";import{eq as s}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const p=t(async t=>{var p,a;const n=r(t);if("POST"===t.method){const r=await i(t);if(r.isActive){const t=await o.select().from(e);for(const r of t)r.isActive&&await o.update(e).set({isActive:!1}).where(s(e.id,r.id))}const m=await o.select().from(e).where(s(e.code,r.code)).limit(1);return m.length>0?await o.update(e).set({name:r.name,isActive:null!=(p=r.isActive)&&p,configJson:r.configJson||"",sendScript:r.sendScript||""}).where(s(e.id,m[0].id)):await o.insert(e).values({name:r.name,code:r.code,isActive:null!=(a=r.isActive)&&a,configJson:r.configJson||"",sendScript:r.sendScript||""}),{success:!0}}if("GET"===t.method)return await o.select().from(e);throw m({statusCode:405,message:"zh"===n?"请求方法不允许":"Method not allowed"})});export{p as default};
-//# sourceMappingURL=providers.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, b as db, H as emailProviders, e as createError } from '../../../../nitro/nitro.mjs';
+import { eq } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const providers = defineEventHandler(async (event) => {
+  var _a, _b;
+  const locale = getRequestLocale(event);
+  if (event.method === "POST") {
+    const body = await readBody(event);
+    if (body.isActive) {
+      const all = await db.select().from(emailProviders);
+      for (const p of all) {
+        if (p.isActive) {
+          await db.update(emailProviders).set({ isActive: false }).where(eq(emailProviders.id, p.id));
+        }
+      }
+    }
+    const existing = await db.select().from(emailProviders).where(eq(emailProviders.code, body.code)).limit(1);
+    if (existing.length > 0) {
+      await db.update(emailProviders).set({
+        name: body.name,
+        isActive: (_a = body.isActive) != null ? _a : false,
+        configJson: body.configJson || "",
+        sendScript: body.sendScript || ""
+      }).where(eq(emailProviders.id, existing[0].id));
+    } else {
+      await db.insert(emailProviders).values({
+        name: body.name,
+        code: body.code,
+        isActive: (_b = body.isActive) != null ? _b : false,
+        configJson: body.configJson || "",
+        sendScript: body.sendScript || ""
+      });
+    }
+    return { success: true };
+  }
+  if (event.method === "GET") {
+    return await db.select().from(emailProviders);
+  }
+  throw createError({ statusCode: 405, message: locale === "zh" ? "\u8BF7\u6C42\u65B9\u6CD5\u4E0D\u5141\u8BB8" : "Method not allowed" });
+});
+
+export { providers as default };

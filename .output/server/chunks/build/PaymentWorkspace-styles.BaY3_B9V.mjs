@@ -1,2 +1,0 @@
-const a=[".payment-html-panel[data-v-a8ac06c7]{background:transparent}.payment-html-wrapper[data-v-a8ac06c7] *{box-sizing:border-box;max-width:100%}.payment-html-wrapper[data-v-a8ac06c7] canvas,.payment-html-wrapper[data-v-a8ac06c7] iframe,.payment-html-wrapper[data-v-a8ac06c7] img,.payment-html-wrapper[data-v-a8ac06c7] svg{max-width:100%}.payment-html-wrapper[data-v-a8ac06c7] iframe{display:block}"];export{a as default};
-//# sourceMappingURL=PaymentWorkspace-styles.BaY3_B9V.mjs.map

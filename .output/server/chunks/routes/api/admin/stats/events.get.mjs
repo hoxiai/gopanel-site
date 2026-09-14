@@ -1,3 +1,102 @@
-import{d as r,c as t,g as e,q as i,ah as o,am as s,an as p,aj as m,b as a,ao as n}from"../../../../nitro/nitro.mjs";import{and as d,gte as l,lt as u,sql as c,count as y,desc as h}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const g=r(async r=>{const g="zh"===t(r)?"未知":"Unknown",A=e(r),z=await i(),{preset:f,days:b,rangeStart:v,rangeEnd:I}=o(A,z),M=s(A.page,1),S=p(A.pageSize,20),$=(M-1)*S,w=d(l(m.createdAt,v),u(m.createdAt,I)),[{value:X}]=await a.select({value:c`COUNT(DISTINCT ${m.ip})
-        + COALESCE(MAX(CASE WHEN ${m.ip} IS NULL THEN 1 ELSE 0 END), 0)`}).from(m).where(w),E=await a.select({ip:m.ip,visitCount:y(),visitorId:c`MAX(${m.visitorId})`,userId:c`MAX(${m.userId})`,country:c`MAX(${m.country})`,region:c`MAX(${m.region})`,city:c`MAX(${m.city})`,deviceType:c`MAX(${m.deviceType})`,browser:c`MAX(${m.browser})`,os:c`MAX(${m.os})`,firstSeenAt:c`MIN(${m.createdAt})`,lastSeenAt:c`MAX(${m.createdAt})`}).from(m).where(w).groupBy(m.ip).orderBy(h(c`MAX(${m.createdAt})`)).limit(S).offset($);return{range:{preset:f,days:b,from:v,to:I},pagination:{page:M,pageSize:S,totalItems:Number(X||0),totalPages:Math.max(1,Math.ceil(Number(X||0)/S))},items:E.map(r=>({ip:r.ip,visitorId:r.visitorId,userId:r.userId||null,visitCount:r.visitCount,isRegistered:!!r.userId,country:r.country||g,region:r.region||null,city:r.city||null,deviceType:r.deviceType||g,browser:r.browser||null,os:r.os||null,firstSeenAt:n(r.firstSeenAt),lastSeenAt:n(r.lastSeenAt)}))}});export{g as default};
-//# sourceMappingURL=events.get.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, w as getConfiguredTimezone, aR as parseStatsRange, aW as clampStatsPage, aX as clampStatsPageSize, aT as visitorEvents, b as db, aY as toIsoTimestampOrEpoch } from '../../../../nitro/nitro.mjs';
+import { and, gte, lt, sql, count, desc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const events_get = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const unknownLabel = locale === "zh" ? "\u672A\u77E5" : "Unknown";
+  const query = getQuery(event);
+  const tz = await getConfiguredTimezone();
+  const { preset, days, rangeStart, rangeEnd } = parseStatsRange(query, tz);
+  const page = clampStatsPage(query.page, 1);
+  const pageSize = clampStatsPageSize(query.pageSize, 20);
+  const offset = (page - 1) * pageSize;
+  const timeFilter = and(gte(visitorEvents.createdAt, rangeStart), lt(visitorEvents.createdAt, rangeEnd));
+  const [{ value: totalItems }] = await db.select({
+    value: sql`COUNT(DISTINCT ${visitorEvents.ip})
+        + COALESCE(MAX(CASE WHEN ${visitorEvents.ip} IS NULL THEN 1 ELSE 0 END), 0)`
+  }).from(visitorEvents).where(timeFilter);
+  const items = await db.select({
+    ip: visitorEvents.ip,
+    visitCount: count(),
+    visitorId: sql`MAX(${visitorEvents.visitorId})`,
+    visitorCount: sql`COUNT(DISTINCT ${visitorEvents.visitorId})`,
+    userId: sql`MAX(${visitorEvents.userId})`,
+    registeredUserCount: sql`COUNT(DISTINCT ${visitorEvents.userId})`,
+    country: sql`MAX(${visitorEvents.country})`,
+    region: sql`MAX(${visitorEvents.region})`,
+    city: sql`MAX(${visitorEvents.city})`,
+    deviceType: sql`MAX(${visitorEvents.deviceType})`,
+    browser: sql`MAX(${visitorEvents.browser})`,
+    os: sql`MAX(${visitorEvents.os})`,
+    firstSeenAt: sql`MIN(${visitorEvents.createdAt})`,
+    lastSeenAt: sql`MAX(${visitorEvents.createdAt})`
+  }).from(visitorEvents).where(timeFilter).groupBy(visitorEvents.ip).orderBy(desc(sql`MAX(${visitorEvents.createdAt})`)).limit(pageSize).offset(offset);
+  return {
+    range: {
+      preset,
+      days,
+      from: rangeStart,
+      to: rangeEnd
+    },
+    pagination: {
+      page,
+      pageSize,
+      totalItems: Number(totalItems || 0),
+      totalPages: Math.max(1, Math.ceil(Number(totalItems || 0) / pageSize))
+    },
+    items: items.map((item) => ({
+      ip: item.ip,
+      visitorId: item.visitorId,
+      visitorCount: Number(item.visitorCount || 0),
+      userId: item.userId || null,
+      registeredUserCount: Number(item.registeredUserCount || 0),
+      visitCount: item.visitCount,
+      isRegistered: !!item.userId,
+      country: item.country || unknownLabel,
+      region: item.region || null,
+      city: item.city || null,
+      deviceType: item.deviceType || unknownLabel,
+      browser: item.browser || null,
+      os: item.os || null,
+      // MIN/MAX are raw sql`` fragments, so no drizzle column mapper runs and
+      // the value arrives dialect-shaped (Postgres string / SQLite seconds).
+      firstSeenAt: toIsoTimestampOrEpoch(item.firstSeenAt),
+      lastSeenAt: toIsoTimestampOrEpoch(item.lastSeenAt)
+    }))
+  };
+});
+
+export { events_get as default };

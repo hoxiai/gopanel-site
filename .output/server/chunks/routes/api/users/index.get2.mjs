@@ -1,2 +1,94 @@
-import{d as t,c as r,aF as e,e as o,b as i,p as a,ap as m}from"../../../nitro/nitro.mjs";import{eq as p,and as n,desc as d}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const s=t(async t=>{const s=r(t),u=await e(t);if(!u.user)throw o({statusCode:401,message:"zh"===s?"未登录":"Unauthorized"});const c=u.user.id,l=await i.select({id:m.id,status:m.status,interval:m.interval,intervalCount:m.intervalCount,amount:m.amount,currency:m.currency,currentPeriodStart:m.currentPeriodStart,currentPeriodEnd:m.currentPeriodEnd,cancelAtPeriodEnd:m.cancelAtPeriodEnd,createdAt:m.createdAt,productId:a.id,productName:a.name,productSlug:a.slug,productType:a.type,productMetaData:a.metaData}).from(m).leftJoin(a,p(m.productId,a.id)).where(n(p(m.userId,c),p(m.status,"active"))).orderBy(d(m.createdAt)).limit(1);if(!l.length)return{data:null};const h=l[0];let y={};if(h.productMetaData)try{y="string"==typeof h.productMetaData?JSON.parse(h.productMetaData):h.productMetaData}catch{}return{data:{id:h.id,status:h.status,tier:y.level||0,grantAmount:y.grant_amount||0,planName:h.productName||("zh"===s?"未知套餐":"Unknown"),interval:h.interval,intervalCount:h.intervalCount,amount:h.amount,currency:h.currency,currentPeriodStart:h.currentPeriodStart,currentPeriodEnd:h.currentPeriodEnd,cancelAtPeriodEnd:h.cancelAtPeriodEnd,createdAt:h.createdAt}}});export{s as default};
-//# sourceMappingURL=index.get2.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, bx as requireUserSession, e as createError, b as db, p as products, z as subscriptions } from '../../../nitro/nitro.mjs';
+import { eq, and, desc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const index_get = defineEventHandler(async (event) => {
+  const locale = getRequestLocale(event);
+  const session = await requireUserSession(event);
+  if (!session.user) {
+    throw createError({ statusCode: 401, message: locale === "zh" ? "\u672A\u767B\u5F55" : "Unauthorized" });
+  }
+  const userId = session.user.id;
+  const subRows = await db.select({
+    id: subscriptions.id,
+    status: subscriptions.status,
+    interval: subscriptions.interval,
+    intervalCount: subscriptions.intervalCount,
+    amount: subscriptions.amount,
+    currency: subscriptions.currency,
+    currentPeriodStart: subscriptions.currentPeriodStart,
+    currentPeriodEnd: subscriptions.currentPeriodEnd,
+    cancelAtPeriodEnd: subscriptions.cancelAtPeriodEnd,
+    createdAt: subscriptions.createdAt,
+    productId: products.id,
+    productName: products.name,
+    productSlug: products.slug,
+    productType: products.type,
+    productMetaData: products.metaData
+  }).from(subscriptions).leftJoin(products, eq(subscriptions.productId, products.id)).where(and(
+    eq(subscriptions.userId, userId),
+    eq(subscriptions.status, "active")
+  )).orderBy(desc(subscriptions.createdAt)).limit(1);
+  if (!subRows.length) {
+    return { data: null };
+  }
+  const sub = subRows[0];
+  let productMeta = {};
+  if (sub.productMetaData) {
+    try {
+      productMeta = typeof sub.productMetaData === "string" ? JSON.parse(sub.productMetaData) : sub.productMetaData;
+    } catch {
+    }
+  }
+  return {
+    data: {
+      id: sub.id,
+      status: sub.status,
+      tier: productMeta.level || 0,
+      grantAmount: productMeta.grant_amount || 0,
+      planName: sub.productName || (locale === "zh" ? "\u672A\u77E5\u5957\u9910" : "Unknown"),
+      interval: sub.interval,
+      intervalCount: sub.intervalCount,
+      amount: sub.amount,
+      currency: sub.currency,
+      currentPeriodStart: sub.currentPeriodStart,
+      currentPeriodEnd: sub.currentPeriodEnd,
+      cancelAtPeriodEnd: sub.cancelAtPeriodEnd,
+      createdAt: sub.createdAt
+    }
+  };
+});
+
+export { index_get as default };

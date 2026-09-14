@@ -1,2 +1,81 @@
-import{d as t,c as r,aF as o,e,g as i,o as p,b as m,p as a}from"../../../nitro/nitro.mjs";import{and as s,eq as d,ne as l,count as n,desc as u}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const c=t(async t=>{var c;const h=r(t),y=(await o(t)).user.id;if(!y)throw e({statusCode:401,message:"zh"===h?"未登录":"Unauthorized"});const z=i(t),f=parseInt(z.page)||1,g=parseInt(z.pageSize)||10,b=(f-1)*g,v=s(d(p.userId,y),l(p.payStatus,"deleted")),k=(null==(c=(await m.select({value:n()}).from(p).where(v))[0])?void 0:c.value)||0;return{data:await m.select({id:p.id,amount:p.amount,status:p.status,payStatus:p.payStatus,createdAt:p.createdAt,paidAt:p.paidAt,tradeNo:p.tradeNo,payMethod:p.payMethod,productName:a.name,productImageUrl:a.imageUrl,productType:a.type,deliveryInfo:p.deliveryInfo}).from(p).leftJoin(a,d(p.productId,a.id)).where(v).orderBy(u(p.createdAt)).limit(g).offset(b),total:k,page:f,pageSize:g}});export{c as default};
-//# sourceMappingURL=orders.get.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, bx as requireUserSession, e as createError, g as getQuery, o as orders, b as db, p as products } from '../../../nitro/nitro.mjs';
+import { and, eq, ne, count, desc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const orders_get = defineEventHandler(async (event) => {
+  var _a;
+  const locale = getRequestLocale(event);
+  const session = await requireUserSession(event);
+  const userId = session.user.id;
+  if (!userId) {
+    throw createError({
+      statusCode: 401,
+      message: locale === "zh" ? "\u672A\u767B\u5F55" : "Unauthorized"
+    });
+  }
+  const query = getQuery(event);
+  const page = parseInt(query.page) || 1;
+  const pageSize = parseInt(query.pageSize) || 10;
+  const offset = (page - 1) * pageSize;
+  const filter = and(
+    eq(orders.userId, userId),
+    ne(orders.payStatus, "deleted")
+  );
+  const totalResult = await db.select({ value: count() }).from(orders).where(filter);
+  const total = ((_a = totalResult[0]) == null ? void 0 : _a.value) || 0;
+  const userOrders = await db.select({
+    id: orders.id,
+    amount: orders.amount,
+    currency: orders.currency,
+    status: orders.status,
+    payStatus: orders.payStatus,
+    createdAt: orders.createdAt,
+    paidAt: orders.paidAt,
+    tradeNo: orders.tradeNo,
+    payMethod: orders.payMethod,
+    productName: products.name,
+    productImageUrl: products.imageUrl,
+    productType: products.type,
+    deliveryInfo: orders.deliveryInfo
+  }).from(orders).leftJoin(products, eq(orders.productId, products.id)).where(filter).orderBy(desc(orders.createdAt)).limit(pageSize).offset(offset);
+  return {
+    data: userOrders,
+    total,
+    page,
+    pageSize
+  };
+});
+
+export { orders_get as default };

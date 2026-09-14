@@ -1,2 +1,74 @@
-import{d as r,c as t,aF as i,e as o,f as e,r as m,bf as s,bg as p}from"../../../../../nitro/nitro.mjs";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"drizzle-orm";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const a=r(async r=>{var a;const d="zh"===t(r)?{unauthorized:"未登录",relationIdRequired:"关联 ID 不能为空",invalidAction:"无效操作"}:{unauthorized:"Unauthorized",relationIdRequired:"Relation ID is required",invalidAction:"Invalid action"},n=await i(r);if(!(null==(a=null==n?void 0:n.user)?void 0:a.id))throw o({statusCode:401,message:d.unauthorized});const l=Number(e(r,"id")||0),u=await m(r),h=String((null==u?void 0:u.action)||"").trim().toLowerCase();if(!l)throw o({statusCode:400,message:d.relationIdRequired});if("approve"===h)return s({relationId:l,masterAgentUserId:n.user.id});if("reject"===h)return p({relationId:l,masterAgentUserId:n.user.id});throw o({statusCode:400,message:d.invalidAction})});export{a as default};
-//# sourceMappingURL=_id_.post.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, bx as requireUserSession, e as createError, f as getRouterParam, r as readBody, c9 as approvePendingPromoAgentRelation, ca as rejectPendingPromoAgentRelation } from '../../../../../nitro/nitro.mjs';
+import 'node:crypto';
+import 'drizzle-orm';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const _id__post = defineEventHandler(async (event) => {
+  var _a;
+  const locale = getRequestLocale(event);
+  const messages = locale === "zh" ? {
+    unauthorized: "\u672A\u767B\u5F55",
+    relationIdRequired: "\u5173\u8054 ID \u4E0D\u80FD\u4E3A\u7A7A",
+    invalidAction: "\u65E0\u6548\u64CD\u4F5C"
+  } : {
+    unauthorized: "Unauthorized",
+    relationIdRequired: "Relation ID is required",
+    invalidAction: "Invalid action"
+  };
+  const session = await requireUserSession(event);
+  if (!((_a = session == null ? void 0 : session.user) == null ? void 0 : _a.id)) {
+    throw createError({ statusCode: 401, message: messages.unauthorized });
+  }
+  const relationId = Number(getRouterParam(event, "id") || 0);
+  const body = await readBody(event);
+  const action = String((body == null ? void 0 : body.action) || "").trim().toLowerCase();
+  if (!relationId) {
+    throw createError({ statusCode: 400, message: messages.relationIdRequired });
+  }
+  if (action === "approve") {
+    return approvePendingPromoAgentRelation({
+      relationId,
+      masterAgentUserId: session.user.id
+    });
+  }
+  if (action === "reject") {
+    return rejectPendingPromoAgentRelation({
+      relationId,
+      masterAgentUserId: session.user.id
+    });
+  }
+  throw createError({ statusCode: 400, message: messages.invalidAction });
+});
+
+export { _id__post as default };

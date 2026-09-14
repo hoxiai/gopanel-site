@@ -1,2 +1,82 @@
-import{d as t,c as r,aF as o,e as i,b as e,p as m,o as p}from"../../../../nitro/nitro.mjs";import{eq as s,and as a}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const d=t(async t=>{var d;const n="zh"===r(t)?{invalidRequest:"请求无效",orderNotFound:"订单不存在"}:{invalidRequest:"Invalid request",orderNotFound:"Order not found"},l=(await o(t)).user.id,u=null==(d=t.context.params)?void 0:d.id;if(!l||!u)throw i({statusCode:400,message:n.invalidRequest});const c=await e.select({id:p.id,amount:p.amount,status:p.status,payStatus:p.payStatus,createdAt:p.createdAt,paidAt:p.paidAt,tradeNo:p.tradeNo,payMethod:p.payMethod,contactEmail:p.contactEmail,deliveryInfo:p.deliveryInfo,productName:m.name,productImageUrl:m.imageUrl,productType:m.type,productSlug:m.slug}).from(p).leftJoin(m,s(p.productId,m.id)).where(a(s(p.id,u),s(p.userId,l))).limit(1);if(!c||0===c.length)throw i({statusCode:404,message:n.orderNotFound});return c[0]});export{d as default};
-//# sourceMappingURL=_id_.get.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, bx as requireUserSession, e as createError, b as db, p as products, o as orders } from '../../../../nitro/nitro.mjs';
+import { eq, and } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const _id__get = defineEventHandler(async (event) => {
+  var _a;
+  const locale = getRequestLocale(event);
+  const messages = locale === "zh" ? {
+    invalidRequest: "\u8BF7\u6C42\u65E0\u6548",
+    orderNotFound: "\u8BA2\u5355\u4E0D\u5B58\u5728"
+  } : {
+    invalidRequest: "Invalid request",
+    orderNotFound: "Order not found"
+  };
+  const session = await requireUserSession(event);
+  const userId = session.user.id;
+  const orderId = (_a = event.context.params) == null ? void 0 : _a.id;
+  if (!userId || !orderId) {
+    throw createError({
+      statusCode: 400,
+      message: messages.invalidRequest
+    });
+  }
+  const result = await db.select({
+    id: orders.id,
+    amount: orders.amount,
+    currency: orders.currency,
+    status: orders.status,
+    payStatus: orders.payStatus,
+    createdAt: orders.createdAt,
+    paidAt: orders.paidAt,
+    tradeNo: orders.tradeNo,
+    payMethod: orders.payMethod,
+    contactEmail: orders.contactEmail,
+    deliveryInfo: orders.deliveryInfo,
+    productName: products.name,
+    productImageUrl: products.imageUrl,
+    productType: products.type,
+    productSlug: products.slug
+  }).from(orders).leftJoin(products, eq(orders.productId, products.id)).where(and(eq(orders.id, orderId), eq(orders.userId, userId))).limit(1);
+  if (!result || result.length === 0) {
+    throw createError({
+      statusCode: 404,
+      message: messages.orderNotFound
+    });
+  }
+  return result[0];
+});
+
+export { _id__get as default };

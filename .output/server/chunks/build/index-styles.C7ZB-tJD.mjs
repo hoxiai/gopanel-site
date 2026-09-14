@@ -1,2 +1,0 @@
-const e=[".fade-enter-active[data-v-d0b801ba],.fade-leave-active[data-v-d0b801ba]{transition:opacity .2s ease,transform .2s ease}.fade-enter-from[data-v-d0b801ba],.fade-leave-to[data-v-d0b801ba]{opacity:0;transform:translate(-50%,-90%) scale(.95)}svg[data-v-d0b801ba]{outline:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}"];export{e as default};
-//# sourceMappingURL=index-styles.C7ZB-tJD.mjs.map

@@ -1,2 +1,82 @@
-import{d as r,c as t,g as e,b as i,h as o,A as m,k as s,e as p}from"../../../nitro/nitro.mjs";import{count as a,desc as n}from"drizzle-orm";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const l=r(async r=>{var l;const d=t(r),c=e(r),u=parseInt(c.page)||1,h=parseInt(c.pageSize)||12,z=(u-1)*h,f=(null==(l=(await i.select({value:a()}).from(o))[0])?void 0:l.value)||0;try{const r=await i.select({id:o.id,username:o.username,permissions:o.permissions,createdAt:o.createdAt}).from(o).orderBy(n(o.createdAt)).limit(h).offset(z),t=new Set(m.map(r=>r.code));return{data:r.map(r=>{const e=Array.isArray(r.permissions)?r.permissions:null,i=new Set((e||[]).map(r=>r.split(":")[0]).filter(r=>t.has(r))),o=s(e)?{all:!0,count:m.length}:{all:!1,count:i.size};return{id:r.id,username:r.username,permissions:e,permissionSummary:o,createdAt:r.createdAt instanceof Date?r.createdAt.toISOString():r.createdAt?new Date(r.createdAt).toISOString():null}}),total:f,page:u,pageSize:h}}catch(r){throw p({statusCode:500,message:r.message||("zh"===d?"获取管理员列表失败":"Failed to fetch admins")})}});export{l as default};
-//# sourceMappingURL=index.get2.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, b as db, h as admins, A as ADMIN_PERMISSIONS, k as hasAllPermissions, e as createError } from '../../../nitro/nitro.mjs';
+import { count, desc } from 'drizzle-orm';
+import 'node:crypto';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const index_get = defineEventHandler(async (event) => {
+  var _a;
+  const locale = getRequestLocale(event);
+  const query = getQuery(event);
+  const page = parseInt(query.page) || 1;
+  const pageSize = parseInt(query.pageSize) || 12;
+  const offset = (page - 1) * pageSize;
+  const totalResult = await db.select({ value: count() }).from(admins);
+  const total = ((_a = totalResult[0]) == null ? void 0 : _a.value) || 0;
+  try {
+    const rawResult = await db.select({
+      id: admins.id,
+      username: admins.username,
+      permissions: admins.permissions,
+      createdAt: admins.createdAt
+    }).from(admins).orderBy(desc(admins.createdAt)).limit(pageSize).offset(offset);
+    const moduleCodeSet = new Set(ADMIN_PERMISSIONS.map((p) => p.code));
+    const data = rawResult.map((r) => {
+      const perms = Array.isArray(r.permissions) ? r.permissions : null;
+      const grantedModules = new Set(
+        (perms || []).map((p) => p.split(":")[0]).filter((base) => moduleCodeSet.has(base))
+      );
+      const summary = hasAllPermissions(perms) ? { all: true, count: ADMIN_PERMISSIONS.length } : { all: false, count: grantedModules.size };
+      return {
+        id: r.id,
+        username: r.username,
+        permissions: perms,
+        permissionSummary: summary,
+        createdAt: r.createdAt instanceof Date ? r.createdAt.toISOString() : r.createdAt ? new Date(r.createdAt).toISOString() : null
+      };
+    });
+    return {
+      data,
+      total,
+      page,
+      pageSize
+    };
+  } catch (error) {
+    throw createError({
+      statusCode: 500,
+      message: error.message || (locale === "zh" ? "\u83B7\u53D6\u7BA1\u7406\u5458\u5217\u8868\u5931\u8D25" : "Failed to fetch admins")
+    });
+  }
+});
+
+export { index_get as default };

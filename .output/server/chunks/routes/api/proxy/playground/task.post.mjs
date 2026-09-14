@@ -1,2 +1,72 @@
-import{d as t,c as r,ae as o,e as i,r as e,b6 as s}from"../../../../nitro/nitro.mjs";import"unified";import"remark-parse";import"remark-rehype";import"remark-mdc";import"remark-gfm";import"rehype-external-links";import"rehype-sort-attribute-values";import"rehype-sort-attributes";import"rehype-raw";import"detab";import"micromark-util-sanitize-uri";import"hast-util-to-string";import"github-slugger";import"@nuxthub/db";import"drizzle-orm";import"crypto";import"node:http";import"node:https";import"node:crypto";import"node:events";import"node:buffer";import"node:fs";import"node:path";import"node:async_hooks";import"postgres";import"drizzle-orm/postgres-js";import"drizzle-orm/d1";import"@libsql/client";import"drizzle-orm/libsql";import"mysql2/promise";import"drizzle-orm/mysql2";import"drizzle-orm/pg-core";import"drizzle-orm/sqlite-core";import"drizzle-orm/mysql-core";import"node:url";import"@iconify/utils";import"consola";import"zod";import"fs";import"path";import"http";import"https";import"zlib";import"stream";import"buffer";import"util";import"url";import"net";import"@adonisjs/hash";import"@adonisjs/hash/drivers/scrypt";const m=t(async t=>{var m;const p=r(t),a=await o(t).catch(()=>null);if(!(null==a?void 0:a.user))throw i({statusCode:401,statusMessage:"zh"===p?"未登录":"Unauthorized"});const n=await e(t),{apiKey:l,taskId:d}=n||{};if(!l||!d)throw i({statusCode:400,statusMessage:"zh"===p?"请求参数错误：缺少 apiKey 或 taskId":"Bad Request: missing apiKey or taskId"});const u=await s(),h=await fetch(`${u}/v1/tasks/${encodeURIComponent(d)}`,{method:"GET",headers:{Authorization:`Bearer ${l}`},signal:AbortSignal.timeout(3e4)}),c=await h.text();if(!h.ok){let t=`HTTP ${h.status}`;try{const r=JSON.parse(c);t=(null==(m=null==r?void 0:r.error)?void 0:m.message)||(null==r?void 0:r.message)||t}catch{}throw i({statusCode:h.status,statusMessage:t.slice(0,300)})}try{return JSON.parse(c)}catch{return c}});export{m as default};
-//# sourceMappingURL=task.post.mjs.map
+import { d as defineEventHandler, c as getRequestLocale, aK as getUserSession, e as createError, r as readBody, b_ as getAIGatewayUrl } from '../../../../nitro/nitro.mjs';
+import 'node:crypto';
+import 'drizzle-orm';
+import 'crypto';
+import 'fs';
+import 'path';
+import 'node:http';
+import 'node:https';
+import 'node:events';
+import 'node:buffer';
+import 'node:fs';
+import 'node:path';
+import 'node:async_hooks';
+import 'postgres';
+import 'drizzle-orm/postgres-js';
+import 'drizzle-orm/d1';
+import '@libsql/client';
+import 'drizzle-orm/libsql';
+import 'mysql2/promise';
+import 'drizzle-orm/mysql2';
+import 'drizzle-orm/pg-core';
+import 'drizzle-orm/sqlite-core';
+import 'drizzle-orm/mysql-core';
+import 'maxmind';
+import 'node:url';
+import '@iconify/utils';
+import 'consola';
+import 'ioredis';
+import 'zod';
+import 'node:child_process';
+import 'node:fs/promises';
+import 'node:dns/promises';
+import 'node:net';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
+
+const task_post = defineEventHandler(async (event) => {
+  var _a;
+  const locale = getRequestLocale(event);
+  const session = await getUserSession(event).catch(() => null);
+  if (!(session == null ? void 0 : session.user)) {
+    throw createError({ statusCode: 401, statusMessage: locale === "zh" ? "\u672A\u767B\u5F55" : "Unauthorized" });
+  }
+  const body = await readBody(event);
+  const { apiKey, taskId } = body || {};
+  if (!apiKey || !taskId) {
+    throw createError({ statusCode: 400, statusMessage: locale === "zh" ? "\u8BF7\u6C42\u53C2\u6570\u9519\u8BEF\uFF1A\u7F3A\u5C11 apiKey \u6216 taskId" : "Bad Request: missing apiKey or taskId" });
+  }
+  const baseUrl = await getAIGatewayUrl();
+  const upstream = await fetch(`${baseUrl}/v1/tasks/${encodeURIComponent(taskId)}`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${apiKey}` },
+    signal: AbortSignal.timeout(3e4)
+  });
+  const text = await upstream.text();
+  if (!upstream.ok) {
+    let msg = `HTTP ${upstream.status}`;
+    try {
+      const j = JSON.parse(text);
+      msg = ((_a = j == null ? void 0 : j.error) == null ? void 0 : _a.message) || (j == null ? void 0 : j.message) || msg;
+    } catch {
+    }
+    throw createError({ statusCode: upstream.status, statusMessage: msg.slice(0, 300) });
+  }
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
+});
+
+export { task_post as default };

@@ -5500,7 +5500,7 @@ const cfg0 = defineAppConfig({
   }
 });
 const inlineConfig = {
-  "appVersion": "1.0.5",
+  "appVersion": "1.0.6",
   "nuxt": {},
   "ui": {
     "colors": {

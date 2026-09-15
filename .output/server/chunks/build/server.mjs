@@ -47,6 +47,7 @@ import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
+import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -5500,7 +5501,7 @@ const cfg0 = defineAppConfig({
   }
 });
 const inlineConfig = {
-  "appVersion": "1.0.6",
+  "appVersion": "1.0.7",
   "nuxt": {},
   "ui": {
     "colors": {
@@ -23464,7 +23465,7 @@ const themeAdminManifestModules = {
   })
 };
 const themeAdminPageModules = {
-  .../* @__PURE__ */ Object.assign({ "../themes/panel/admin/pages/appstore.vue": () => import('./appstore-B58Lw3Fx.mjs'), "../themes/panel/admin/pages/install-stats.vue": () => import('./install-stats-CAfP6tml.mjs') })
+  .../* @__PURE__ */ Object.assign({ "../themes/panel/admin/pages/appstore.vue": () => import('./appstore-k4E-Zv28.mjs'), "../themes/panel/admin/pages/install-stats.vue": () => import('./install-stats-CAfP6tml.mjs') })
 };
 const themeAdminLocaleEnModules = {
   .../* @__PURE__ */ Object.assign({})

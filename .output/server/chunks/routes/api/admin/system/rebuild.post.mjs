@@ -29,6 +29,7 @@ import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
+import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';

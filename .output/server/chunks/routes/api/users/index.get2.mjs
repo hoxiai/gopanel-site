@@ -1,15 +1,16 @@
-import { d as defineEventHandler, c as getRequestLocale, bx as requireUserSession, e as createError, b as db, p as products, z as subscriptions } from '../../../nitro/nitro.mjs';
-import { eq, and, desc } from 'drizzle-orm';
+import { d as defineEventHandler, c as getRequestLocale, bT as requireUserSession, e as createError, b as db, p as products, D as subscriptions } from '../../../nitro/nitro.mjs';
+import { eq, and, or, isNull, gt, desc } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,13 +23,13 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -60,8 +61,9 @@ const index_get = defineEventHandler(async (event) => {
     productMetaData: products.metaData
   }).from(subscriptions).leftJoin(products, eq(subscriptions.productId, products.id)).where(and(
     eq(subscriptions.userId, userId),
-    eq(subscriptions.status, "active")
-  )).orderBy(desc(subscriptions.createdAt)).limit(1);
+    eq(subscriptions.status, "active"),
+    or(isNull(subscriptions.currentPeriodEnd), gt(subscriptions.currentPeriodEnd, /* @__PURE__ */ new Date()))
+  )).orderBy(desc(subscriptions.currentPeriodEnd)).limit(1);
   if (!subRows.length) {
     return { data: null };
   }

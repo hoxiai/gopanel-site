@@ -1,15 +1,16 @@
-import { d as defineEventHandler, bx as requireUserSession, b as db, ba as userTokens, bb as EMAIL_VERIFY_TOKEN_NAME } from '../../../nitro/nitro.mjs';
-import { and, eq, or, isNull, ne, desc } from 'drizzle-orm';
+import { d as defineEventHandler, bT as requireUserSession, b as db, bs as userTokens, cM as apiTokenScope } from '../../../nitro/nitro.mjs';
+import { desc } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,13 +23,13 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -45,12 +46,7 @@ const index_get = defineEventHandler(async (event) => {
     expiresAt: userTokens.expiresAt,
     revoked: userTokens.revoked,
     createdAt: userTokens.createdAt
-  }).from(userTokens).where(and(
-    eq(userTokens.userId, userId),
-    // ne() against a NULL name is NULL (not true) in SQL, which would
-    // silently exclude un-named rows — explicitly allow NULL through.
-    or(isNull(userTokens.name), ne(userTokens.name, EMAIL_VERIFY_TOKEN_NAME))
-  )).orderBy(desc(userTokens.createdAt));
+  }).from(userTokens).where(apiTokenScope(userId)).orderBy(desc(userTokens.createdAt));
   return { data: rows };
 });
 

@@ -1,15 +1,16 @@
-import { cF as assertListingBlueprintImageTaskSpecs, cG as listBlueprintTaskItems, cH as completeBlueprintTaskItem, cI as settleListingBlueprintStep, cJ as ensureBlueprintTaskItems, cK as registerPlannedGenerationSlots, cL as persistGeneratedImageWorkspace, cM as getPublishAggregatesForUser, cN as rebuildProductAggregate, cO as assertImageGenerationTaskSpec, cP as isTaskControlInterrupt, cQ as isGenerationTaskStateUnknown, cR as classifyGenerationError, cS as failBlueprintTaskItem, cT as startBlueprintTaskItem, cU as runProductImageGenerationTaskSpec, cV as updateBlueprintTaskItemStage, cW as enqueueIdempotentToolTask } from '../nitro/nitro.mjs';
-import 'node:crypto';
+import { du as getPublishAggregatesForUser, dv as getListingPricingDefaultsByUser, dw as rebuildProductAggregate, dx as ensureProductVisionFactsForImages, dy as shouldBlockImageGenerationForVision, dz as hasChannelImageBlueprint, dA as getListingAutomationByUser, dB as customizeBlueprint, dC as resolveChannelImageBlueprint, dD as filterBlueprintPlanByEffectiveSkus, dE as buildImageBlueprintPlan, dF as buildListingBlueprintImageTaskSpecs, dG as getChannelPromptEngine, dH as resolveChannelPromptSnapshotForSelector, dI as assertListingBlueprintImageTaskSpecs, dJ as listBlueprintTaskItems, dK as completeBlueprintTaskItem, dL as settleListingBlueprintStep, dM as ensureBlueprintTaskItems, dN as registerPlannedGenerationSlots, dO as persistGeneratedImageWorkspace, dP as assertImageGenerationTaskSpec, dQ as isTaskControlInterrupt, dR as isGenerationTaskStateUnknown, dS as classifyGenerationError, dT as failBlueprintTaskItem, dU as startBlueprintTaskItem, dV as runProductImageGenerationTaskSpec, dW as updateBlueprintTaskItemStage, dX as enqueueIdempotentToolTask } from '../nitro/nitro.mjs';
 import 'drizzle-orm';
+import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,13 +23,13 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -308,5 +309,85 @@ const runBlueprintChain = async (userId, productId, options, onProgress) => {
     skipped: false
   });
 };
+const resolveBlueprintImageTaskSpecsForProduct = async (userId, productId, channel, mode = "fill", presetInstructions) => {
+  var _a, _b, _c, _d;
+  const [row] = await getPublishAggregatesForUser(userId, [productId]);
+  if (!row) {
+    throw new Error(`product not found: ${productId}`);
+  }
+  const pricingDefaults = await getListingPricingDefaultsByUser(userId).catch(() => void 0);
+  const product = rebuildProductAggregate(row, pricingDefaults);
+  const visionOutcome = await ensureProductVisionFactsForImages(userId, productId, product, { staleRefresh: "await" }).catch(() => null);
+  if (visionOutcome && shouldBlockImageGenerationForVision(visionOutcome)) {
+    throw new Error(`\u751F\u56FE\u524D\u7F6E\u89C6\u89C9\u4E8B\u5B9E\u963B\u65AD\uFF1A${visionOutcome.message || visionOutcome.reason}`);
+  }
+  if (!hasChannelImageBlueprint(channel)) {
+    throw new Error(`\u8BE5\u6E20\u9053\u6682\u4E0D\u652F\u6301\u751F\u56FE\uFF08\u56FE\u96C6\u84DD\u56FE\u672A\u6CE8\u518C\uFF09\uFF1A${channel}`);
+  }
+  const channelDraft = (row.drafts || {})[channel] || {};
+  const listing = channelDraft.listing && typeof channelDraft.listing === "object" && !Array.isArray(channelDraft.listing) ? channelDraft.listing : channelDraft;
+  const categoryId = String(
+    (listing == null ? void 0 : listing.categoryId) || (listing == null ? void 0 : listing.category_id) || (listing == null ? void 0 : listing.subjectId) || (listing == null ? void 0 : listing.subject_id) || ((_b = (_a = product.listingWorkspace) == null ? void 0 : _a.categoryHints) == null ? void 0 : _b.selectedWbSubjectId) || ((_d = (_c = product.listingWorkspace) == null ? void 0 : _c.categoryHints) == null ? void 0 : _d.selectedOzonCategoryId) || ""
+  ).trim();
+  const strategy = await getListingAutomationByUser(userId).catch(() => ({
+    galleryTarget: 3,
+    galleryStyles: ["white_background", "scene", "details"]
+  }));
+  const blueprint = customizeBlueprint(
+    resolveChannelImageBlueprint(channel),
+    strategy.galleryTarget,
+    strategy.galleryStyles
+  );
+  const blueprintPlan = filterBlueprintPlanByEffectiveSkus(
+    product,
+    buildImageBlueprintPlan(product, mode, blueprint)
+  );
+  if (!blueprintPlan.tasks.length) {
+    return {
+      imageTaskSpecs: [],
+      blueprintSnapshot: {
+        total: blueprintPlan.total || 0,
+        completed: blueprintPlan.completed || 0
+      }
+    };
+  }
+  const baseImageTaskSpecs = buildListingBlueprintImageTaskSpecs(
+    product,
+    blueprintPlan.tasks,
+    presetInstructions,
+    channel
+  );
+  const categoryProfileKey = getChannelPromptEngine().resolveChannelPromptCategoryProfileKey(product);
+  const imageTaskSpecs = await Promise.all(baseImageTaskSpecs.map(async (entry) => {
+    const channelPromptSnapshot = await resolveChannelPromptSnapshotForSelector({
+      channel,
+      mediaType: "image",
+      outputUsage: entry.taskSpec.outputUsage,
+      ...entry.taskSpec.outputUsage === "gallery_image" && entry.taskSpec.slotKey ? { slotKey: entry.taskSpec.slotKey } : {},
+      ...categoryId ? { categoryId } : {},
+      categoryProfileKey
+    });
+    return {
+      ...entry,
+      // 主题本地的 ChannelPromptSnapshot 把 channel / outputUsage /
+      // categoryProfileKey 放宽成 string，engine 的 ImageGenerationTaskSpec 要的
+      // 是收窄联合，所以直接铺进去会在返回值上炸 TS2322（报的是
+      // taskSpec.channelPromptSnapshot.selector.channel: string 不可赋给
+      // 'ozon' | 'wb'，跟 Object.freeze 的 Readonly 无关）。值域由本函数的
+      // channel: Channel 入参与 resolveChannelPromptSnapshotForSelector 的
+      // selector 保证；收口方式与 server/assets/image-task-spec.ts 同一处边界一致。
+      // 真正的根因是主题复制了一份宽松的 ChannelPromptSnapshot，应回归 engine 类型，
+      // 那是跨仓改动，这里先按既有约定收口。
+      taskSpec: Object.freeze({ ...entry.taskSpec, channelPromptSnapshot })
+    };
+  }));
+  return {
+    imageTaskSpecs,
+    blueprintSnapshot: {
+      total: blueprintPlan.total,
+      completed: blueprintPlan.completed
+    }
+  };
+};
 
-export { runBlueprintChain };
+export { resolveBlueprintImageTaskSpecsForProduct, runBlueprintChain };

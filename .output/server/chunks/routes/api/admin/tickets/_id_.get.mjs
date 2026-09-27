@@ -1,15 +1,16 @@
-import { d as defineEventHandler, f as getRouterParam, e as createError, b as db, b0 as tickets, u as users, b1 as ticketMessages, b2 as userWallets, o as orders, b3 as fromScaled } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, f as getRouterParam, e as createError, b as db, F as tickets, u as users, bf as ticketMessages, bg as userWallets, v as orders, bh as fromScaled, bi as getWalletBackend } from '../../../../nitro/nitro.mjs';
 import { eq, asc, desc } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,13 +23,13 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -87,7 +88,9 @@ const _id__get = defineEventHandler(async (event) => {
       ticket,
       messages,
       userFinance,
-      recentOrders
+      recentOrders,
+      // 钱包归属：AINode 钱包站点补偿只能发充值余额（后台据此限定补偿类型）
+      walletBackend: getWalletBackend()
     }
   };
 });

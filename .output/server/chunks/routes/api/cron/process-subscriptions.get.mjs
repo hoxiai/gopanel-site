@@ -1,15 +1,16 @@
-import { d as defineEventHandler, c as getRequestLocale, bE as useRuntimeConfig, bF as getHeader, bo as logger, e as createError, b as db, z as subscriptions, o as orders, ah as ORDER_STATUS } from '../../../nitro/nitro.mjs';
-import { and, eq, lt } from 'drizzle-orm';
+import { d as defineEventHandler, c as getRequestLocale, c7 as useRuntimeConfig, bj as getHeader, bK as logger, e as createError, b as db, u as users, D as subscriptions, v as orders, as as ORDER_STATUS, O as ORDER_PAY_STATUS, be as syncWalletTierFromRemaining, ac as emitEvent } from '../../../nitro/nitro.mjs';
+import { eq, and, lt } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,13 +23,13 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -49,11 +50,35 @@ const processSubscriptions_get = defineEventHandler(async (event) => {
   let expiredCount = 0;
   let errorCount = 0;
   try {
-    const dueSubscriptions = await db.select().from(subscriptions).where(and(eq(subscriptions.status, "active"), lt(subscriptions.currentPeriodEnd, now)));
+    const dueSubscriptions = await db.select({
+      id: subscriptions.id,
+      userId: subscriptions.userId,
+      productId: subscriptions.productId,
+      status: subscriptions.status,
+      cancelAtPeriodEnd: subscriptions.cancelAtPeriodEnd,
+      currentPeriodEnd: subscriptions.currentPeriodEnd,
+      userEmail: users.email
+    }).from(subscriptions).leftJoin(users, eq(subscriptions.userId, users.id)).where(and(eq(subscriptions.status, "active"), lt(subscriptions.currentPeriodEnd, now)));
     for (const sub of dueSubscriptions) {
       try {
         await db.update(subscriptions).set({ status: "expired", updatedAt: now }).where(eq(subscriptions.id, sub.id));
-        await db.update(orders).set({ status: ORDER_STATUS.EXPIRED }).where(and(eq(orders.subscriptionId, sub.id), eq(orders.status, ORDER_STATUS.ACTIVE)));
+        await db.update(orders).set({ status: ORDER_STATUS.EXPIRED }).where(and(
+          eq(orders.subscriptionId, sub.id),
+          eq(orders.status, ORDER_STATUS.ACTIVE),
+          eq(orders.payStatus, ORDER_PAY_STATUS.PAID)
+        ));
+        if (sub.userId) {
+          await syncWalletTierFromRemaining(Number(sub.userId), now);
+        }
+        if (sub.userId) {
+          await emitEvent("subscription.revoked", {
+            id: sub.id,
+            userId: Number(sub.userId),
+            productId: Number(sub.productId || 0) || 0,
+            subscriptionId: sub.id,
+            reason: sub.cancelAtPeriodEnd ? "subscription_expired_period_ended" : "subscription_expired_unpaid"
+          });
+        }
         await logger.info(`[Cron] Subscription ${sub.id} expired.`);
         expiredCount++;
       } catch (err) {

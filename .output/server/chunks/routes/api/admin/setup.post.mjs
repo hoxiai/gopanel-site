@@ -1,15 +1,16 @@
-import { d as defineEventHandler, c as getRequestLocale, M as resolveClientIp, N as checkIpRateLimit, e as createError, r as readBody, j as hashPassword, b as db, h as admins, U as recordOperationFromEvent } from '../../../nitro/nitro.mjs';
-import 'node:crypto';
+import { d as defineEventHandler, c as getRequestLocale, S as resolveClientIp, T as checkIpRateLimit, e as createError, b as db, h as admins, r as readBody, j as hashPassword, b3 as isUniqueViolation, Z as recordOperationFromEvent } from '../../../nitro/nitro.mjs';
 import 'drizzle-orm';
+import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,13 +23,13 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -49,15 +50,6 @@ function isStrongPassword(pw) {
   if (commonWeak.has(pw.toLowerCase())) return { ok: false, reason: "common_password" };
   return { ok: true };
 }
-function isUniqueViolation(err) {
-  if (!err) return false;
-  const msg = err.message || "";
-  const code = err.code || "";
-  const lower = msg.toLowerCase();
-  return /unique.*constraint/.test(lower) || /duplicate.*(entry|key|column)/.test(lower) || /sqlite_constraint_unique/.test(lower) || code === "23505" || // PostgreSQL
-  code === "ER_DUP_ENTRY" || // MySQL
-  code === "SQLITE_CONSTRAINT_UNIQUE";
-}
 const setup_post = defineEventHandler(async (event) => {
   var _a, _b, _c;
   const locale = getRequestLocale(event);
@@ -70,6 +62,10 @@ const setup_post = defineEventHandler(async (event) => {
       statusMessage: "Too Many Requests",
       message: locale === "zh" ? "\u8BF7\u6C42\u8FC7\u4E8E\u9891\u7E41\uFF0C\u8BF7\u7A0D\u540E\u518D\u8BD5" : "Too many requests, please try later"
     });
+  }
+  const existingAdmins = await db.select({ id: admins.id }).from(admins).limit(1);
+  if (existingAdmins.length > 0) {
+    throw createError({ statusCode: 403, message: locale === "zh" ? "\u7BA1\u7406\u5458\u5DF2\u521D\u59CB\u5316" : "Admin already initialized" });
   }
   const body = await readBody(event);
   const { username, password } = body || {};

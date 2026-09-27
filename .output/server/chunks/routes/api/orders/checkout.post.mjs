@@ -1,16 +1,17 @@
-import { d as defineEventHandler, a9 as requireTrustedRequestOrigin, by as mergePromoTracking, bA as readPromoTracking, bz as capturePromoTracking, bG as getRequestIP, e as createError, r as readBody, bx as requireUserSession, b as db, u as users, W as clearUserSession, aC as settings, bu as ensureVisitorId, p as products, ac as resolveRequestLocale, ab as getSiteLocaleConfig, y as buildLocaleCurrencyQuote, ad as getMinimalCheckoutAdminConfig, bH as stripReservedOrderMeta, ae as buildMinimalCheckoutBridgeMeta, af as mergeMinimalCheckoutMeta, Z as isMinimalCheckoutRelayOrder, bI as MINIMAL_CHECKOUT_SOURCE, a2 as fulfillMinimalCheckoutRelay, a3 as fulfillOrder, a5 as emitEvent, b2 as userWallets, o as orders, O as ORDER_PAY_STATUS, ag as prepareOrderMetaForInsert, ai as ensureTopupRecordForOrder, $ as createOrderAttribution, be as trackVisitorEvent, ah as ORDER_STATUS, bJ as getAffectedRows, a0 as settlePaidTopup, c as getRequestLocale, J as getLocalizedSettingValue, I as sendEmail, bK as createNotification } from '../../../nitro/nitro.mjs';
-import { eq, and, gte, desc } from 'drizzle-orm';
+import { d as defineEventHandler, ai as requireTrustedRequestOrigin, bV as mergePromoTracking, bX as readPromoTracking, bW as capturePromoTracking, c3 as getRequestIP, e as createError, r as readBody, bT as requireUserSession, b as db, u as users, $ as clearUserSession, aO as settings, bQ as ensureVisitorId, p as products, al as resolveRequestLocale, ak as getSiteLocaleConfig, C as buildLocaleCurrencyQuote, ao as getMinimalCheckoutAdminConfig, ca as stripReservedOrderMeta, ap as buildMinimalCheckoutBridgeMeta, aq as mergeMinimalCheckoutMeta, a4 as isMinimalCheckoutRelayOrder, cb as MINIMAL_CHECKOUT_SOURCE, a9 as fulfillMinimalCheckoutRelay, aa as fulfillOrder, ac as emitEvent, cc as getSubscriptionEntitlement, v as orders, O as ORDER_PAY_STATUS, ar as prepareOrderMetaForInsert, at as ensureTopupRecordForOrder, a6 as createOrderAttribution, bA as trackVisitorEvent, as as ORDER_STATUS, cd as getAffectedRows, a7 as settlePaidTopup, c as getRequestLocale, N as getLocalizedSettingValue, P as sendEmail, ce as createNotification } from '../../../nitro/nitro.mjs';
+import { eq, and, or, isNull, gte, desc } from 'drizzle-orm';
 import crypto from 'crypto';
 import { z } from 'zod';
 import 'node:crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -23,12 +24,12 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -68,9 +69,14 @@ const parseOrderMetaData = (value) => {
   }
 };
 const matchesCurrencySnapshot = (value, snapshot) => {
+  var _a, _b;
   const current = parseOrderMetaData(value).currencySnapshot;
   if (!current || typeof current !== "object") return false;
-  return current.locale === snapshot.locale && current.baseCurrency === snapshot.baseCurrency && Number(current.baseAmount) === Number(snapshot.baseAmount) && current.currency === snapshot.currency && Number(current.exchangeRate) === Number(snapshot.exchangeRate) && Number(current.amount) === Number(snapshot.amount) && current.source === snapshot.source;
+  const basicMatches = current.locale === snapshot.locale && current.baseCurrency === snapshot.baseCurrency && Number(current.baseAmount) === Number(snapshot.baseAmount) && current.currency === snapshot.currency && Number(current.exchangeRate) === Number(snapshot.exchangeRate) && Number(current.amount) === Number(snapshot.amount) && current.source === snapshot.source;
+  if (!basicMatches) return false;
+  const currentRate = Number(((_a = current.discountDetails) == null ? void 0 : _a.combinedDiscountRate) || 1);
+  const targetRate = Number(((_b = snapshot.discountDetails) == null ? void 0 : _b.combinedDiscountRate) || 1);
+  return Math.abs(currentRate - targetRate) < 1e-4;
 };
 const sendPendingOrderEmail = async (input) => {
   if (!isDeliverableEmail(input.email)) return;
@@ -114,6 +120,7 @@ const createPendingOrderNotification = async (event, input) => {
   });
 };
 const checkout_post = defineEventHandler(async (event) => {
+  var _a;
   try {
     const siteUrl = requireTrustedRequestOrigin(event);
     const locale = getPreferredLocale(event);
@@ -126,7 +133,7 @@ const checkout_post = defineEventHandler(async (event) => {
       productUnavailable: "\u5546\u54C1\u5F53\u524D\u4E0D\u53EF\u552E",
       topupLoginRequired: "\u8BF7\u5148\u767B\u5F55\u540E\u518D\u5145\u503C",
       invalidTopupAmount: "\u5145\u503C\u5230\u8D26\u91D1\u989D\u5FC5\u987B\u5927\u4E8E 0",
-      activeSubscriptionExists: "\u60A8\u5F53\u524D\u5DF2\u62E5\u6709\u540C\u7EA7\u6709\u6548\u8BA2\u9605\uFF0C\u8BF7\u5347\u7EA7\u5230\u66F4\u9AD8\u7B49\u7EA7\u7684\u5957\u9910\u3002",
+      activeSubscriptionExists: "\u60A8\u5F53\u524D\u5DF2\u62E5\u6709\u66F4\u9AD8\u7B49\u7EA7\u7684\u6709\u6548\u8BA2\u9605\uFF0C\u6682\u4E0D\u652F\u6301\u964D\u7EA7\u8D2D\u4E70\u3002",
       purchaseLimitExceeded: "\u60A8\u5DF2\u8FBE\u5230\u8BE5\u5546\u54C1\u7684\u8D2D\u4E70\u4E0A\u9650\uFF0C\u65E0\u6CD5\u518D\u6B21\u8D2D\u4E70\u3002",
       purchaseLimitExceededWithCount: "\u8BE5\u5546\u54C1\u6BCF\u4EBA\u6700\u591A\u53EF\u8D2D\u4E70 {limit} \u6B21\uFF0C\u60A8\u5DF2\u8D2D\u4E70\u8FC7 {count} \u6B21\u3002",
       orderCreated: "\u8BA2\u5355\u521B\u5EFA\u6210\u529F",
@@ -140,7 +147,7 @@ const checkout_post = defineEventHandler(async (event) => {
       productUnavailable: "Product is not available for sale",
       topupLoginRequired: "Please log in before topping up",
       invalidTopupAmount: "Top-up credit amount must be greater than 0",
-      activeSubscriptionExists: "You already have an active subscription at this tier. Please upgrade to a higher plan.",
+      activeSubscriptionExists: "You already have an active higher-tier subscription. Downgrades are not supported.",
       purchaseLimitExceeded: "You have reached the purchase limit for this product.",
       purchaseLimitExceededWithCount: "This product can only be purchased {limit} time(s) per user. You have already purchased it {count} time(s).",
       orderCreated: "Order created successfully",
@@ -224,25 +231,78 @@ const checkout_post = defineEventHandler(async (event) => {
         productMetaData = {};
       }
     }
+    const originalBaseAmount = Number((product.price * productNum).toFixed(4));
+    let effectiveBaseAmount = originalBaseAmount;
+    let volumeDiscountRate = 1;
+    const rawVolumeDiscounts = productMetaData == null ? void 0 : productMetaData.volume_discounts;
+    if (Array.isArray(rawVolumeDiscounts) && rawVolumeDiscounts.length > 0) {
+      const matchedTiers = rawVolumeDiscounts.filter((tier) => {
+        const minQty = Number((tier == null ? void 0 : tier.minQuantity) || (tier == null ? void 0 : tier.min_quantity));
+        const rate = Number((tier == null ? void 0 : tier.discountRate) || (tier == null ? void 0 : tier.discount_rate));
+        return Number.isFinite(minQty) && minQty > 0 && productNum >= minQty && Number.isFinite(rate) && rate > 0 && rate <= 1;
+      }).sort((a, b) => {
+        const rateA = Number(a.discountRate || a.discount_rate);
+        const rateB = Number(b.discountRate || b.discount_rate);
+        return rateA - rateB;
+      });
+      if (matchedTiers.length > 0) {
+        volumeDiscountRate = Number(matchedTiers[0].discountRate || matchedTiers[0].discount_rate);
+      }
+    }
+    let promoDiscountRate = 1;
+    const hasPromoAttribution = Boolean(promoTracking.inviteCode || promoTracking.promoCode || promoTracking.agentCode);
+    if (hasPromoAttribution) {
+      let configuredPromoRate = Number(productMetaData == null ? void 0 : productMetaData.promo_discount_rate);
+      if (!Number.isFinite(configuredPromoRate) || configuredPromoRate <= 0 || configuredPromoRate > 1) {
+        const globalPromoRateSetting = await db.select().from(settings).where(eq(settings.key, "promo_buyer_discount_rate")).limit(1);
+        if (globalPromoRateSetting.length > 0) {
+          const globalVal = Number(globalPromoRateSetting[0].value);
+          if (Number.isFinite(globalVal) && globalVal > 0 && globalVal <= 1) {
+            configuredPromoRate = globalVal;
+          }
+        }
+      }
+      if (Number.isFinite(configuredPromoRate) && configuredPromoRate > 0 && configuredPromoRate < 1) {
+        promoDiscountRate = configuredPromoRate;
+      }
+    }
+    const combinedDiscountRate = Number((volumeDiscountRate * promoDiscountRate).toFixed(4));
+    if (combinedDiscountRate < 1) {
+      effectiveBaseAmount = Number((originalBaseAmount * combinedDiscountRate).toFixed(4));
+    }
+    const discountBaseAmount = Number((originalBaseAmount - effectiveBaseAmount).toFixed(4));
+    const discountDetails = {
+      originalPrice: product.price,
+      quantity: productNum,
+      originalBaseAmount,
+      volumeDiscountRate: volumeDiscountRate < 1 ? volumeDiscountRate : null,
+      promoDiscountRate: promoDiscountRate < 1 ? promoDiscountRate : null,
+      combinedDiscountRate: combinedDiscountRate < 1 ? combinedDiscountRate : 1,
+      discountBaseAmount,
+      finalBaseAmount: effectiveBaseAmount
+    };
     const checkoutLocale = resolveRequestLocale(event, parsedBody.locale, await getSiteLocaleConfig());
     const currencyQuote = await buildLocaleCurrencyQuote(
-      product.price * productNum,
+      effectiveBaseAmount,
       checkoutLocale
     );
     const totalAmount = currencyQuote.amount;
     const configuredRechargeAmount = Number(productMetaData.recharge_amount || 0);
-    const rechargeAmount = configuredRechargeAmount > 0 ? configuredRechargeAmount : currencyQuote.baseAmount;
+    const rechargeAmount = configuredRechargeAmount > 0 ? configuredRechargeAmount * productNum : currencyQuote.baseAmount;
     if (product.type === "topup" && (!(totalAmount > 0) || !(rechargeAmount > 0))) {
       throw createError({ statusCode: 400, message: messages.invalidTopupAmount });
     }
     const currencySnapshot = {
       locale: currencyQuote.locale,
       baseCurrency: currencyQuote.baseCurrency,
+      originalBaseAmount,
       baseAmount: currencyQuote.baseAmount,
+      discountBaseAmount,
       currency: currencyQuote.currency,
       exchangeRate: currencyQuote.rate,
       amount: currencyQuote.amount,
-      source: currencyQuote.source
+      source: currencyQuote.source,
+      ...combinedDiscountRate < 1 ? { discountDetails } : {}
     };
     const minimalCheckoutConfig = await getMinimalCheckoutAdminConfig();
     const finalMetaData = {
@@ -251,6 +311,8 @@ const checkout_post = defineEventHandler(async (event) => {
       ...promoTracking.inviteCode ? { inviteCode: promoTracking.inviteCode } : {},
       ...promoTracking.promoCode ? { promoCode: promoTracking.promoCode } : {},
       ...promoTracking.agentCode ? { agentCode: promoTracking.agentCode } : {},
+      order_quantity: productNum,
+      ...combinedDiscountRate < 1 ? { discountDetails } : {},
       currencySnapshot
     };
     const buildRelayOrderMeta = (externalOrderId) => {
@@ -288,8 +350,8 @@ const checkout_post = defineEventHandler(async (event) => {
       });
       return mergeMinimalCheckoutMeta(finalMetaData, bridgeMeta);
     };
-    const fulfillFreeRelayOrder = async (targetOrderId) => {
-      const isMinimalRelay = isMinimalCheckoutRelayOrder({ source: MINIMAL_CHECKOUT_SOURCE, metaData: relayOrderMeta });
+    const fulfillFreeRelayOrder = async (targetOrderId, metaData) => {
+      const isMinimalRelay = isMinimalCheckoutRelayOrder({ source: MINIMAL_CHECKOUT_SOURCE, metaData });
       const fulfilled = isMinimalRelay ? await fulfillMinimalCheckoutRelay(targetOrderId) : await fulfillOrder(targetOrderId);
       if (!fulfilled) return;
       await emitEvent("order.paid", fulfilled);
@@ -297,9 +359,9 @@ const checkout_post = defineEventHandler(async (event) => {
     if (product.type === "subscription" && userId) {
       const productLevel = productMetaData == null ? void 0 : productMetaData.level;
       if (productLevel !== void 0) {
-        const walletRecord = await db.select({ tierLevel: userWallets.tierLevel }).from(userWallets).where(eq(userWallets.userId, userId)).limit(1);
-        const currentLevel = walletRecord.length > 0 ? walletRecord[0].tierLevel || 0 : 0;
-        if (Number(productLevel) <= Number(currentLevel)) {
+        const entitlement = await getSubscriptionEntitlement(Number(userId));
+        const currentLevel = (_a = entitlement == null ? void 0 : entitlement.level) != null ? _a : 0;
+        if (Number(productLevel) < Number(currentLevel)) {
           throw createError({
             statusCode: 409,
             message: messages.activeSubscriptionExists
@@ -337,6 +399,9 @@ const checkout_post = defineEventHandler(async (event) => {
         eq(orders.productId, productId),
         eq(orders.visitorId, visitorId),
         // 必须是同一个访客
+        // 同浏览器切换账号时 visitorId 不变:登录用户只接手自己或匿名时建的单,
+        // 匿名访客只复用匿名单,别人的待支付单不能被改挂到自己名下
+        userId ? or(eq(orders.userId, userId), isNull(orders.userId)) : isNull(orders.userId),
         gte(orders.createdAt, oneHourAgo)
         // 必须是1小时内的订单
       )
@@ -382,7 +447,7 @@ const checkout_post = defineEventHandler(async (event) => {
           ));
           if (getAffectedRows(claim) > 0) {
             if (product.type === "topup") await settlePaidTopup(pendingOrder.id);
-            await fulfillFreeRelayOrder(pendingOrder.id).catch(
+            await fulfillFreeRelayOrder(pendingOrder.id, relayOrderMeta2).catch(
               (e) => console.error("[Checkout] Free relay order reuse fulfillment failed:", pendingOrder.id, e)
             );
           }
@@ -430,8 +495,8 @@ const checkout_post = defineEventHandler(async (event) => {
       currency: currencyQuote.currency,
       source: "minimal_checkout",
       externalOrderId: orderId,
-      status: ORDER_STATUS.NONE,
-      // Fulfillment status
+      // 履约状态：0 元单视为已支付、紧接着履约，与复用分支和支付回调同口径先置处理中
+      status: isFreeOrder ? ORDER_STATUS.PROCESSING : ORDER_STATUS.NONE,
       payStatus: isFreeOrder ? ORDER_PAY_STATUS.PAID : ORDER_PAY_STATUS.PENDING,
       // 0 元直接视为已支付
       paidAt: isFreeOrder ? /* @__PURE__ */ new Date() : null,
@@ -467,7 +532,7 @@ const checkout_post = defineEventHandler(async (event) => {
     });
     if (isFreeOrder) {
       if (product.type === "topup") await settlePaidTopup(orderId);
-      await fulfillFreeRelayOrder(orderId).catch(
+      await fulfillFreeRelayOrder(orderId, relayOrderMeta).catch(
         (e) => console.error("[Checkout] Free relay order fulfillment failed:", orderId, e)
       );
     } else {
@@ -504,7 +569,12 @@ const checkout_post = defineEventHandler(async (event) => {
   } catch (error) {
     const locale = getPreferredLocale(event);
     const failedPrefix = locale === "zh" ? "\u521B\u5EFA\u8BA2\u5355\u5931\u8D25\uFF1A" : "Failed to create order: ";
-    return { code: 1, message: `${failedPrefix}${error.message}` };
+    const isAuthRequired = (error == null ? void 0 : error.statusCode) === 401;
+    return {
+      code: isAuthRequired ? 401 : 1,
+      authRequired: isAuthRequired,
+      message: `${failedPrefix}${error.message}`
+    };
   }
 });
 

@@ -1,15 +1,16 @@
-import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, r as readBody, b as db, o as orders, s as setAuditMeta, O as ORDER_PAY_STATUS, Z as isMinimalCheckoutRelayOrder, _ as readMinimalCheckoutBridgeMeta, $ as createOrderAttribution, a0 as settlePaidTopup, a1 as recoverCreditedApayTopup, a2 as fulfillMinimalCheckoutRelay, a3 as fulfillOrder, a4 as settlePromoCommission, a5 as emitEvent, a6 as cancelPromoCommission, a7 as refundTopup } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, r as readBody, b as db, v as orders, O as ORDER_PAY_STATUS, a2 as findSubscriptionRefundImpact, a3 as describeSubscriptionRefundImpact, s as setAuditMeta, a4 as isMinimalCheckoutRelayOrder, a5 as readMinimalCheckoutBridgeMeta, a6 as createOrderAttribution, a7 as settlePaidTopup, a8 as recoverCreditedApayTopup, a9 as fulfillMinimalCheckoutRelay, aa as fulfillOrder, ab as settlePromoCommission, ac as emitEvent, ad as cancelPromoCommission, ae as revokeSubscriptionForOrder, af as refundTopup, ag as SUBSCRIPTION_REFUND_IMPACT_CODE } from '../../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,13 +23,13 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -36,12 +37,25 @@ import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
 
 const _id__put = defineEventHandler(async (event) => {
-  var _a, _b;
+  var _a, _b, _c;
   const locale = getRequestLocale(event);
   const id = getRouterParam(event, "id");
   if (!id) throw createError({ statusCode: 400, message: locale === "zh" ? "\u7F3A\u5C11 ID" : "Missing id" });
   const body = await readBody(event);
   const existing = await db.select({ status: orders.status, payStatus: orders.payStatus }).from(orders).where(eq(orders.id, id)).limit(1);
+  const previousPayStatus = (_a = existing[0]) == null ? void 0 : _a.payStatus;
+  const endsCharge = body.payStatus === ORDER_PAY_STATUS.REFUNDED || body.payStatus === ORDER_PAY_STATUS.CANCELLED;
+  const wasCharged = previousPayStatus === ORDER_PAY_STATUS.PAID || previousPayStatus === ORDER_PAY_STATUS.REFUNDED;
+  if (endsCharge && wasCharged && previousPayStatus !== body.payStatus && body.confirmSubscriptionImpact !== true) {
+    const impact = await findSubscriptionRefundImpact(String(id));
+    if (impact) {
+      throw createError({
+        statusCode: 409,
+        message: describeSubscriptionRefundImpact(impact, locale, body.payStatus),
+        data: { code: SUBSCRIPTION_REFUND_IMPACT_CODE, impact }
+      });
+    }
+  }
   const updateData = {};
   if (body.status) updateData.status = body.status;
   if (body.payStatus) updateData.payStatus = body.payStatus;
@@ -58,7 +72,7 @@ const _id__put = defineEventHandler(async (event) => {
   if (body.payStatus === ORDER_PAY_STATUS.PAID) {
     const updatedOrder = result[0];
     const isMinimalRelay = isMinimalCheckoutRelayOrder(updatedOrder);
-    const isApayTopup = ((_b = (_a = readMinimalCheckoutBridgeMeta(updatedOrder == null ? void 0 : updatedOrder.metaData)) == null ? void 0 : _a.attach) == null ? void 0 : _b.walletOwner) === "apay";
+    const isApayTopup = ((_c = (_b = readMinimalCheckoutBridgeMeta(updatedOrder == null ? void 0 : updatedOrder.metaData)) == null ? void 0 : _b.attach) == null ? void 0 : _c.walletOwner) === "apay";
     if (!wasAlreadyPaid) {
       await createOrderAttribution({
         orderId: id,
@@ -68,7 +82,7 @@ const _id__put = defineEventHandler(async (event) => {
     }
     if (isApayTopup) {
       await settlePaidTopup(id);
-      await recoverCreditedApayTopup(id);
+      await recoverCreditedApayTopup(id, { paidTransition: !wasAlreadyPaid });
     } else if (!wasAlreadyPaid) {
       const fulfilledOrder = isMinimalRelay ? await fulfillMinimalCheckoutRelay(id) : await fulfillOrder(id);
       if (fulfilledOrder) {
@@ -77,9 +91,16 @@ const _id__put = defineEventHandler(async (event) => {
       }
     }
   }
-  if (body.payStatus === ORDER_PAY_STATUS.REFUNDED || body.payStatus === ORDER_PAY_STATUS.CANCELLED) {
+  if (endsCharge) {
     const refundedOrder = result[0];
     await cancelPromoCommission(id, `admin_${body.payStatus}`);
+    if (wasCharged) {
+      try {
+        await revokeSubscriptionForOrder(String(id), `admin_${body.payStatus}`);
+      } catch (error) {
+        console.error(`[Subscription] failed to revoke for refunded order ${id}:`, error);
+      }
+    }
     if (body.payStatus === ORDER_PAY_STATUS.REFUNDED && (refundedOrder == null ? void 0 : refundedOrder.userId)) {
       try {
         const clawback = await refundTopup(id);

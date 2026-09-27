@@ -1,15 +1,16 @@
-import { d as defineEventHandler, a9 as requireTrustedRequestOrigin, c as getRequestLocale, r as readBody, by as mergePromoTracking, bz as capturePromoTracking, bA as readPromoTracking, e as createError, bd as validateEmail, b as db, u as users, j as hashPassword, aa as ensurePromoMember, bB as bindInviteRelation, bC as requestPromoAgentJoin, o as orders, a5 as emitEvent, bt as issueWebSession, be as trackVisitorEvent, bu as ensureVisitorId, ba as userTokens, bb as EMAIL_VERIFY_TOKEN_NAME, J as getLocalizedSettingValue, I as sendEmail } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, ai as requireTrustedRequestOrigin, c as getRequestLocale, r as readBody, bV as mergePromoTracking, bW as capturePromoTracking, bX as readPromoTracking, e as createError, bt as validateEmail, b as db, u as users, j as hashPassword, aj as ensurePromoMember, bY as bindInviteRelation, bZ as requestPromoAgentJoin, ac as emitEvent, b_ as promoAgentRelations, b$ as promoInviteRelations, aB as promoMembers, bP as issueWebSession, bA as trackVisitorEvent, bQ as ensureVisitorId, bs as userTokens, bw as EMAIL_VERIFY_TOKEN_NAME, N as getLocalizedSettingValue, P as sendEmail } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,13 +23,13 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -98,7 +99,6 @@ const register_post = defineEventHandler(async (event) => {
       userId: user.id,
       agentCode: promoTracking.agentCode});
   }
-  await db.update(orders).set({ userId: user.id }).where(eq(orders.contactEmail, user.email));
   try {
     await emitEvent("user.registered", {
       id: user.id,
@@ -110,6 +110,9 @@ const register_post = defineEventHandler(async (event) => {
   } catch (err) {
     console.error("[Register] user.registered sync rule failed, rolling back user:", err);
     try {
+      await db.delete(promoAgentRelations).where(eq(promoAgentRelations.agentUserId, user.id));
+      await db.delete(promoInviteRelations).where(eq(promoInviteRelations.inviteeUserId, user.id));
+      await db.delete(promoMembers).where(eq(promoMembers.userId, user.id));
       await db.delete(users).where(eq(users.id, user.id));
     } catch (cleanupErr) {
       console.error("[Register] Failed to rollback user after sync rule failure:", cleanupErr);

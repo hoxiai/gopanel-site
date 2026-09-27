@@ -1,15 +1,16 @@
-import { d as defineEventHandler, f as getRouterParam, e as createError, b as db, b0 as tickets, r as readBody, b4 as changeBalance, b1 as ticketMessages, b5 as notifications } from '../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, f as getRouterParam, e as createError, b as db, F as tickets, r as readBody, bc as usesAINodeWallet, bj as getHeader, bk as changeAINodeWallet, bl as changeBalance, bf as ticketMessages, bm as notifications } from '../../../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,19 +23,20 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
 
+const IDEMPOTENCY_KEY_PATTERN = /^[A-Za-z0-9_-]{8,64}$/;
 const compensation_post = defineEventHandler(async (event) => {
   const admin = event.context.admin;
   const adminId = admin == null ? void 0 : admin.id;
@@ -50,13 +52,26 @@ const compensation_post = defineEventHandler(async (event) => {
   }
   const body = await readBody(event);
   const amount = Math.abs(Number(body.amount || 0));
-  const balanceType = body.balanceType === "cash" ? "cash" : "grant";
+  const balanceType = usesAINodeWallet() || body.balanceType === "cash" ? "cash" : "grant";
   const reason = String(body.reason || "\u5DE5\u5355\u95EE\u9898\u6838\u5B9E\u8865\u507F").trim();
+  const idempotencyKey = String(body.idempotencyKey || getHeader(event, "idempotency-key") || "").trim();
   if (!(amount > 0)) {
     throw createError({ statusCode: 400, statusMessage: "\u8865\u507F\u91D1\u989D\u6216\u70B9\u6570\u5FC5\u987B\u5927\u4E8E 0" });
   }
-  const eventId = `ticket-comp:${ticket.id}:${Date.now()}`;
-  const balanceResult = await changeBalance({
+  if (!IDEMPOTENCY_KEY_PATTERN.test(idempotencyKey)) {
+    throw createError({ statusCode: 400, statusMessage: "\u7F3A\u5C11\u8865\u507F\u5E42\u7B49\u952E\uFF0C\u8BF7\u5237\u65B0\u9875\u9762\u540E\u91CD\u8BD5" });
+  }
+  const eventId = `ticket-comp:${ticket.id}:${idempotencyKey}`;
+  const remark = `[\u5DE5\u5355 ${ticket.ticketNo}] ${reason}`;
+  const balanceResult = usesAINodeWallet() ? await changeAINodeWallet({
+    userId: ticket.userId,
+    direction: "credit",
+    amount,
+    eventId,
+    type: "admin_recharge",
+    sourceId: String(ticket.id),
+    remark
+  }).then((result) => ({ applied: !result.alreadyProcessed, balance: null })) : await changeBalance({
     userId: ticket.userId,
     balanceType,
     amount,
@@ -67,18 +82,26 @@ const compensation_post = defineEventHandler(async (event) => {
     sourceId: String(ticket.id),
     operatorAdminId: adminId != null ? adminId : null,
     operatorName: adminUsername,
-    remark: `[\u5DE5\u5355 ${ticket.ticketNo}] ${reason}`
+    remark
   });
   const unitName = balanceType === "grant" ? "\u7B97\u529B\u70B9" : "\u5143\u73B0\u91D1\u4F59\u989D";
+  if (!balanceResult.applied) {
+    return {
+      code: 200,
+      message: "\u8BE5\u8865\u507F\u5DF2\u53D1\u653E\u8FC7\uFF0C\u672A\u91CD\u590D\u5165\u8D26",
+      data: { applied: false, duplicate: true, newBalance: balanceResult.balance, balanceType }
+    };
+  }
   const actionSummary = `\u7BA1\u7406\u5458 ${adminUsername} \u5DF2\u4E3A\u60A8\u53D1\u653E ${amount} ${unitName} \u8865\u507F\u5230\u8D26\uFF08\u539F\u56E0\uFF1A${reason}\uFF09\u3002`;
+  const balanceLine = balanceResult.balance === null ? "" : `
+\u5F53\u524D\u8D26\u6237\u6700\u65B0${unitName}: ${balanceResult.balance}`;
   const [createdMessage] = await db.insert(ticketMessages).values({
     ticketId,
     senderType: "system",
     senderId: adminId || null,
     senderName: "\u7CFB\u7EDF\u8D22\u52A1\u901A\u77E5",
     content: `\u{1F4B0} **\u8D22\u52A1\u8865\u507F\u53D1\u653E\u901A\u77E5**
-${actionSummary}
-\u5F53\u524D\u8D26\u6237\u6700\u65B0${unitName}: ${balanceResult.balance}`,
+${actionSummary}${balanceLine}`,
     attachments: null,
     createdAt: /* @__PURE__ */ new Date()
   }).returning();

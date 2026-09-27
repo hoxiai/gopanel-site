@@ -1,15 +1,16 @@
-import { d as defineEventHandler, f as getRouterParam, e as createError, r as readBody, b as db, as as promoApplications, aa as ensurePromoMember, at as PROMO_ROLE } from '../../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, f as getRouterParam, e as createError, r as readBody, b as db, aF as promoApplications, aj as ensurePromoMember, aC as PROMO_ROLE } from '../../../../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,13 +23,13 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -36,9 +37,8 @@ import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
 
 const audit_post = defineEventHandler(async (event) => {
-  var _a;
-  const adminSession = await requireAdminSession(event);
-  const adminId = Number(((_a = adminSession == null ? void 0 : adminSession.user) == null ? void 0 : _a.id) || 0) || null;
+  const admin = event.context.admin;
+  const adminId = Number((admin == null ? void 0 : admin.id) || 0) || null;
   const id = Number(getRouterParam(event, "id"));
   if (!id) {
     throw createError({ statusCode: 400, message: "Invalid application ID" });

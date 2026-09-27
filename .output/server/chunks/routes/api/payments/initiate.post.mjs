@@ -1,16 +1,17 @@
-import { d as defineEventHandler, a9 as requireTrustedRequestOrigin, c as getRequestLocale, r as readBody, bL as requireOrderOwnership, O as ORDER_PAY_STATUS, b as db, ak as paymentMethods, ab as getSiteLocaleConfig, ac as resolveRequestLocale, bU as resolvePaymentPluginConfig, bW as resolvePaymentMethodCurrencies, bV as isPaymentMethodCurrencySupported, bG as getRequestIP, bX as getRequestHeaders, bY as executeCreateScript, o as orders, a8 as reconcileOrder } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, ai as requireTrustedRequestOrigin, c as getRequestLocale, r as readBody, cg as resolveOrderAccess, O as ORDER_PAY_STATUS, b as db, av as paymentMethods, ak as getSiteLocaleConfig, al as resolveRequestLocale, co as isPaymentMethodAvailableForLocale, cp as resolvePaymentPluginConfig, cr as resolvePaymentMethodCurrencies, cq as isPaymentMethodCurrencySupported, c3 as getRequestIP, cs as getRequestHeaders, ct as executeCreateScript, v as orders, ah as reconcileOrder } from '../../../nitro/nitro.mjs';
 import fs from 'fs';
 import path from 'path';
 import { z } from 'zod';
 import { eq, and, ne } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -23,12 +24,12 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -50,6 +51,7 @@ const initiate_post = defineEventHandler(async (event) => {
     const messages = locale === "zh" ? {
       invalidPayload: "\u652F\u4ED8\u8BF7\u6C42\u53C2\u6570\u65E0\u6548",
       alreadyPaid: "\u8BA2\u5355\u5DF2\u652F\u4ED8",
+      orderClosed: "\u8BA2\u5355\u5DF2\u9000\u6B3E\u6216\u5DF2\u53D6\u6D88\uFF0C\u4E0D\u80FD\u518D\u652F\u4ED8",
       methodNotFound: "\u652F\u4ED8\u65B9\u5F0F\u4E0D\u5B58\u5728\u6216\u672A\u542F\u7528",
       methodUnavailableForLocale: "\u5F53\u524D\u8BED\u8A00\u4E0B\u8BE5\u652F\u4ED8\u65B9\u5F0F\u4E0D\u53EF\u7528",
       createScriptMissing: (code) => `\u652F\u4ED8\u521B\u5EFA\u811A\u672C\u7F3A\u5931\uFF1A${code}`,
@@ -61,6 +63,7 @@ const initiate_post = defineEventHandler(async (event) => {
     } : {
       invalidPayload: "Invalid payment request",
       alreadyPaid: "Order already paid",
+      orderClosed: "This order has been refunded or cancelled and can no longer be paid",
       methodNotFound: "Payment method not found or inactive",
       methodUnavailableForLocale: "Payment method is not available in current language",
       createScriptMissing: (code) => `Create script missing for ${code}`,
@@ -75,9 +78,12 @@ const initiate_post = defineEventHandler(async (event) => {
       return { code: 1, message: messages.invalidPayload };
     }
     const body = parsedBody.data;
-    const order = await requireOrderOwnership(event, body.orderId);
+    const { order } = await resolveOrderAccess(event, body.orderId);
     if (order.payStatus === ORDER_PAY_STATUS.PAID) {
       return { code: 1, message: messages.alreadyPaid };
+    }
+    if (order.payStatus === ORDER_PAY_STATUS.REFUNDED || order.payStatus === ORDER_PAY_STATUS.CANCELLED) {
+      return { code: 1, message: messages.orderClosed };
     }
     const methods = await db.select().from(paymentMethods).where(eq(paymentMethods.isActive, true));
     const method = methods.find((m) => String(m.code).toLowerCase() === body.methodCode.toLowerCase());
@@ -86,6 +92,9 @@ const initiate_post = defineEventHandler(async (event) => {
     }
     const localeConfig = await getSiteLocaleConfig();
     const requestLocale = resolveRequestLocale(event, body.locale, localeConfig);
+    if (!isPaymentMethodAvailableForLocale(method, requestLocale, localeConfig)) {
+      return { code: 1, message: messages.methodUnavailableForLocale };
+    }
     let createScript = method.create || "";
     if (!createScript.trim()) {
       const localCreateScriptPath = path.join(process.cwd(), "payments", method.code, "create.js");

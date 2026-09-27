@@ -1,15 +1,16 @@
-import { d as defineEventHandler, c as getRequestLocale, g as getQuery, bc as proxyExternalRequest, u as users, b as db, b2 as userWallets, ba as userTokens, e as createError } from '../../../../nitro/nitro.mjs';
-import { sql, eq, or, like, count, and } from 'drizzle-orm';
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, bz as fetchExternalUsersMap, u as users, b as db, bg as userWallets, bs as userTokens, e as createError } from '../../../../nitro/nitro.mjs';
+import { sql, eq, or, like, count, and, gt } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,13 +23,13 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -36,33 +37,13 @@ import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
 
 const summary_get = defineEventHandler(async (event) => {
-  var _a, _b;
+  var _a;
   const locale = getRequestLocale(event);
   const query = getQuery(event);
   const keyword = String(query.q || query.keyword || "").trim();
   const hasSpending = String(query.hasSpending || "").trim();
   try {
-    let externalUsersMap = /* @__PURE__ */ new Map();
-    try {
-      const externalRes = await proxyExternalRequest(event, {
-        requireSession: true,
-        proxyLabel: "ExternalUsersAPI",
-        userAgent: "APay-Admin/1.0",
-        overrideQuery: {
-          path: "/api/admin/users",
-          page: 1,
-          pageSize: 1e4
-          // 获取所有用户的消费数据用于汇总
-        }
-      });
-      if (((_a = externalRes == null ? void 0 : externalRes.data) == null ? void 0 : _a.list) && Array.isArray(externalRes.data.list)) {
-        externalRes.data.list.forEach((extUser) => {
-          externalUsersMap.set(Number(extUser.id), extUser);
-        });
-      }
-    } catch (externalError) {
-      console.error("[admin/users/summary] Failed to fetch external user data:", externalError);
-    }
+    const externalUsersMap = await fetchExternalUsersMap(event);
     const likePattern = keyword ? `%${keyword.toLowerCase()}%` : "";
     const emailLower = sql`lower(${users.email})`;
     const nicknameLower = sql`lower(coalesce(${users.nickname}, ''))`;
@@ -122,11 +103,11 @@ const summary_get = defineEventHandler(async (event) => {
           eq(userTokens.revoked, false),
           or(
             sql`${userTokens.expiresAt} IS NULL`,
-            sql`${userTokens.expiresAt} > NOW()`
+            gt(userTokens.expiresAt, /* @__PURE__ */ new Date())
           )
         )
       );
-      summary.totalActiveKeys = Number(((_b = activeKeysResult[0]) == null ? void 0 : _b.count) || 0);
+      summary.totalActiveKeys = Number(((_a = activeKeysResult[0]) == null ? void 0 : _a.count) || 0);
     }
     return {
       data: summary

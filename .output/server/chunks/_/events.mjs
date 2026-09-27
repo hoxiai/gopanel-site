@@ -1,15 +1,16 @@
-import { _ as readMinimalCheckoutBridgeMeta, cX as sendMinimalCheckoutPaidNotification } from '../nitro/nitro.mjs';
-import 'node:crypto';
+import { de as syncSubscriptionToAINode } from '../nitro/nitro.mjs';
 import 'drizzle-orm';
+import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,41 +23,56 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
 
+const toUserId = (payload) => {
+  var _a;
+  return Number((_a = payload == null ? void 0 : payload.userId) != null ? _a : 0) || 0;
+};
+const productType = (payload) => {
+  const product = payload == null ? void 0 : payload.product;
+  return product && typeof product === "object" ? String(product.type || "") : "";
+};
 function getThemeEventRules() {
   return [
     {
-      key: "minimal:checkout_notify",
+      key: "ainode:sync_subscription_paid",
       event: "order.paid",
-      theme: "minimal",
-      label: "\u6781\u7B80\u6536\u94F6\uFF1A\u5916\u90E8\u4E2D\u7EE7\u8BA2\u5355\u652F\u4ED8\u901A\u77E5\u4E0E\u56DE\u8C03",
-      description: "\u5916\u90E8\u4E2D\u7EE7\u652F\u4ED8\u8BA2\u5355\u652F\u4ED8\u6210\u529F\u540E\uFF0C\u81EA\u52A8\u5411\u7B2C\u4E09\u65B9\u7CFB\u7EDF\u53D1\u9001 Webhook \u56DE\u8C03\u901A\u77E5\u5E76\u7B7E\u540D\u9A8C\u7B7E",
+      theme: "ainode",
+      label: "AINode\uFF1A\u8BA2\u9605\u652F\u4ED8\u540E\u540C\u6B65\u5957\u9910\u989D\u5EA6",
+      description: "\u8BA2\u9605\u8BA2\u5355\uFF08\u65B0\u8D2D\u3001\u7EED\u8D39\u3001\u5347\u7EA7\uFF09\u652F\u4ED8\u5C65\u7EA6\u540E\uFF0C\u6309 APay \u5F53\u524D\u8BA2\u9605\u5411 AINode \u53D1\u9001 subscription.apply",
       mode: "async",
       handler: async (payload) => {
-        const order = payload;
-        const bridgeMeta = readMinimalCheckoutBridgeMeta(order == null ? void 0 : order.metaData);
-        if (!bridgeMeta) {
-          return { ok: true };
-        }
-        try {
-          const res = await sendMinimalCheckoutPaidNotification(order);
-          return { ok: res.delivered || res.skipped };
-        } catch (err) {
-          console.error(`[MinimalCheckoutEvent] notification failed for order ${order == null ? void 0 : order.id}:`, err);
-          return { ok: false, errorMessage: (err == null ? void 0 : err.message) || String(err) };
-        }
+        if (productType(payload) !== "subscription") return { ok: true };
+        const userId = toUserId(payload);
+        if (!userId) return { ok: false, errorMessage: "\u8BA2\u9605\u8BA2\u5355\u6CA1\u6709\u5173\u8054\u7528\u6237\uFF0C\u65E0\u6CD5\u540C\u6B65 AINode" };
+        const result = await syncSubscriptionToAINode(userId, `order.paid:${String((payload == null ? void 0 : payload.id) || "")}`);
+        return { ok: result.ok, errorMessage: result.errorMessage };
+      }
+    },
+    {
+      key: "ainode:sync_subscription_revoked",
+      event: "subscription.revoked",
+      theme: "ainode",
+      label: "AINode\uFF1A\u8BA2\u9605\u64A4\u9500\u540E\u540C\u6B65\u6536\u56DE\u989D\u5EA6",
+      description: "\u9000\u6B3E\u3001\u7BA1\u7406\u5458\u53D6\u6D88\u6216\u5230\u671F\u6B62\u4ED8\u540E\uFF0C\u6309 APay \u5F53\u524D\u8BA2\u9605\u5411 AINode \u53D1\u9001 subscription.cancel\uFF08\u4ECD\u6709\u5176\u4ED6\u751F\u6548\u8BA2\u9605\u65F6\u53D1\u9001 apply\uFF09",
+      mode: "async",
+      handler: async (payload) => {
+        const userId = toUserId(payload);
+        if (!userId) return { ok: false, errorMessage: "\u8BA2\u9605\u64A4\u9500\u4E8B\u4EF6\u7F3A\u5C11\u7528\u6237\uFF0C\u65E0\u6CD5\u540C\u6B65 AINode" };
+        const result = await syncSubscriptionToAINode(userId, `subscription.revoked:${String((payload == null ? void 0 : payload.subscriptionId) || "")}`);
+        return { ok: result.ok, errorMessage: result.errorMessage };
       }
     }
   ];

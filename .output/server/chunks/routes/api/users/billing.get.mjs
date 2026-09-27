@@ -1,15 +1,16 @@
-import { d as defineEventHandler, c as getRequestLocale, bx as requireUserSession, e as createError, g as getQuery, c3 as getOrCreateUserWallet, b as db, b2 as userWallets, o as orders, q as aggregateOrderAccountingTotals, p as products, t as toIsoTimestamp } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, bT as requireUserSession, e as createError, g as getQuery, bc as usesAINodeWallet, cB as getOrCreateUserWallet, b as db, bg as userWallets, v as orders, w as aggregateOrderAccountingTotals, p as products, t as toIsoTimestamp } from '../../../nitro/nitro.mjs';
 import { eq, and, gte, ne, desc, inArray } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,13 +23,13 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -51,11 +52,14 @@ const billing_get = defineEventHandler(async (event) => {
   const limit = parseInt(query.pageSize) || 15;
   const offset = (page - 1) * limit;
   const tab = query.tab || "pending";
-  const walletRecord = await getOrCreateUserWallet(Number(userId));
-  const userRecord = await db.select().from(userWallets).where(eq(userWallets.id, walletRecord.id)).limit(1);
-  const cash = Number(((_a = userRecord[0]) == null ? void 0 : _a.cashBalance) || 0) / 1e8;
-  const grant = Number(((_b = userRecord[0]) == null ? void 0 : _b.grantBalance) || 0) / 1e8;
-  const availableBalance = cash + grant;
+  let availableBalance = 0;
+  if (!usesAINodeWallet()) {
+    const walletRecord = await getOrCreateUserWallet(Number(userId));
+    const userRecord = await db.select().from(userWallets).where(eq(userWallets.id, walletRecord.id)).limit(1);
+    const cash = Number(((_a = userRecord[0]) == null ? void 0 : _a.cashBalance) || 0) / 1e8;
+    const grant = Number(((_b = userRecord[0]) == null ? void 0 : _b.grantBalance) || 0) / 1e8;
+    availableBalance = cash + grant;
+  }
   const thirtyDaysAgo = /* @__PURE__ */ new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
   const recentOrders = await db.select({
@@ -90,7 +94,7 @@ const billing_get = defineEventHandler(async (event) => {
     const product = productMap.get(order.productId);
     let displayType = "purchase";
     if ((product == null ? void 0 : product.type) === "subscription") displayType = "subscription";
-    if ((product == null ? void 0 : product.type) === "recharge") displayType = "recharge";
+    if ((product == null ? void 0 : product.type) === "topup") displayType = "recharge";
     return {
       id: order.id,
       time: toIsoTimestamp(order.paidAt || order.createdAt),

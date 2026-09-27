@@ -1,16 +1,17 @@
-import { d as defineEventHandler, c as getRequestLocale, g as getQuery, o as orders, p as products, u as users, b as db, r as readBody, e as createError, a9 as requireTrustedRequestOrigin, aa as ensurePromoMember, ab as getSiteLocaleConfig, ac as resolveRequestLocale, y as buildLocaleCurrencyQuote, ad as getMinimalCheckoutAdminConfig, ae as buildMinimalCheckoutBridgeMeta, af as mergeMinimalCheckoutMeta, O as ORDER_PAY_STATUS, ag as prepareOrderMetaForInsert, ah as ORDER_STATUS, $ as createOrderAttribution, ai as ensureTopupRecordForOrder, a0 as settlePaidTopup, Z as isMinimalCheckoutRelayOrder, a2 as fulfillMinimalCheckoutRelay, a3 as fulfillOrder, a4 as settlePromoCommission, a5 as emitEvent, J as getLocalizedSettingValue, I as sendEmail, s as setAuditMeta } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, v as orders, p as products, u as users, b as db, r as readBody, e as createError, ai as requireTrustedRequestOrigin, aj as ensurePromoMember, ak as getSiteLocaleConfig, al as resolveRequestLocale, am as resolveCurrencyRate, an as roundCurrencyAmount, ao as getMinimalCheckoutAdminConfig, ap as buildMinimalCheckoutBridgeMeta, aq as mergeMinimalCheckoutMeta, O as ORDER_PAY_STATUS, ar as prepareOrderMetaForInsert, as as ORDER_STATUS, a6 as createOrderAttribution, at as ensureTopupRecordForOrder, a7 as settlePaidTopup, a4 as isMinimalCheckoutRelayOrder, a9 as fulfillMinimalCheckoutRelay, aa as fulfillOrder, ab as settlePromoCommission, ac as emitEvent, N as getLocalizedSettingValue, P as sendEmail, s as setAuditMeta } from '../../../nitro/nitro.mjs';
 import { or, eq, and, ne, like, sql, count, desc } from 'drizzle-orm';
 import crypto from 'crypto';
 import { z } from 'zod';
 import 'node:crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -23,12 +24,12 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -216,18 +217,29 @@ const index = defineEventHandler(async (event) => {
     }
     const product = productList[0];
     const quantity = Math.max(1, body.quantity || 1);
-    const defaultTotal = Number(product.price || 0) * quantity;
-    const actualAmount = body.amount !== void 0 && body.amount !== null && Number.isFinite(Number(body.amount)) ? Math.max(0, Number(body.amount)) : defaultTotal;
+    const defaultBaseTotal = Number(product.price || 0) * quantity;
+    const hasCustomAmount = body.amount !== void 0 && body.amount !== null && Number.isFinite(Number(body.amount));
     const siteLocaleConfig = await getSiteLocaleConfig();
     const orderLocale = resolveRequestLocale(event, body.locale || void 0, siteLocaleConfig);
-    const currencyQuote = await buildLocaleCurrencyQuote(actualAmount, orderLocale);
-    const finalCurrency = String(body.currency || currencyQuote.currency || "USD").trim().toUpperCase();
+    const currencyInfo = await resolveCurrencyRate(body.currency, orderLocale);
+    const finalCurrency = currencyInfo.targetCurrency;
+    const exchangeRate = currencyInfo.rate;
+    const baseCurrency = currencyInfo.baseCurrency;
+    let actualAmount;
+    let baseAmount;
+    if (hasCustomAmount) {
+      actualAmount = Math.max(0, Number(body.amount));
+      baseAmount = exchangeRate > 0 ? roundCurrencyAmount(actualAmount / exchangeRate, baseCurrency) : roundCurrencyAmount(actualAmount, baseCurrency);
+    } else {
+      baseAmount = roundCurrencyAmount(defaultBaseTotal, baseCurrency);
+      actualAmount = roundCurrencyAmount(baseAmount * exchangeRate, finalCurrency);
+    }
     const currencySnapshot = {
-      locale: currencyQuote.locale,
-      baseCurrency: currencyQuote.baseCurrency,
-      baseAmount: currencyQuote.baseAmount,
+      locale: currencyInfo.locale,
+      baseCurrency,
+      baseAmount,
       currency: finalCurrency,
-      exchangeRate: currencyQuote.rate,
+      exchangeRate,
       amount: actualAmount,
       source: "admin_manual"
     };
@@ -250,17 +262,17 @@ const index = defineEventHandler(async (event) => {
     }
     const minimalCheckoutConfig = await getMinimalCheckoutAdminConfig();
     const configuredRechargeAmount = Number(productMetaData.recharge_amount || 0);
-    const rechargeAmount = configuredRechargeAmount > 0 ? configuredRechargeAmount : currencyQuote.baseAmount;
+    const rechargeAmount = configuredRechargeAmount > 0 ? configuredRechargeAmount * quantity : baseAmount;
     const bridgeMeta = buildMinimalCheckoutBridgeMeta({
       externalOrderId: orderId,
       sourceProductId: product.id,
       amount: actualAmount,
       currency: finalCurrency,
-      sourceAmount: currencyQuote.baseAmount,
-      sourceCurrency: currencyQuote.baseCurrency,
-      exchangeRate: currencyQuote.rate,
+      sourceAmount: baseAmount,
+      sourceCurrency: baseCurrency,
+      exchangeRate,
       rechargeAmount,
-      rechargeCurrency: String(productMetaData.display_unit || currencyQuote.baseCurrency).trim().toUpperCase(),
+      rechargeCurrency: String(productMetaData.display_unit || baseCurrency).trim().toUpperCase(),
       balanceType: String(productMetaData.balance_type || "").trim().toLowerCase() === "grant" ? "grant" : "cash",
       notifyUrl: minimalCheckoutConfig.defaultNotifyUrl || void 0,
       returnUrl: minimalCheckoutConfig.defaultReturnUrl || void 0,
@@ -282,6 +294,8 @@ const index = defineEventHandler(async (event) => {
     const finalMetaData = mergeMinimalCheckoutMeta({
       ...body.metaData || {},
       ...productMetaData.plan_ids ? { plan_ids: productMetaData.plan_ids } : {},
+      // 卡密履约按 order_quantity 逐张认领,与前台结算同一个键
+      order_quantity: quantity,
       currencySnapshot
     }, bridgeMeta);
     const isPaid = body.payStatus === ORDER_PAY_STATUS.PAID;

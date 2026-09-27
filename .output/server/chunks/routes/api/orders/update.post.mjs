@@ -1,15 +1,16 @@
-import { d as defineEventHandler, c as getRequestLocale, r as readBody, bL as requireOrderOwnership, O as ORDER_PAY_STATUS, b as db, o as orders } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, cg as resolveOrderAccess, O as ORDER_PAY_STATUS, b as db, v as orders } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:path';
+import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
 import 'node:fs';
-import 'node:path';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -22,13 +23,13 @@ import 'drizzle-orm/pg-core';
 import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
+import 'node:os';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'zod';
 import 'node:child_process';
-import 'node:os';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -54,7 +55,7 @@ const update_post = defineEventHandler(async (event) => {
     if (!orderId || !tradeNo) {
       return { code: 1, message: messages.required };
     }
-    const order = await requireOrderOwnership(event, String(orderId));
+    const { order } = await resolveOrderAccess(event, String(orderId));
     if (order.payStatus === ORDER_PAY_STATUS.PAID) {
       return { code: 1, message: messages.alreadyPaid };
     }

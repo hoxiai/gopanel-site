@@ -1,4 +1,4 @@
-import { h as useToast, t as useConfirm, o as _sfc_main$x, l as _sfc_main$B, b as _sfc_main$G, d as _sfc_main$k, p as _sfc_main$j, a as __nuxt_component_3$1, B as _sfc_main$n, q as _sfc_main$s } from './server.mjs';
+import { h as useToast, t as useConfirm, o as _sfc_main$x, l as _sfc_main$B, b as _sfc_main$G, d as _sfc_main$k, p as _sfc_main$j, a as __nuxt_component_3$2, B as _sfc_main$n, q as _sfc_main$s } from './server.mjs';
 import { _ as _sfc_main$1 } from './Switch-D-JFjDEk.mjs';
 import { defineComponent, ref, computed, mergeProps, withCtx, createTextVNode, toDisplayString, createVNode, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate, ssrRenderList, ssrRenderClass, ssrRenderAttr } from 'vue/server-renderer';
@@ -304,7 +304,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       const _component_UIcon = _sfc_main$G;
       const _component_UInput = _sfc_main$k;
       const _component_USelect = _sfc_main$j;
-      const _component_NuxtLink = __nuxt_component_3$1;
+      const _component_NuxtLink = __nuxt_component_3$2;
       const _component_UPagination = _sfc_main$n;
       const _component_UModal = _sfc_main$s;
       const _component_USwitch = _sfc_main$1;

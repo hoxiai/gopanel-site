@@ -1,4 +1,4 @@
-import { _ as _export_sfc, f as useI18n, K as useCurrencyFormat, g as useFormatTime, s as useRouter, z as useFetch, l as _sfc_main$B, b as _sfc_main$G, a as __nuxt_component_3$1, o as _sfc_main$x } from './server.mjs';
+import { _ as _export_sfc, f as useI18n, K as useCurrencyFormat, g as useFormatTime, s as useRouter, z as useFetch, l as _sfc_main$B, b as _sfc_main$G, a as __nuxt_component_3$2, o as _sfc_main$x } from './server.mjs';
 import { defineComponent, ref, computed, withAsyncContext, mergeProps, unref, withCtx, createVNode, toDisplayString, createTextVNode, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderList, ssrRenderClass, ssrRenderComponent, ssrRenderAttr, ssrRenderStyle } from 'vue/server-renderer';
 import '../nitro/nitro.mjs';
@@ -354,7 +354,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O, _P, _Q, _R, _S, _T, _U, _V, _W;
       const _component_UButton = _sfc_main$B;
       const _component_UIcon = _sfc_main$G;
-      const _component_NuxtLink = __nuxt_component_3$1;
+      const _component_NuxtLink = __nuxt_component_3$2;
       const _component_UBadge = _sfc_main$x;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-[calc(100vh-8rem)] flex flex-col gap-6 pb-8" }, _attrs))} data-v-b931477f><div class="flex flex-col md:flex-row md:items-end justify-between gap-4 shrink-0" data-v-b931477f><div data-v-b931477f><h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight" data-v-b931477f>${ssrInterpolate(_ctx.$t("admin.dashboard.title", "\u7ECF\u8425\u6982\u89C8"))}</h1><p class="text-gray-500 dark:text-gray-400 mt-1 text-sm" data-v-b931477f>${ssrInterpolate(((_a = unref(dashboardData)) == null ? void 0 : _a.timezone) ? `\u65F6\u533A: ${unref(dashboardData).timezone} \xB7 ` : "")} \u5B9E\u65F6\u8425\u6536\u8D8B\u52BF\u3001\u5F85\u529E\u5904\u7F6E\u4E0E\u4E1A\u52A1\u52A8\u6001 </p></div><div class="flex items-center gap-2.5" data-v-b931477f><div class="flex items-center bg-gray-100 dark:bg-white/5 p-1 rounded-xl shrink-0" data-v-b931477f><!--[-->`);
       ssrRenderList(rangeOptions, (r) => {

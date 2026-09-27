@@ -1,4 +1,4 @@
-import { v as useSettings, f as useI18n, h as useToast, i as useAdminPermissions, E as useRoute, b as _sfc_main$G, l as _sfc_main$B, d as _sfc_main$k, c as _sfc_main$l, e as _sfc_main$g, p as _sfc_main$j, o as _sfc_main$x, z as useFetch, q as _sfc_main$s, a as __nuxt_component_3$1, at as useAppConfig, aD as useComponentUI, aj as useForwardProps, aE as reactivePick, aF as tv, ax as _sfc_main$E, ac as Primitive } from './server.mjs';
+import { v as useSettings, f as useI18n, h as useToast, i as useAdminPermissions, E as useRoute, b as _sfc_main$G, l as _sfc_main$B, d as _sfc_main$k, c as _sfc_main$l, e as _sfc_main$g, p as _sfc_main$j, o as _sfc_main$x, z as useFetch, q as _sfc_main$s, a as __nuxt_component_3$2, at as useAppConfig, aD as useComponentUI, aj as useForwardProps, aE as reactivePick, aF as tv, ax as _sfc_main$E, ac as Primitive } from './server.mjs';
 import { i as isSettingsTabId, _ as __nuxt_component_2 } from './Nav-DQUTv58w.mjs';
 import { _ as _sfc_main$c } from './Switch-D-JFjDEk.mjs';
 import { defineComponent, ref, watch, mergeProps, unref, withCtx, createTextVNode, toDisplayString, createVNode, computed, openBlock, createBlock, Fragment, renderList, withModifiers, reactive, watchEffect, isRef, createCommentVNode, useSlots, renderSlot, normalizeProps, guardReactiveProps, useSSRContext } from 'vue';
@@ -4672,7 +4672,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       const _component_UButton = _sfc_main$B;
       const _component_UIcon = _sfc_main$G;
       const _component_USwitch = _sfc_main$c;
-      const _component_NuxtLink = __nuxt_component_3$1;
+      const _component_NuxtLink = __nuxt_component_3$2;
       const _component_UModal = _sfc_main$s;
       const _component_UInput = _sfc_main$k;
       const _component_USelect = _sfc_main$j;

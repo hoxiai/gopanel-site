@@ -1,6 +1,6 @@
 import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import * as vue from 'vue';
 import { useSlots, computed, unref, mergeProps, withCtx, renderSlot, createVNode, openBlock, createBlock, createCommentVNode, Fragment, renderList, hasInjectionContext, inject, defineComponent, h, watchPostEffect, createElementBlock, normalizeStyle, ref, getCurrentInstance, watch, nextTick, watchEffect, reactive, mergeDefaults, toValue, provide, useModel, createTextVNode, toDisplayString as toDisplayString$1, mergeModels, customRef, shallowRef, getCurrentScope, onScopeDispose, shallowReadonly, markRaw, toRefs, toRef as toRef$1, camelize as camelize$1, Teleport, toHandlerKey, resolveDynamicComponent, normalizeProps, guardReactiveProps, readonly, cloneVNode, isRef, useId as useId$1, useTemplateRef, toHandlers, onServerPrefetch, resolveComponent, Comment, defineAsyncComponent, withModifiers, withAsyncContext, withKeys, resolveDirective, createElementVNode, effectScope, useSSRContext, toRaw, shallowReactive, Suspense, createApp, Text, onErrorCaptured, isReadonly, isShallow, isReactive } from 'vue';
-import { dY as serialize, cx as setResponseStatus$1, dZ as getRequestURL, d_ as defu, d$ as isEqual$1, e0 as resolveActiveTheme, e1 as upperFirst, e2 as defuFn, e3 as resolveLocalizedSetting, e4 as parse$1, c6 as getRequestHeader, e5 as appendResponseHeader, e6 as sanitizeStatusCode, cs as getRequestHeaders, e7 as getContext, e8 as setCookie, ch as getCookie, e9 as deleteCookie, ea as SEO_LOCALE_LANGUAGE, eb as $fetch$1, ec as baseURL, ed as hash, ee as createHooks, e as createError$1, ef as executeAsync, eg as normalizeSiteOrigin, eh as stripLocalePrefix$1, c_ as classifySeoRoute, cZ as seoRouteRegistry, ei as localePathForSeo, ej as safeJsonLd, ek as getRequestProtocol, el as themeHostConfigs } from '../nitro/nitro.mjs';
+import { dY as serialize, cx as setResponseStatus$1, dZ as getRequestURL, d_ as defu, d$ as isEqual$1, e0 as resolveActiveTheme, e1 as SEO_LOCALE_LANGUAGE, e2 as upperFirst, e3 as defuFn, e4 as appendResponseHeader, e5 as resolveLocalizedSetting, e6 as parse$1, c6 as getRequestHeader, e7 as sanitizeStatusCode, cs as getRequestHeaders, e8 as getContext, e9 as setCookie, ch as getCookie, ea as deleteCookie, eb as $fetch$1, ec as baseURL, ed as hash, ee as createHooks, e as createError$1, ef as executeAsync, eg as normalizeSiteOrigin, eh as stripLocalePrefix$1, c_ as classifySeoRoute, cZ as seoRouteRegistry, ei as localePathForSeo, ej as safeJsonLd, ek as getRequestProtocol, el as themeHostConfigs } from '../nitro/nitro.mjs';
 import { useRoute as useRoute$1, useRouter as useRouter$1, RouterView, isNavigationFailure, createMemoryHistory, createRouter, START_LOCATION } from 'vue-router';
 import { Icon, getIcon, loadIcon as loadIcon$1, _api, addAPIProvider, setCustomIconsLoader } from '@iconify/vue';
 import { getIconCSS } from '@iconify/utils/lib/css/icon';
@@ -17,7 +17,7 @@ import sync, { getFrameData } from 'framesync';
 import { inertia, animate, velocityPerSecond, cubicBezier, bounceOut, bounceInOut, bounceIn, anticipate, backOut, backInOut, backIn, circOut, circInOut, circIn, easeOut, easeInOut, easeIn, linear } from 'popmotion';
 import { number as number$1, complex, alpha, filter, px, progressPercentage, degrees, scale, color } from 'style-value-types';
 import colors from 'tailwindcss/colors';
-import { u as useHead$1, h as headSymbol, a as useSeoMeta$1 } from '../routes/renderer.mjs';
+import { u as useSeoMeta$1, a as useHead$1, h as headSymbol } from '../routes/renderer.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -5783,7 +5783,7 @@ defineComponent({
   }
 });
 const clientOnlySymbol = /* @__PURE__ */ Symbol.for("nuxt:client-only");
-const __nuxt_component_2$2 = defineComponent({
+const __nuxt_component_2$1 = defineComponent({
   name: "ClientOnly",
   inheritAttrs: false,
   props: ["fallback", "placeholder", "placeholderTag", "fallbackTag"],
@@ -13047,7 +13047,7 @@ function defineNuxtLink(options) {
     }
   });
 }
-const __nuxt_component_3$1 = /* @__PURE__ */ defineNuxtLink(nuxtLinkDefaults);
+const __nuxt_component_3$2 = /* @__PURE__ */ defineNuxtLink(nuxtLinkDefaults);
 function applyTrailingSlashBehavior(to, trailingSlash) {
   const normalizeFn = trailingSlash === "append" ? withTrailingSlash : withoutTrailingSlash;
   const hasProtocolDifferentFromHttp = hasProtocol(to) && !to.startsWith("http");
@@ -13225,7 +13225,7 @@ const _sfc_main$C = /* @__PURE__ */ Object.assign({ inheritAttrs: false }, {
       return ui.value({ class: props.class, active, disabled: props.disabled });
     }
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_NuxtLink = __nuxt_component_3$1;
+      const _component_NuxtLink = __nuxt_component_3$2;
       _push(ssrRenderComponent(_component_NuxtLink, mergeProps(unref(nuxtLinkProps), {
         to: to.value,
         custom: ""
@@ -15738,7 +15738,7 @@ const _sfc_main$y = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_Icon = __nuxt_component_0$1;
-      const _component_NuxtLink = __nuxt_component_3$1;
+      const _component_NuxtLink = __nuxt_component_3$2;
       const _component_UButton = _sfc_main$B;
       const _component_UIcon = _sfc_main$G;
       const _directive_motion_fade_visible_once = resolveDirective("motion-fade-visible-once");
@@ -19016,7 +19016,7 @@ _sfc_main$r.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("components/PaymentModal.vue");
   return _sfc_setup$r ? _sfc_setup$r(props, ctx) : void 0;
 };
-const __nuxt_component_2$1 = Object.assign(_sfc_main$r, { __name: "PaymentModal" });
+const __nuxt_component_3$1 = Object.assign(_sfc_main$r, { __name: "PaymentModal" });
 const useJsonLd = (key, nodes) => {
   const registry = useState("apay-json-ld-nodes", () => ({}));
   const normalized = computed(() => {
@@ -19143,7 +19143,7 @@ const _sfc_main$q = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_UCarousel = _sfc_main$t;
       const _component_UIcon = _sfc_main$G;
-      const _component_PaymentModal = __nuxt_component_2$1;
+      const _component_PaymentModal = __nuxt_component_3$1;
       const _component_UButton = _sfc_main$B;
       const _component_Icon = __nuxt_component_0$1;
       const _directive_motion_fade_visible = resolveDirective("motion-fade-visible");
@@ -19410,7 +19410,7 @@ const _sfc_main$p = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_UIcon = _sfc_main$G;
-      const _component_NuxtLink = __nuxt_component_3$1;
+      const _component_NuxtLink = __nuxt_component_3$2;
       const _directive_motion_fade_visible_once = resolveDirective("motion-fade-visible-once");
       const _directive_motion_slide_visible_once_bottom = resolveDirective("motion-slide-visible-once-bottom");
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-screen bg-[#09090b] pt-24 pb-16" }, _attrs))}><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div${ssrRenderAttrs(mergeProps({ class: "text-center max-w-3xl mx-auto mb-16" }, ssrGetDirectiveProps(_ctx, _directive_motion_fade_visible_once)))}><h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">${ssrInterpolate(_ctx.$t("site.products.title"))} <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">${ssrInterpolate(_ctx.$t("site.products.titleHighlight"))}</span></h1><p class="text-lg text-gray-400">${ssrInterpolate(_ctx.$t("site.products.titleTips"))}</p></div>`);
@@ -19600,7 +19600,7 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
       return productType || t("site.payment.productTypeProduct");
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_NuxtLink = __nuxt_component_3$1;
+      const _component_NuxtLink = __nuxt_component_3$2;
       const _component_UIcon = _sfc_main$G;
       const _component_UBadge = _sfc_main$x;
       const _component_UButton = _sfc_main$B;
@@ -23627,7 +23627,13 @@ const __vite_glob_0_10 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   __proto__: null,
   default: _sfc_main$i
 }, Symbol.toStringTag, { value: "Module" }));
-const publishedOptionalThemes = [];
+const name$4 = "GoPanel 管理";
+const pages = [{ "key": "appstore", "title": "应用商店", "description": "应用列表管理、上游数据同步与一键构建最新包。", "route": "/admin/extensions/appstore", "component": "appstore.vue", "icon": "ph:squares-four", "order": 5 }, { "key": "installs", "title": "安装与升级统计", "description": "查看真实安装/升级量、渠道分布与最近安装记录。", "route": "/admin/extensions/installs", "component": "install-stats.vue", "icon": "ph:chart-line-up", "order": 10 }];
+const __vite_glob_2_0 = {
+  name: name$4,
+  pages
+};
+const publishedOptionalThemes = ["panel"];
 const publishedOptionalThemeSet = new Set(publishedOptionalThemes);
 const corePageModules = /* @__PURE__ */ Object.assign({
   "../core/pages/about.vue": __vite_glob_0_0$1,
@@ -23642,12 +23648,26 @@ const corePageModules = /* @__PURE__ */ Object.assign({
   "../core/pages/user/orders/index.vue": __vite_glob_0_9,
   "../core/pages/user/tokens/index.vue": __vite_glob_0_10
 });
-const themePageModules = {};
-const themeAdminManifestModules = {};
-const themeAdminPageModules = {};
-const themeAdminLocaleEnModules = {};
-const themeAdminLocaleZhModules = {};
-const themeLayoutLoaders = {};
+const themePageModules = {
+  .../* @__PURE__ */ Object.assign({ "../themes/panel/pages/changelog.vue": () => import('./changelog-IdpZ1zpt.mjs'), "../themes/panel/pages/docs.vue": () => import('./docs-C_F1MjCO.mjs'), "../themes/panel/pages/features.vue": () => import('./features-DNXiXqNT.mjs'), "../themes/panel/pages/index.vue": () => import('./index-DSgIoiKs.mjs'), "../themes/panel/pages/licenses.vue": () => import('./licenses-IBpAboOo.mjs'), "../themes/panel/pages/products/[slug].vue": () => import('./_slug_-Ds3yhFrY.mjs'), "../themes/panel/pages/products/index.vue": () => import('./index-D1QPkkdn.mjs') })
+};
+const themeAdminManifestModules = {
+  .../* @__PURE__ */ Object.assign({
+    "../themes/panel/theme.admin.json": __vite_glob_2_0
+  })
+};
+const themeAdminPageModules = {
+  .../* @__PURE__ */ Object.assign({ "../themes/panel/admin/pages/appstore.vue": () => import('./appstore-ByAmVlKN.mjs'), "../themes/panel/admin/pages/install-stats.vue": () => import('./install-stats-DIO2LvBM.mjs') })
+};
+const themeAdminLocaleEnModules = {
+  .../* @__PURE__ */ Object.assign({})
+};
+const themeAdminLocaleZhModules = {
+  .../* @__PURE__ */ Object.assign({})
+};
+const themeLayoutLoaders = {
+  "panel": () => import('./default-XdFCUVaw.mjs')
+};
 const schemaVersion$3 = 1;
 const id$3 = "apps";
 const name$3 = "App Catalog";
@@ -28641,8 +28661,8 @@ const useAdminExtensions = () => {
     return manifest.value.name || `${formatThemeName(activeTheme.value)} Admin`;
   });
   const themeExtensionPages = computed(() => {
-    const pages = manifest.value.pages || [];
-    return pages.map((page) => {
+    const pages2 = manifest.value.pages || [];
+    return pages2.map((page) => {
       const route = normalizeRoute(page.route, page.key);
       const component = normalizeComponent(page.component, page.key);
       const componentPath = `../themes/${activeTheme.value}/admin/pages/${component}`;
@@ -33193,8 +33213,8 @@ const __nuxt_component_1 = defineComponent({
   }
 });
 const layouts = {
-  admin: defineAsyncComponent(() => import('./admin-WHxtpvRV.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-DmZGcIoO.mjs').then((m) => m.default || m)),
+  admin: defineAsyncComponent(() => import('./admin-BP9cXBa_.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-Bzvh6IW8.mjs').then((m) => m.default || m)),
   empty: defineAsyncComponent(() => import('./empty-DMy7_SdZ.mjs').then((m) => m.default || m))
 };
 const routeRulesMatcher = _routeRulesMatcher;
@@ -33908,4 +33928,4 @@ let entry;
 }
 const entry_default = ((ssrContext) => entry(ssrContext));
 
-export { useTypeahead as $, ADMIN_PERMISSIONS as A, _sfc_main$n as B, publishedOptionalThemes as C, useLocaleRouter as D, useRoute as E, themeAdminLocaleEnModules as F, themeAdminLocaleZhModules as G, useExtensions as H, setResponseStatus as I, stripLocalePrefix as J, useCurrencyFormat as K, useAdminSession as L, firstAllowedAdminRoute as M, __nuxt_component_0$1 as N, useRequestURL as O, useLocaleCurrency as P, PopperAnchor_default as Q, PopperArrow_default as R, createSharedComposable as S, useDirection as T, PopperRoot_default as U, createContext as V, useVModel as W, useFocusGuards as X, useBodyScrollLock as Y, useForwardExpose as Z, _export_sfc as _, __nuxt_component_3$1 as a, corePageModules as a$, getActiveElement as a0, FocusScope_default as a1, DismissableLayer_default as a2, PopperContent_default as a3, getOpenState as a4, PopperContentPropsDefaultValue as a5, isPointerInGraceArea as a6, isMouseEvent as a7, FIRST_LAST_KEYS as a8, LAST_KEYS as a9, pickLinkProps as aA, _sfc_main$D as aB, omit as aC, useComponentUI as aD, reactivePick as aE, tv as aF, useFormControl as aG, useFormField as aH, Label_default as aI, createEventHook as aJ, useFieldGroup as aK, useComponentIcons as aL, compare as aM, _sfc_main$F as aN, looseToNumber as aO, getDisplayValue as aP, refAutoReset as aQ, handleAndDispatchCustomEvent$1 as aR, useParentElement as aS, getNextMatch as aT, VisuallyHidden_default as aU, isNullish as aV, useResizeObserver as aW, useNuxtApp as aX, tryOnScopeDispose$1 as aY, injectTooltipProviderContext as aZ, useTimeoutFn as a_, focusFirst as aa, useCollection as ab, Primitive as ac, SELECTION_KEYS$1 as ad, ITEM_SELECT as ae, Presence_default as af, isIndeterminate as ag, getCheckedState as ah, reactiveOmit as ai, useForwardProps as aj, useForwardPropsEmits as ak, useHideOthers as al, useId as am, Teleport_default as an, SUB_CLOSE_KEYS as ao, SUB_OPEN_KEYS as ap, useEmitAsProps as aq, usePrimitiveElement as ar, useLocale as as, useAppConfig as at, usePortal as au, createReusableTemplate as av, isArrayOfArray as aw, _sfc_main$E as ax, get as ay, _sfc_main$C as az, _sfc_main$G as b, themePageModules as b0, useActiveTheme as b1, isPathLocaleAllowed as b2, transformUI as b3, useEventListener$1 as b4, useRuntimeConfig as b5, resolveBaseURL as b6, ImageComponent as b7, DialogRoot_default as b8, DialogTrigger_default as b9, DialogPortal_default as ba, useClipboard as bb, refThrottled as bc, useDebounceFn as bd, useActiveElement as be, __nuxt_component_2$2 as bf, _sfc_main$d as bg, useState as bh, useLocalizedSettings as bi, useCookie as bj, pointerDownOutside as bk, DialogOverlay_default as bl, DialogContent_default as bm, DialogTitle_default as bn, DialogDescription_default as bo, DialogClose_default as bp, themeLayoutLoaders as bq, useUserSession as br, _sfc_main$l as c, _sfc_main$k as d, entry_default as default, _sfc_main$g as e, useI18n as f, useFormatTime as g, useToast as h, useAdminPermissions as i, useAdminExtensions as j, moduleEditCode as k, _sfc_main$B as l, moduleViewCode as m, _sfc_main$h as n, _sfc_main$x as o, _sfc_main$j as p, _sfc_main$s as q, navigateTo as r, useRouter as s, useConfirm as t, useHead as u, useSettings as v, useAsyncData as w, themeExtensionPermissionCode as x, usePagination as y, useFetch as z };
+export { useTypeahead as $, ADMIN_PERMISSIONS as A, _sfc_main$n as B, publishedOptionalThemes as C, useLocaleRouter as D, useRoute as E, themeAdminLocaleEnModules as F, themeAdminLocaleZhModules as G, useExtensions as H, setResponseStatus as I, stripLocalePrefix as J, useCurrencyFormat as K, useAdminSession as L, firstAllowedAdminRoute as M, __nuxt_component_0$1 as N, useRequestURL as O, useLocaleCurrency as P, PopperAnchor_default as Q, PopperArrow_default as R, createSharedComposable as S, useDirection as T, PopperRoot_default as U, createContext as V, useVModel as W, useFocusGuards as X, useBodyScrollLock as Y, useForwardExpose as Z, _export_sfc as _, __nuxt_component_3$2 as a, corePageModules as a$, getActiveElement as a0, FocusScope_default as a1, DismissableLayer_default as a2, PopperContent_default as a3, getOpenState as a4, PopperContentPropsDefaultValue as a5, isPointerInGraceArea as a6, isMouseEvent as a7, FIRST_LAST_KEYS as a8, LAST_KEYS as a9, pickLinkProps as aA, _sfc_main$D as aB, omit as aC, useComponentUI as aD, reactivePick as aE, tv as aF, useFormControl as aG, useFormField as aH, Label_default as aI, createEventHook as aJ, useFieldGroup as aK, useComponentIcons as aL, compare as aM, _sfc_main$F as aN, looseToNumber as aO, getDisplayValue as aP, refAutoReset as aQ, handleAndDispatchCustomEvent$1 as aR, useParentElement as aS, getNextMatch as aT, VisuallyHidden_default as aU, isNullish as aV, useResizeObserver as aW, useNuxtApp as aX, tryOnScopeDispose$1 as aY, injectTooltipProviderContext as aZ, useTimeoutFn as a_, focusFirst as aa, useCollection as ab, Primitive as ac, SELECTION_KEYS$1 as ad, ITEM_SELECT as ae, Presence_default as af, isIndeterminate as ag, getCheckedState as ah, reactiveOmit as ai, useForwardProps as aj, useForwardPropsEmits as ak, useHideOthers as al, useId as am, Teleport_default as an, SUB_CLOSE_KEYS as ao, SUB_OPEN_KEYS as ap, useEmitAsProps as aq, usePrimitiveElement as ar, useLocale as as, useAppConfig as at, usePortal as au, createReusableTemplate as av, isArrayOfArray as aw, _sfc_main$E as ax, get as ay, _sfc_main$C as az, _sfc_main$G as b, themePageModules as b0, useActiveTheme as b1, isPathLocaleAllowed as b2, transformUI as b3, useEventListener$1 as b4, useRuntimeConfig as b5, resolveBaseURL as b6, ImageComponent as b7, DialogRoot_default as b8, DialogTrigger_default as b9, DialogPortal_default as ba, useClipboard as bb, useSeoMeta as bc, useLocalizedProduct as bd, useProductJsonLd as be, __nuxt_component_3$1 as bf, useCollectionPageJsonLd as bg, useCustomerAuth as bh, __nuxt_component_2$1 as bi, useUserSession as bj, refThrottled as bk, useDebounceFn as bl, useActiveElement as bm, _sfc_main$d as bn, useState as bo, useLocalizedSettings as bp, useCookie as bq, pointerDownOutside as br, DialogOverlay_default as bs, DialogContent_default as bt, DialogTitle_default as bu, DialogDescription_default as bv, DialogClose_default as bw, themeLayoutLoaders as bx, _sfc_main$l as c, _sfc_main$k as d, entry_default as default, _sfc_main$g as e, useI18n as f, useFormatTime as g, useToast as h, useAdminPermissions as i, useAdminExtensions as j, moduleEditCode as k, _sfc_main$B as l, moduleViewCode as m, _sfc_main$h as n, _sfc_main$x as o, _sfc_main$j as p, _sfc_main$s as q, navigateTo as r, useRouter as s, useConfirm as t, useHead as u, useSettings as v, useAsyncData as w, themeExtensionPermissionCode as x, usePagination as y, useFetch as z };

@@ -1,4 +1,4 @@
-import { _ as _export_sfc, a as __nuxt_component_3$1, b as _sfc_main$G } from './server.mjs';
+import { _ as _export_sfc, a as __nuxt_component_3$2, b as _sfc_main$G } from './server.mjs';
 import { defineComponent, unref, createVNode, resolveDynamicComponent, withCtx, createTextVNode, toDisplayString, useSSRContext } from 'vue';
 import { ssrRenderList, ssrRenderVNode, ssrRenderComponent, ssrInterpolate } from 'vue/server-renderer';
 
@@ -28,7 +28,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
   emits: ["select"],
   setup(__props, { emit: __emit }) {
     const emit = __emit;
-    const NuxtLink = __nuxt_component_3$1;
+    const NuxtLink = __nuxt_component_3$2;
     const onSelect = (tab) => {
       if (!tab.route) emit("select", tab.id);
     };

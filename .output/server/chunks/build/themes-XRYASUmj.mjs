@@ -61,7 +61,12 @@ import 'devalue';
 import 'unhead/plugins';
 import 'unhead/utils';
 
-const themeDisplayMetadata = {};
+const themeDisplayMetadata = {
+  "panel": {
+    "name": "Analytics Panel",
+    "description": "\u6570\u636E\u4EEA\u8868\u76D8\u5BFC\u5411\u7684\u5B98\u7F51\u4E3B\u9898\uFF0C\u5F3A\u8C03\u7EDF\u8BA1\u3001\u62A5\u8868\u3001\u5B89\u88C5\u4E0E\u5347\u7EA7\u5206\u5E03\u7B49\u540E\u53F0\u5316\u5448\u73B0\u3002"
+  }
+};
 
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "themes",

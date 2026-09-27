@@ -1,4 +1,4 @@
-import { f as useI18n, g as useFormatTime, K as useCurrencyFormat, E as useRoute, s as useRouter, h as useToast, t as useConfirm, O as useRequestURL, i as useAdminPermissions, y as usePagination, z as useFetch, b as _sfc_main$G, l as _sfc_main$B, p as _sfc_main$j, d as _sfc_main$k, n as _sfc_main$h, o as _sfc_main$x, a as __nuxt_component_3$1, B as _sfc_main$n, c as _sfc_main$l, e as _sfc_main$g, v as useSettings, P as useLocaleCurrency } from './server.mjs';
+import { f as useI18n, g as useFormatTime, K as useCurrencyFormat, E as useRoute, s as useRouter, h as useToast, t as useConfirm, O as useRequestURL, i as useAdminPermissions, y as usePagination, z as useFetch, b as _sfc_main$G, l as _sfc_main$B, p as _sfc_main$j, d as _sfc_main$k, n as _sfc_main$h, o as _sfc_main$x, a as __nuxt_component_3$2, B as _sfc_main$n, c as _sfc_main$l, e as _sfc_main$g, v as useSettings, P as useLocaleCurrency } from './server.mjs';
 import { _ as __nuxt_component_5 } from './FullScreenModal-CPuhWsrZ.mjs';
 import { defineComponent, ref, watch, computed, withAsyncContext, mergeProps, unref, withCtx, createTextVNode, toDisplayString, createSlots, createVNode, openBlock, createBlock, createCommentVNode, Fragment, isRef, withModifiers, renderList, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderClass, ssrRenderComponent, ssrRenderList, ssrRenderAttr } from 'vue/server-renderer';
@@ -1926,7 +1926,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       const _component_USelect = _sfc_main$j;
       const _component_UInput = _sfc_main$k;
       const _component_UTable = _sfc_main$h;
-      const _component_NuxtLink = __nuxt_component_3$1;
+      const _component_NuxtLink = __nuxt_component_3$2;
       const _component_UBadge = _sfc_main$x;
       const _component_UPagination = _sfc_main$n;
       const _component_FullScreenModal = __nuxt_component_5;

@@ -1,4 +1,4 @@
-import { d as defineEventHandler, g as getQuery, bP as sendLocalizedRedirect, b as db, bw as userTokens, bA as EMAIL_VERIFY_TOKEN_NAME, u as users, z as orders, a_ as getUserSession, a0 as setUserSession } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, g as getQuery, bU as sendLocalizedRedirect, b as db, bA as userTokens, bE as EMAIL_VERIFY_TOKEN_NAME, u as users, z as orders, b0 as getUserSession, a2 as setUserSession } from '../../../nitro/nitro.mjs';
 import { eq, and, isNull } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -6,6 +6,7 @@ import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
+import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';

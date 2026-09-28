@@ -1,4 +1,4 @@
-import { d as defineEventHandler, f as getRouterParam, e as createError, b as db, J as tickets, u as users, bj as ticketMessages, bk as userWallets, z as orders, bl as fromScaled, bm as getWalletBackend } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, f as getRouterParam, e as createError, b as db, L as tickets, u as users, bn as ticketMessages, bo as userWallets, z as orders, bp as fromScaled, bq as getWalletBackend } from '../../../../nitro/nitro.mjs';
 import { eq, asc, desc } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -6,6 +6,7 @@ import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
+import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';

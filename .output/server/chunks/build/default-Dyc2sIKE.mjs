@@ -1,4 +1,4 @@
-import { d8 as buildAssetsURL } from '../nitro/nitro.mjs';
+import { dd as buildAssetsURL } from '../nitro/nitro.mjs';
 import { _ as __nuxt_component_0 } from './EmailVerificationBanner-CeVSh4Zc.mjs';
 import { r as useSettings, z as useLocaleRouter, bl as useCustomerAuth, p as useRouter, I as __nuxt_component_3$1, _ as _sfc_main$I, bm as __nuxt_component_2$2 } from './server.mjs';
 import { defineComponent, ref, computed, mergeProps, unref, withCtx, createVNode, createTextVNode, useSSRContext } from 'vue';
@@ -10,6 +10,7 @@ import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
+import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';

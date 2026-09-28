@@ -1,4 +1,4 @@
-import { d as defineEventHandler, b as db, aS as settings, r as readBody, s as setAuditMeta, b5 as EMAIL_VERIFY_POLICY_KEY, b6 as invalidateEmailVerifyPolicyCache } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, b as db, aU as settings, r as readBody, s as setAuditMeta, b7 as EMAIL_VERIFY_POLICY_KEY, b8 as invalidateEmailVerifyPolicyCache } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -6,6 +6,7 @@ import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
+import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';

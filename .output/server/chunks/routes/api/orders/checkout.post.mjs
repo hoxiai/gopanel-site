@@ -1,4 +1,4 @@
-import { d as defineEventHandler, am as requireTrustedRequestOrigin, bZ as mergePromoTracking, b$ as readPromoTracking, b_ as capturePromoTracking, c7 as getRequestIP, e as createError, r as readBody, bX as requireUserSession, b as db, u as users, a3 as clearUserSession, aS as settings, bU as ensureVisitorId, p as products, ap as resolveRequestLocale, ao as getSiteLocaleConfig, G as buildLocaleCurrencyQuote, as as getMinimalCheckoutAdminConfig, ch as stripReservedOrderMeta, at as buildMinimalCheckoutBridgeMeta, au as mergeMinimalCheckoutMeta, a8 as isMinimalCheckoutRelayOrder, ci as MINIMAL_CHECKOUT_SOURCE, ad as fulfillMinimalCheckoutRelay, ae as fulfillOrder, ag as emitEvent, cj as getSubscriptionEntitlement, z as orders, O as ORDER_PAY_STATUS, av as prepareOrderMetaForInsert, ax as ensureTopupRecordForOrder, aa as createOrderAttribution, bE as trackVisitorEvent, aw as ORDER_STATUS, ck as getAffectedRows, ab as settlePaidTopup, c as getRequestLocale, S as getLocalizedSettingValue, T as sendEmail, cl as createNotification } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, ao as requireTrustedRequestOrigin, c2 as mergePromoTracking, c4 as readPromoTracking, c3 as capturePromoTracking, cc as getRequestIP, e as createError, r as readBody, c0 as requireUserSession, b as db, u as users, a5 as clearUserSession, aU as settings, bZ as ensureVisitorId, p as products, ar as resolveRequestLocale, aq as getSiteLocaleConfig, G as buildLocaleCurrencyQuote, au as getMinimalCheckoutAdminConfig, cm as stripReservedOrderMeta, av as buildMinimalCheckoutBridgeMeta, aw as mergeMinimalCheckoutMeta, aa as isMinimalCheckoutRelayOrder, cn as MINIMAL_CHECKOUT_SOURCE, af as fulfillMinimalCheckoutRelay, ag as fulfillOrder, ai as emitEvent, co as getSubscriptionEntitlement, z as orders, O as ORDER_PAY_STATUS, ax as prepareOrderMetaForInsert, az as ensureTopupRecordForOrder, ac as createOrderAttribution, bJ as trackVisitorEvent, ay as ORDER_STATUS, cp as getAffectedRows, ad as settlePaidTopup, c as getRequestLocale, U as getLocalizedSettingValue, V as sendEmail, cq as createNotification } from '../../../nitro/nitro.mjs';
 import { eq, and, or, isNull, gte, desc } from 'drizzle-orm';
 import crypto from 'crypto';
 import { z } from 'zod';
@@ -7,6 +7,7 @@ import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
+import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';

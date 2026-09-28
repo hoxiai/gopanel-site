@@ -1,4 +1,4 @@
-import { d as defineEventHandler, c as getRequestLocale, bX as requireUserSession, e as createError, r as readBody, b as db, bw as userTokens, cT as apiTokenScope, cU as API_TOKEN_PREFIX } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, c0 as requireUserSession, e as createError, r as readBody, b as db, bA as userTokens, cY as apiTokenScope, cZ as API_TOKEN_PREFIX } from '../../../nitro/nitro.mjs';
 import crypto from 'crypto';
 import { z } from 'zod';
 import { count, and, eq } from 'drizzle-orm';
@@ -7,6 +7,7 @@ import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
+import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';

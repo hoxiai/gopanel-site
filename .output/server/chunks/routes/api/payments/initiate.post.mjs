@@ -1,4 +1,4 @@
-import { d as defineEventHandler, am as requireTrustedRequestOrigin, c as getRequestLocale, r as readBody, cn as resolveOrderAccess, O as ORDER_PAY_STATUS, b as db, az as paymentMethods, ao as getSiteLocaleConfig, ap as resolveRequestLocale, cv as isPaymentMethodAvailableForLocale, cw as resolvePaymentPluginConfig, cy as resolvePaymentMethodCurrencies, cx as isPaymentMethodCurrencySupported, c7 as getRequestIP, cz as getRequestHeaders, cA as executeCreateScript, z as orders, al as reconcileOrder } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, ao as requireTrustedRequestOrigin, c as getRequestLocale, r as readBody, cs as resolveOrderAccess, O as ORDER_PAY_STATUS, b as db, aB as paymentMethods, aq as getSiteLocaleConfig, ar as resolveRequestLocale, cA as isPaymentMethodAvailableForLocale, cB as resolvePaymentPluginConfig, cD as resolvePaymentMethodCurrencies, cC as isPaymentMethodCurrencySupported, cc as getRequestIP, cE as getRequestHeaders, cF as executeCreateScript, z as orders, an as reconcileOrder } from '../../../nitro/nitro.mjs';
 import fs from 'fs';
 import path from 'path';
 import { z } from 'zod';
@@ -7,6 +7,7 @@ import 'node:crypto';
 import 'crypto';
 import 'node:path';
 import '@nuxthub/blob';
+import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';

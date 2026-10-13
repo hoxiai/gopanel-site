@@ -264,3 +264,4 @@ const resource = {
 };
 
 export { resource as default };
+//# sourceMappingURL=site-uAubCRn2.mjs.map

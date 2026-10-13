@@ -264,3 +264,4 @@ const resource = {
 };
 
 export { resource as default };
+//# sourceMappingURL=site-C3vRaYAS.mjs.map

@@ -1,4 +1,4 @@
-import { d as defineEventHandler, ao as requireTrustedRequestOrigin, c as getRequestLocale, r as readBody, b0 as getUserSession, b as db, u as users, e as createError, c9 as getEmailVerifySendCooldown, bD as revokeEmailVerifyTokens, ca as issueEmailVerification, cb as EMAIL_VERIFY_SEND_COOLDOWN_SECONDS } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, aq as requireTrustedRequestOrigin, c as getRequestLocale, r as readBody, b2 as getUserSession, b as db, u as users, e as createError, ce as getEmailVerifySendCooldown, bG as revokeEmailVerifyTokens, cf as issueEmailVerification, cg as EMAIL_VERIFY_SEND_COOLDOWN_SECONDS } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -6,7 +6,6 @@ import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
-import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -16,8 +15,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -26,11 +24,13 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:url';
+import 'zod';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
-import 'zod';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -101,3 +101,4 @@ const resendVerification_post = defineEventHandler(async (event) => {
 });
 
 export { resendVerification_post as default };
+//# sourceMappingURL=resend-verification.post.mjs.map

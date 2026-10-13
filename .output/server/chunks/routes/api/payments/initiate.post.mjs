@@ -1,4 +1,4 @@
-import { d as defineEventHandler, ao as requireTrustedRequestOrigin, c as getRequestLocale, r as readBody, cs as resolveOrderAccess, O as ORDER_PAY_STATUS, b as db, aB as paymentMethods, aq as getSiteLocaleConfig, ar as resolveRequestLocale, cA as isPaymentMethodAvailableForLocale, cB as resolvePaymentPluginConfig, cD as resolvePaymentMethodCurrencies, cC as isPaymentMethodCurrencySupported, cc as getRequestIP, cE as getRequestHeaders, cF as executeCreateScript, z as orders, an as reconcileOrder } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, aq as requireTrustedRequestOrigin, c as getRequestLocale, r as readBody, cB as resolveOrderAccess, O as ORDER_PAY_STATUS, b as db, aC as paymentMethods, as as getSiteLocaleConfig, at as resolveRequestLocale, cJ as isPaymentMethodAvailableForLocale, cK as resolvePaymentPluginConfig, cM as resolvePaymentMethodCurrencies, cL as isPaymentMethodCurrencySupported, ch as getRequestIP, cN as getRequestHeaders, cO as executeCreateScript, z as orders, ao as reconcileOrder } from '../../../nitro/nitro.mjs';
 import fs from 'fs';
 import path from 'path';
 import { z } from 'zod';
@@ -7,7 +7,6 @@ import 'node:crypto';
 import 'crypto';
 import 'node:path';
 import '@nuxthub/blob';
-import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -17,8 +16,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -31,6 +29,8 @@ import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -187,3 +187,4 @@ const initiate_post = defineEventHandler(async (event) => {
 });
 
 export { initiate_post as default };
+//# sourceMappingURL=initiate.post.mjs.map

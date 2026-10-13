@@ -1,13 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { d as defineEventHandler, e as createError, d2 as setHeader, br as getHeader, cJ as setResponseStatus, dc as sendStream } from '../../nitro/nitro.mjs';
+import { d as defineEventHandler, e as createError, dc as setHeader, bt as getHeader, cS as setResponseStatus, dq as sendStream } from '../../nitro/nitro.mjs';
 import { blob } from '@nuxthub/blob';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
-import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -16,8 +15,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -26,11 +24,13 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:url';
+import 'zod';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
-import 'zod';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -95,3 +95,4 @@ const ____slug_ = defineEventHandler(async (event) => {
 });
 
 export { ____slug_ as default };
+//# sourceMappingURL=_...slug_.mjs.map

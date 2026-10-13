@@ -1,4 +1,4 @@
-import { d as defineEventHandler, b1 as extensionManifests, b2 as readExtensionMigrationStatus, b3 as readEnabledExtensionIds, e as createError, r as readBody, b4 as migrateExtensionDatabase, s as setAuditMeta, b5 as normalizeEnabledExtensionIds, b as db, aU as settings, b6 as ENABLED_EXTENSIONS_SETTING_KEY } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, b3 as extensionManifests, b4 as readExtensionMigrationStatus, b5 as readEnabledExtensionIds, e as createError, r as readBody, b6 as migrateExtensionDatabase, s as setAuditMeta, b7 as normalizeEnabledExtensionIds, b as db, aW as settings, b8 as ENABLED_EXTENSIONS_SETTING_KEY } from '../../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -6,7 +6,6 @@ import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
-import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -16,8 +15,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -26,11 +24,13 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:url';
+import 'zod';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
-import 'zod';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -121,3 +121,4 @@ const extensions = defineEventHandler(async (event) => {
 });
 
 export { extensions as default };
+//# sourceMappingURL=extensions.mjs.map

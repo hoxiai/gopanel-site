@@ -1,4 +1,4 @@
-import { ey as themeImageProxyDirectHostIncludes } from '../nitro/nitro.mjs';
+import { eQ as themeImageProxyDirectHostIncludes } from '../nitro/nitro.mjs';
 
 const PROXY_ENDPOINT = "/api/proxy/image";
 const PROXIED_IMAGE_HOSTS = [
@@ -39,3 +39,4 @@ const useImageProxy = () => {
 };
 
 export { useImageProxy as u };
+//# sourceMappingURL=useImageProxy-DBzzMBty.mjs.map

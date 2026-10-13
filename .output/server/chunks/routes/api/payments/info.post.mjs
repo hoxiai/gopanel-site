@@ -1,4 +1,4 @@
-import { d as defineEventHandler, c as getRequestLocale, r as readBody, cs as resolveOrderAccess, aq as getSiteLocaleConfig, ar as resolveRequestLocale, cz as lockLegacyPendingOrderCurrency, b as db, aB as paymentMethods, aD as applyLocalPaymentPluginDefaults, cA as isPaymentMethodAvailableForLocale, cB as resolvePaymentPluginConfig, cC as isPaymentMethodCurrencySupported } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, cB as resolveOrderAccess, as as getSiteLocaleConfig, at as resolveRequestLocale, cI as lockLegacyPendingOrderCurrency, b as db, aC as paymentMethods, aE as applyLocalPaymentPluginDefaults, cJ as isPaymentMethodAvailableForLocale, cK as resolvePaymentPluginConfig, cL as isPaymentMethodCurrencySupported } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import fs from 'fs';
 import path from 'path';
@@ -6,7 +6,6 @@ import 'node:crypto';
 import 'crypto';
 import 'node:path';
 import '@nuxthub/blob';
-import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -16,8 +15,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -26,11 +24,13 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:url';
+import 'zod';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
-import 'zod';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -65,9 +65,7 @@ const info_post = defineEventHandler(async (event) => {
     order = await lockLegacyPendingOrderCurrency(order, requestLocale);
     let activeMethods = (await db.select().from(paymentMethods).where(eq(paymentMethods.isActive, true))).map((method) => applyLocalPaymentPluginDefaults({ ...method }));
     const localeFilteredMethods = activeMethods.filter((method) => isPaymentMethodAvailableForLocale(method, requestLocale, localeConfig));
-    if (localeFilteredMethods.length > 0) {
-      activeMethods = localeFilteredMethods;
-    }
+    activeMethods = localeFilteredMethods;
     if (activeMethods.length === 0) {
       return { code: 1, message: messages.noActiveMethods };
     }
@@ -152,3 +150,4 @@ const info_post = defineEventHandler(async (event) => {
 });
 
 export { info_post as default };
+//# sourceMappingURL=info.post.mjs.map

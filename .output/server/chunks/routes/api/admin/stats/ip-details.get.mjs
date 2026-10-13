@@ -1,6 +1,5 @@
-import { d as defineEventHandler, c as getRequestLocale, g as getQuery, e as createError, D as getConfiguredTimezone, ba as parseStatsRange, bd as visitorEvents, p as products, J as loadVisitorReport, K as getRequestHost, u as users, bg as toIsoTimestampOrEpoch, bi as visitorSourceLabel } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, e as createError, D as getConfiguredTimezone, bc as parseStatsRange, bf as visitorEvents, b as db, p as products, J as loadVisitorReport, K as getRequestHost, u as users, bi as toIsoTimestampOrEpoch, bk as visitorSourceLabel } from '../../../../nitro/nitro.mjs';
 import { sql, eq, and, gte, lt, count, desc, inArray } from 'drizzle-orm';
-import { db } from '@nuxthub/db';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
@@ -16,8 +15,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -26,11 +24,13 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:url';
+import 'zod';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
-import 'zod';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -171,3 +171,4 @@ const ipDetails_get = defineEventHandler(async (event) => {
 });
 
 export { ipDetails_get as default };
+//# sourceMappingURL=ip-details.get.mjs.map

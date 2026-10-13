@@ -6,7 +6,6 @@ import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
-import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -16,8 +15,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -26,11 +24,13 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:url';
+import 'zod';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
-import 'zod';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -47,16 +47,18 @@ const sync_post = defineEventHandler(async (event) => {
   const autoSync = body.autoSync !== false;
   const token = body.token ? String(body.token).trim() : void 0;
   const cookie = body.cookie ? String(body.cookie).trim() : void 0;
+  const userAgent = body.userAgent ? String(body.userAgent).trim() : void 0;
+  const rawPayload = body.rawPayload ? String(body.rawPayload).trim() : void 0;
   if (!targetId) {
     throw createError({
       statusCode: 400,
       statusMessage: "targetId \u4E0D\u80FD\u4E3A\u7A7A\uFF08\u5982\u6587\u7AE0 slug \u6216\u6A21\u578B slug\uFF09"
     });
   }
-  if (!topicIdOrUrl) {
+  if (!topicIdOrUrl && !rawPayload) {
     throw createError({
       statusCode: 400,
-      statusMessage: "\u8BF7\u63D0\u4F9B\u5916\u90E8\u8BDD\u9898\u94FE\u63A5\u6216 ID"
+      statusMessage: "\u8BF7\u63D0\u4F9B\u5916\u90E8\u8BDD\u9898\u94FE\u63A5/ID \u6216\u76F4\u63A5\u7C98\u8D34\u6570\u636E"
     });
   }
   if (source !== "v2ex" && source !== "linuxdo") {
@@ -74,7 +76,9 @@ const sync_post = defineEventHandler(async (event) => {
       status,
       autoSync,
       token,
-      cookie
+      cookie,
+      userAgent,
+      rawPayload
     });
     const sourceName = source === "linuxdo" ? "LINUX DO" : "V2EX";
     return {
@@ -91,3 +95,4 @@ const sync_post = defineEventHandler(async (event) => {
 });
 
 export { sync_post as default };
+//# sourceMappingURL=sync.post.mjs.map

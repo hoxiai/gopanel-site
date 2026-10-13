@@ -1,4 +1,4 @@
-import { d as defineEventHandler, c as getRequestLocale, g as getQuery, z as orders, p as products, u as users, b as db, r as readBody, e as createError, ao as requireTrustedRequestOrigin, ap as ensurePromoMember, aq as getSiteLocaleConfig, ar as resolveRequestLocale, as as resolveCurrencyRate, at as roundCurrencyAmount, au as getMinimalCheckoutAdminConfig, av as buildMinimalCheckoutBridgeMeta, aw as mergeMinimalCheckoutMeta, O as ORDER_PAY_STATUS, ax as prepareOrderMetaForInsert, ay as ORDER_STATUS, ac as createOrderAttribution, az as ensureTopupRecordForOrder, ad as settlePaidTopup, aa as isMinimalCheckoutRelayOrder, af as fulfillMinimalCheckoutRelay, ag as fulfillOrder, ah as settlePromoCommission, ai as emitEvent, U as getLocalizedSettingValue, V as sendEmail, s as setAuditMeta } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, z as orders, p as products, u as users, b as db, r as readBody, e as createError, aq as requireTrustedRequestOrigin, ar as ensurePromoMember, as as getSiteLocaleConfig, at as resolveRequestLocale, au as resolveCurrencyRate, av as roundCurrencyAmount, aw as getMinimalCheckoutAdminConfig, ax as buildMinimalCheckoutBridgeMeta, ay as mergeMinimalCheckoutMeta, O as ORDER_PAY_STATUS, az as prepareOrderMetaForInsert, ap as ORDER_STATUS, ac as createOrderAttribution, aA as ensureTopupRecordForOrder, ad as settlePaidTopup, aa as isMinimalCheckoutRelayOrder, af as fulfillMinimalCheckoutRelay, ag as fulfillOrder, ah as settlePromoCommission, ai as emitEvent, U as getLocalizedSettingValue, V as sendEmail, s as setAuditMeta } from '../../../nitro/nitro.mjs';
 import { or, eq, and, ne, like, sql, count, desc } from 'drizzle-orm';
 import crypto from 'crypto';
 import { z } from 'zod';
@@ -7,7 +7,6 @@ import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
-import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -17,8 +16,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -31,6 +29,8 @@ import '@iconify/utils';
 import 'consola';
 import 'ioredis';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -120,18 +120,25 @@ const index = defineEventHandler(async (event) => {
       id: orders.id,
       amount: orders.amount,
       currency: orders.currency,
+      source: orders.source,
+      externalOrderId: orders.externalOrderId,
       status: orders.status,
       payStatus: orders.payStatus,
       contactEmail: orders.contactEmail,
       payMethod: orders.payMethod,
       tradeNo: orders.tradeNo,
       visitorId: orders.visitorId,
+      deliveryInfo: orders.deliveryInfo,
+      metaData: orders.metaData,
       createdAt: orders.createdAt,
+      paidAt: orders.paidAt,
       productName: products.name,
       productSlug: products.slug,
       productId: products.id,
       productImage: products.imageUrl,
       productType: products.type,
+      productPrice: products.price,
+      userId: orders.userId,
       userNickname: users.nickname,
       userEmail: users.email
     }).from(orders).leftJoin(products, eq(orders.productId, products.id)).leftJoin(users, eq(orders.userId, users.id));
@@ -392,3 +399,4 @@ const index = defineEventHandler(async (event) => {
 });
 
 export { index as default };
+//# sourceMappingURL=index2.mjs.map

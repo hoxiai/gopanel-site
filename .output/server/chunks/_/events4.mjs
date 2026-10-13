@@ -1,12 +1,11 @@
 import { eq } from 'drizzle-orm';
-import { b as db, p as products, dE as readShoplyPlanMeta, dF as pushShoplyLicense } from '../nitro/nitro.mjs';
+import { b as db, p as products, dR as readShoplyPlanMeta, dS as pushShoplyLicense } from '../nitro/nitro.mjs';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
-import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -16,8 +15,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -26,11 +24,13 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:url';
+import 'zod';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
-import 'zod';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -58,7 +58,7 @@ function getThemeEventRules() {
           const result = await pushShoplyLicense(userId, { ensure: true, force: false });
           if (result.skipped) {
             console.warn(`[ShoplyLicense] order ${String(order.id)} skipped: ${result.reason}`);
-            return { ok: result.reason !== "user_not_found" };
+            return { ok: false, errorMessage: result.reason };
           }
           if (result.failed.length) {
             return { ok: false, errorMessage: `license not applied to stores ${result.failed.join(",")}` };
@@ -90,7 +90,7 @@ function getThemeEventRules() {
         }
         try {
           const result = await pushShoplyLicense(userId, { ensure: false, force: false });
-          if (result.skipped) return { ok: result.reason !== "user_not_found" };
+          if (result.skipped) return { ok: false, errorMessage: result.reason };
           if (result.failed.length) {
             return { ok: false, errorMessage: `license not applied to stores ${result.failed.join(",")}` };
           }
@@ -106,3 +106,4 @@ function getThemeEventRules() {
 }
 
 export { getThemeEventRules };
+//# sourceMappingURL=events4.mjs.map

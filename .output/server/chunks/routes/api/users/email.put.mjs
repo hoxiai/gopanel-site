@@ -1,4 +1,4 @@
-import { d as defineEventHandler, ao as requireTrustedRequestOrigin, c as getRequestLocale, c0 as requireUserSession, e as createError, r as readBody, bB as validateEmail, b as db, u as users, a0 as verifyPassword, bC as normalizeEmail, c9 as getEmailVerifySendCooldown, bD as revokeEmailVerifyTokens, ca as issueEmailVerification, c1 as overwriteSessionUser } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, aq as requireTrustedRequestOrigin, c as getRequestLocale, c5 as requireUserSession, e as createError, r as readBody, bE as validateEmail, b as db, u as users, a0 as verifyPassword, bF as normalizeEmail, ce as getEmailVerifySendCooldown, bG as revokeEmailVerifyTokens, cf as issueEmailVerification, c6 as overwriteSessionUser } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -6,7 +6,6 @@ import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
-import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -16,8 +15,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -26,11 +24,13 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:url';
+import 'zod';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
-import 'zod';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -139,3 +139,4 @@ const email_put = defineEventHandler(async (event) => {
 });
 
 export { email_put as default };
+//# sourceMappingURL=email.put.mjs.map

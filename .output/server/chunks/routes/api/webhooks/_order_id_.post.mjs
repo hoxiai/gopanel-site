@@ -1,4 +1,4 @@
-import { d as defineEventHandler, d2 as setHeader, c as getRequestLocale, f as getRouterParam, d3 as readRawBody, r as readBody, g as getQuery, cE as getRequestHeaders, bT as logger, e as createError, b as db, z as orders, aB as paymentMethods, d4 as executeCallbackScript, cJ as setResponseStatus, d5 as markOrderPaid, O as ORDER_PAY_STATUS, ay as ORDER_STATUS, cp as getAffectedRows, d6 as markTopupPaymentFailed, aj as cancelPromoCommission, ak as revokeSubscriptionForOrder, al as refundTopup } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, dc as setHeader, c as getRequestLocale, f as getRouterParam, dd as readRawBody, r as readBody, g as getQuery, cN as getRequestHeaders, bY as logger, e as createError, b as db, z as orders, aC as paymentMethods, de as executeCallbackScript, cS as setResponseStatus, df as markOrderPaid, O as ORDER_PAY_STATUS, ap as ORDER_STATUS, cy as getAffectedRows, dg as markTopupPaymentFailed, aj as cancelPromoCommission, ak as revokeSubscriptionForOrder, al as refundTopup, am as sendMinimalCheckoutRefundNotification } from '../../../nitro/nitro.mjs';
 import { eq, and, inArray, ne } from 'drizzle-orm';
 import fs from 'fs';
 import path from 'path';
@@ -6,7 +6,6 @@ import 'node:crypto';
 import 'crypto';
 import 'node:path';
 import '@nuxthub/blob';
-import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -16,8 +15,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -26,11 +24,13 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:url';
+import 'zod';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
-import 'zod';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -100,6 +100,12 @@ const postHandler = defineEventHandler(async (event) => {
       throw new Error(`Order ${urlOrderId} not found`);
     }
     const order = existingOrders[0];
+    const verifiedPayload = { ...payload, order: {
+      id: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      tradeNo: order.tradeNo
+    } };
     const payMethod = order.payMethod;
     if (!payMethod) {
       throw new Error(`Order ${urlOrderId} does not have a payment method assigned`);
@@ -149,7 +155,7 @@ const postHandler = defineEventHandler(async (event) => {
         console.warn("Failed to read local config.json for", realMethodCode);
       }
     }
-    const result = await executeCallbackScript(callbackScript, payload, configJson);
+    const result = await executeCallbackScript(callbackScript, verifiedPayload, configJson);
     await logger.info(`Webhook processed for ${realMethodCode}`, {
       source: "webhook",
       details: { urlOrderId, payload: logPayload, result }
@@ -232,6 +238,12 @@ const postHandler = defineEventHandler(async (event) => {
             if (result.status === "refunded" && order2.userId) {
               await refundTopup(result.orderId).catch((err) => console.error("[Webhook] refundTopup failed:", err));
             }
+            if (result.status === "refunded" && wasCharged) {
+              const notification = await sendMinimalCheckoutRefundNotification({ ...order2, payStatus: "refunded" });
+              if (!notification.skipped && !notification.delivered) {
+                throw new Error("Refund relay notification failed; gateway retry required");
+              }
+            }
           }
         }
       } else {
@@ -258,3 +270,4 @@ const postHandler = defineEventHandler(async (event) => {
 });
 
 export { postHandler as default };
+//# sourceMappingURL=_order_id_.post.mjs.map

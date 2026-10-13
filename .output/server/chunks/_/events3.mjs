@@ -1,12 +1,11 @@
 import { eq, and, desc, ne, gt } from 'drizzle-orm';
-import { dt as ensureAINodeApiKey, du as persistModelCredentials, dv as markQingpuTrialPaymentReceived, dw as fulfillPaidTrialOrder, dx as formatTrialErrorMessage, b as db, p as products, z as orders, u as users, bT as logger, H as subscriptions, dy as enqueueAndDeliverAINodeSync, dn as getQingpuAINodeBaseUrl, dz as getQingpuAINodeTenantToken, dA as retryIdempotentAINodeCall, dB as creditAINodeCustomerBalance, dC as planSubscriptionRevoke, dD as grantEventId } from '../nitro/nitro.mjs';
+import { dG as ensureAINodeApiKey, dH as persistModelCredentials, dI as markQingpuTrialPaymentReceived, dJ as fulfillPaidTrialOrder, dK as formatTrialErrorMessage, b as db, p as products, z as orders, u as users, bY as logger, H as subscriptions, dL as enqueueAndDeliverAINodeSync, dB as getQingpuAINodeBaseUrl, dM as getQingpuAINodeTenantToken, dN as retryIdempotentAINodeCall, dO as creditAINodeCustomerBalance, dP as planSubscriptionRevoke, dQ as grantEventId } from '../nitro/nitro.mjs';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
-import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -16,8 +15,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -26,11 +24,13 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:url';
+import 'zod';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
-import 'zod';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -327,3 +327,4 @@ function getThemeEventRules() {
 }
 
 export { getThemeEventRules };
+//# sourceMappingURL=events3.mjs.map

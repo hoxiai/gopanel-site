@@ -1,4 +1,4 @@
-import { d as defineEventHandler, ao as requireTrustedRequestOrigin, c as getRequestLocale, r as readBody, c2 as mergePromoTracking, c3 as capturePromoTracking, c4 as readPromoTracking, e as createError, bB as validateEmail, b as db, u as users, j as hashPassword, ap as ensurePromoMember, c5 as bindInviteRelation, c6 as requestPromoAgentJoin, ai as emitEvent, c7 as promoAgentRelations, c8 as promoInviteRelations, aH as promoMembers, bY as issueWebSession, bJ as trackVisitorEvent, bZ as ensureVisitorId, bA as userTokens, bE as EMAIL_VERIFY_TOKEN_NAME, U as getLocalizedSettingValue, V as sendEmail } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, aq as requireTrustedRequestOrigin, c as getRequestLocale, r as readBody, c7 as mergePromoTracking, c8 as capturePromoTracking, c9 as readPromoTracking, e as createError, bE as validateEmail, b as db, u as users, j as hashPassword, ar as ensurePromoMember, ca as bindInviteRelation, cb as requestPromoAgentJoin, ai as emitEvent, cc as promoAgentRelations, cd as promoInviteRelations, aJ as promoMembers, c1 as issueWebSession, bM as trackVisitorEvent, c2 as ensureVisitorId, bD as userTokens, bH as EMAIL_VERIFY_TOKEN_NAME, U as getLocalizedSettingValue, V as sendEmail } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -6,7 +6,6 @@ import 'fs';
 import 'path';
 import 'node:path';
 import '@nuxthub/blob';
-import '@nuxthub/db';
 import 'node:http';
 import 'node:https';
 import 'node:events';
@@ -16,8 +15,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -26,11 +24,13 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:url';
+import 'zod';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
-import 'zod';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -167,3 +167,4 @@ const register_post = defineEventHandler(async (event) => {
 });
 
 export { register_post as default };
+//# sourceMappingURL=register.post.mjs.map

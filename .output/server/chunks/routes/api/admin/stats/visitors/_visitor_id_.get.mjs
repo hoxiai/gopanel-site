@@ -1,6 +1,5 @@
-import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, C as visitorProfiles, u as users, z as orders, bd as visitorEvents, p as products, t as toIsoTimestamp } from '../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, b as db, C as visitorProfiles, u as users, z as orders, bf as visitorEvents, p as products, t as toIsoTimestamp } from '../../../../../nitro/nitro.mjs';
 import { eq, or, count, and, gt, desc } from 'drizzle-orm';
-import { db } from '@nuxthub/db';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
@@ -16,8 +15,7 @@ import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
 import 'drizzle-orm/d1';
-import '@libsql/client';
-import 'drizzle-orm/libsql';
+import 'node:module';
 import 'mysql2/promise';
 import 'drizzle-orm/mysql2';
 import 'drizzle-orm/pg-core';
@@ -26,11 +24,13 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:url';
+import 'zod';
 import '@iconify/utils';
 import 'consola';
 import 'ioredis';
-import 'zod';
 import 'node:child_process';
+import 'process';
+import 'buffer';
 import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
@@ -159,3 +159,4 @@ const _visitor_id__get = defineEventHandler(async (event) => {
 });
 
 export { _visitor_id__get as default };
+//# sourceMappingURL=_visitor_id_.get.mjs.map

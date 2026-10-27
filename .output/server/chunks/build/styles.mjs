@@ -4,12 +4,12 @@ const styles = {
   "pages/admin/dashboard.vue?vue&type=style&index=0&scoped=93ddc56c&lang.css": () => import('./dashboard-styles.1EsfloRn.mjs').then(interopDefault),
   "components/admin/settings/Nav.vue": () => import('./Nav-styles.CSE4XTdn.mjs').then(interopDefault),
   "components/admin/settings/Nav.vue?vue&type=style&index=0&scoped=3007fcd7&lang.css": () => import('./Nav-styles.CSE4XTdn.mjs').then(interopDefault),
-  "components/LikeButton.vue": () => import('./LikeButton-styles.DOImobUk.mjs').then(interopDefault),
-  "components/LikeButton.vue?vue&type=style&index=0&scoped=f08c92ca&lang.css": () => import('./LikeButton-styles.DOImobUk.mjs').then(interopDefault),
   "components/AdminSidebar.vue": () => import('./AdminSidebar-styles.CaVlJfid.mjs').then(interopDefault),
   "components/AdminSidebar.vue?vue&type=style&index=0&scoped=1d03f188&lang.css": () => import('./AdminSidebar-styles.CaVlJfid.mjs').then(interopDefault),
   "components/RichEditor.vue": () => import('./RichEditor-styles.DD6KqjPn.mjs').then(interopDefault),
   "components/RichEditor.vue?vue&type=style&index=0&lang.css": () => import('./RichEditor-styles.DD6KqjPn.mjs').then(interopDefault),
+  "components/LikeButton.vue": () => import('./LikeButton-styles.DOImobUk.mjs').then(interopDefault),
+  "components/LikeButton.vue?vue&type=style&index=0&scoped=f08c92ca&lang.css": () => import('./LikeButton-styles.DOImobUk.mjs').then(interopDefault),
   "components/PaymentWorkspace.vue": () => import('./PaymentWorkspace-styles.Drdicu5C.mjs').then(interopDefault),
   "components/PaymentWorkspace.vue?vue&type=style&index=0&scoped=f68870a6&lang.css": () => import('./PaymentWorkspace-styles.Drdicu5C.mjs').then(interopDefault)
 };

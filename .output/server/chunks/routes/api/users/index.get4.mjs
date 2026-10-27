@@ -1,4 +1,4 @@
-import { d as defineEventHandler, c5 as requireUserSession, b as db, bD as userTokens, d7 as apiTokenScope } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, cT as requireUserSession, b as db, cl as userTokens, eA as apiTokenScope, dx as MCP_SCOPE_DEFINITIONS } from '../../../nitro/nitro.mjs';
 import { desc } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -27,7 +27,9 @@ import 'node:url';
 import 'zod';
 import '@iconify/utils';
 import 'consola';
+import 'node:zlib';
 import 'ioredis';
+import 'jose';
 import 'node:child_process';
 import 'process';
 import 'buffer';
@@ -43,12 +45,18 @@ const index_get = defineEventHandler(async (event) => {
   const rows = await db.select({
     id: userTokens.id,
     name: userTokens.name,
+    scopes: userTokens.scopes,
+    clientId: userTokens.clientId,
+    clientName: userTokens.clientName,
     lastUsedAt: userTokens.lastUsedAt,
     expiresAt: userTokens.expiresAt,
     revoked: userTokens.revoked,
     createdAt: userTokens.createdAt
   }).from(userTokens).where(apiTokenScope(userId)).orderBy(desc(userTokens.createdAt));
-  return { data: rows };
+  return {
+    data: rows,
+    supportedScopes: MCP_SCOPE_DEFINITIONS
+  };
 });
 
 export { index_get as default };

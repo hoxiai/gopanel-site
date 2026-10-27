@@ -1,4 +1,4 @@
-import { d as defineEventHandler, r as readBody, e as createError, b2 as getUserSession, c2 as ensureVisitorId, b as db, cp as likes } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, r as readBody, e as createError, bs as getUserSession, cQ as ensureVisitorId, b as db, dd as likes } from '../../../nitro/nitro.mjs';
 import { sql, and, eq, inArray, or, isNull } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -27,7 +27,9 @@ import 'node:url';
 import 'zod';
 import '@iconify/utils';
 import 'consola';
+import 'node:zlib';
 import 'ioredis';
+import 'jose';
 import 'node:child_process';
 import 'process';
 import 'buffer';

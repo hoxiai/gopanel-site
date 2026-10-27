@@ -1,5 +1,5 @@
-import { cP as defineCachedEventHandler, g as getQuery, aG as posts, b as db } from '../../nitro/nitro.mjs';
-import { eq, or, like, and, count, desc, asc } from 'drizzle-orm';
+import { e8 as defineCachedEventHandler, g as getQuery, e9 as resolvePostRequestLocaleHint, aJ as posts, ea as resolvePostLocaleContext, b as db } from '../../nitro/nitro.mjs';
+import { eq, or, isNull, like, and, count, desc, asc } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
@@ -27,7 +27,9 @@ import 'node:url';
 import 'zod';
 import '@iconify/utils';
 import 'consola';
+import 'node:zlib';
 import 'ioredis';
+import 'jose';
 import 'node:child_process';
 import 'process';
 import 'buffer';
@@ -47,11 +49,24 @@ const index_get = defineCachedEventHandler(async (event) => {
   const page = Math.max(parseInt(query.page) || 1, 1);
   const pageSize = Math.min(Math.max(parseInt(query.pageSize) || 12, 1), 100);
   const offset = (page - 1) * pageSize;
+  const effectiveType = rawType || (!postKey ? "blog" : "");
   const conditions = [eq(posts.isActive, true)];
   if (rawType) {
     conditions.push(eq(posts.type, rawType));
   } else if (!postKey) {
     conditions.push(eq(posts.type, "blog"));
+  }
+  if (effectiveType === "blog") {
+    const localeContext = await resolvePostLocaleContext(event, query.locale);
+    if (localeContext.isMultiLocaleEnabled) {
+      conditions.push(
+        or(
+          isNull(posts.locale),
+          eq(posts.locale, ""),
+          eq(posts.locale, localeContext.locale)
+        )
+      );
+    }
   }
   if (postKey) {
     conditions.push(or(eq(posts.key, postKey), like(posts.key, `${postKey}%`)));
@@ -77,6 +92,7 @@ const index_get = defineCachedEventHandler(async (event) => {
     id: posts.id,
     key: posts.key,
     sort: posts.sort,
+    locale: posts.locale,
     slug: posts.slug,
     title: posts.title,
     description: posts.description,
@@ -104,9 +120,11 @@ const index_get = defineCachedEventHandler(async (event) => {
   // cache for 60 seconds
   swr: true,
   name: "posts-list",
+  varies: ["cookie", "accept-language", "referer", "x-apay-ssr-path", "host", "x-forwarded-host"],
   getKey: (event) => {
     const query = getQuery(event);
-    return `posts-${query.type || ""}-k-${query.key || ""}-c-${query.include_content || query.content || "0"}-o-${query.order || ""}-page-${query.page || 1}-size-${query.pageSize || 12}`;
+    const localeKey = resolvePostRequestLocaleHint(event, query.locale);
+    return `posts-${query.type || ""}-l-${localeKey}-k-${query.key || ""}-c-${query.include_content || query.content || "0"}-o-${query.order || ""}-page-${query.page || 1}-size-${query.pageSize || 12}`;
   }
 });
 

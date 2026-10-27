@@ -1,4 +1,4 @@
-import { d as defineEventHandler, g as getQuery, aG as posts, b as db } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, g as getQuery, aJ as posts, aL as normalizePostLocale, b as db } from '../../../nitro/nitro.mjs';
 import { eq, or, like, and, count, desc, sql } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -27,7 +27,9 @@ import 'node:url';
 import 'zod';
 import '@iconify/utils';
 import 'consola';
+import 'node:zlib';
 import 'ioredis';
+import 'jose';
 import 'node:child_process';
 import 'process';
 import 'buffer';
@@ -44,11 +46,18 @@ const index_get = defineEventHandler(async (event) => {
   const pageSize = Math.min(100, Math.max(1, parseInt(query.pageSize) || 15));
   const offset = (page - 1) * pageSize;
   const type = String(query.type || "").trim();
+  const locale = String(query.locale || "").trim();
   const status = String(query.status || "").trim();
   const search = String(query.search || "").trim();
   const conditions = [];
   if (type && type !== "all") {
     conditions.push(eq(posts.type, type));
+  }
+  if (locale && locale !== "all") {
+    const normalizedLocale = normalizePostLocale(locale);
+    if (normalizedLocale) {
+      conditions.push(eq(posts.locale, normalizedLocale));
+    }
   }
   if (status === "published") {
     conditions.push(eq(posts.isActive, true));
@@ -79,7 +88,17 @@ const index_get = defineEventHandler(async (event) => {
     totalViews: sql`COALESCE(SUM(${posts.views}), 0)`
   }).from(posts);
   return {
-    data: result,
+    data: result.map((row) => {
+      let metaData = row.metaData;
+      if (typeof metaData === "string") {
+        try {
+          metaData = JSON.parse(metaData);
+        } catch {
+          metaData = null;
+        }
+      }
+      return { ...row, metaData };
+    }),
     total,
     page,
     pageSize,

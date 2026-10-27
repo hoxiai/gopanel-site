@@ -1,4 +1,4 @@
-import { d as defineEventHandler, c as getRequestLocale, r as readBody, e as createError, b as db, aG as posts, aH as findUniqueViolation } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, e as createError, aL as normalizePostLocale, b as db, aJ as posts, aM as notifyIndexNowEntityChange, aN as notifySubscribersOnPostPublished, aO as findUniqueViolation } from '../../../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -27,7 +27,9 @@ import 'node:url';
 import 'zod';
 import '@iconify/utils';
 import 'consola';
+import 'node:zlib';
 import 'ioredis';
+import 'jose';
 import 'node:child_process';
 import 'process';
 import 'buffer';
@@ -37,6 +39,18 @@ import 'node:net';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
 
+const normalizePostMetaData = (value) => {
+  if (value === null || value === void 0 || value === "") return null;
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return parsed && typeof parsed === "object" ? parsed : null;
+    } catch {
+      return null;
+    }
+  }
+  return typeof value === "object" ? value : null;
+};
 const index_post = defineEventHandler(async (event) => {
   const locale = getRequestLocale(event);
   const body = await readBody(event);
@@ -44,24 +58,54 @@ const index_post = defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, message: locale === "zh" ? "\u6807\u9898\u548C slug \u4E0D\u80FD\u4E3A\u7A7A" : "Title and slug are required" });
   }
   try {
+    const postType = body.type || "blog";
     const normalizedKey = typeof body.key === "string" ? body.key.trim() : "";
     const normalizedSort = body.sort === "" || body.sort === null || body.sort === void 0 ? null : Number.isFinite(Number(body.sort)) ? Number(body.sort) : null;
+    const normalizedLocale = postType === "blog" && typeof body.locale === "string" && body.locale.trim() ? normalizePostLocale(body.locale) || null : null;
     const postData = {
       title: body.title,
       slug: body.slug,
       key: normalizedKey || null,
       sort: normalizedSort,
+      locale: normalizedLocale,
       description: body.description || null,
       content: body.content || null,
-      type: body.type || "blog",
+      type: postType,
       imageUrl: body.imageUrl || null,
       isActive: body.isActive !== void 0 ? body.isActive : true,
-      metaData: body.metaData ? process.env.NUXT_HUB_DATABASE ? body.metaData : JSON.stringify(body.metaData) : null,
+      metaData: normalizePostMetaData(body.metaData),
       createdAt: /* @__PURE__ */ new Date(),
       updatedAt: /* @__PURE__ */ new Date()
     };
     const result = await db.insert(posts).values(postData).returning();
-    return { code: 0, message: locale === "zh" ? "\u6587\u7AE0\u521B\u5EFA\u6210\u529F" : "Post created successfully", data: result[0] };
+    const createdPost = result[0];
+    if (createdPost && postData.isActive && postType === "blog" && createdPost.slug) {
+      notifyIndexNowEntityChange(event, {
+        entityType: "post",
+        slug: createdPost.slug,
+        locale: createdPost.locale
+      });
+    }
+    let newsletterResult = null;
+    if (createdPost && postData.isActive && postType === "blog" && Boolean(body.notifySubscribers)) {
+      newsletterResult = await notifySubscribersOnPostPublished({
+        id: createdPost.id,
+        title: createdPost.title,
+        slug: createdPost.slug,
+        description: createdPost.description,
+        locale: createdPost.locale,
+        type: createdPost.type
+      }).catch((err) => {
+        console.error("[Newsletter] Failed to notify subscribers on post create:", err);
+        return null;
+      });
+    }
+    return {
+      code: 0,
+      message: locale === "zh" ? "\u6587\u7AE0\u521B\u5EFA\u6210\u529F" : "Post created successfully",
+      data: createdPost,
+      newsletter: newsletterResult
+    };
   } catch (error) {
     console.error("Create post error:", error);
     const duplicate = findUniqueViolation(error);

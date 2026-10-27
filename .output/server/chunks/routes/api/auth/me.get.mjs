@@ -1,4 +1,4 @@
-import { d as defineEventHandler, c5 as requireUserSession, b as db, u as users, c6 as overwriteSessionUser } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, cT as requireUserSession, b as db, u as users, cU as overwriteSessionUser } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -27,7 +27,9 @@ import 'node:url';
 import 'zod';
 import '@iconify/utils';
 import 'consola';
+import 'node:zlib';
 import 'ioredis';
+import 'jose';
 import 'node:child_process';
 import 'process';
 import 'buffer';

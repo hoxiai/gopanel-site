@@ -1,4 +1,4 @@
-import { d as defineEventHandler, g as getQuery, b as db, aJ as promoMembers, aK as PROMO_ROLE, aL as listPromoAgents } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, g as getQuery, b as db, aQ as promoMembers, aR as PROMO_ROLE, aS as listPromoAgents } from '../../../../nitro/nitro.mjs';
 import { count, inArray } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -27,7 +27,9 @@ import 'node:url';
 import 'zod';
 import '@iconify/utils';
 import 'consola';
+import 'node:zlib';
 import 'ioredis';
+import 'jose';
 import 'node:child_process';
 import 'process';
 import 'buffer';

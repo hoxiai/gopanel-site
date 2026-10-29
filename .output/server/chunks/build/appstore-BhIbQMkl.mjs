@@ -1,4 +1,4 @@
-import { e as useToast, i as _sfc_main$R, G as _sfc_main$n, _ as _sfc_main$W, k as _sfc_main$M, b as _sfc_main$v, n as _sfc_main$G, a1 as useAppConfig, a2 as useComponentUI, ao as useLocale, as as createReusableTemplate, a5 as useFormField, a6 as tv, aw as _sfc_main$U, Z as Primitive, b8 as VisuallyHidden_default } from './server.mjs';
+import { e as useToast, i as _sfc_main$S, G as _sfc_main$p, _ as _sfc_main$X, k as _sfc_main$N, b as _sfc_main$w, n as _sfc_main$H, a1 as useAppConfig, a2 as useComponentUI, ao as useLocale, as as createReusableTemplate, a5 as useFormField, a6 as tv, aw as _sfc_main$V, Z as Primitive, b8 as VisuallyHidden_default } from './server.mjs';
 import { defineComponent, ref, computed, mergeProps, withCtx, createTextVNode, createVNode, toDisplayString, openBlock, createBlock, Fragment, renderList, createCommentVNode, withDirectives, vModelSelect, vModelText, vModelCheckbox, useSlots, useModel, toRefs, watch, toRef, unref, renderSlot, withModifiers, resolveDynamicComponent, withKeys, mergeModels, reactive, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate, ssrRenderList, ssrRenderAttr, ssrRenderClass, ssrIncludeBooleanAttr, ssrLooseContain, ssrLooseEqual, ssrRenderSlot, ssrRenderVNode } from 'vue/server-renderer';
 import require$$0__default from 'process';
@@ -530,7 +530,7 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign({ inheritAttrs: false }, {
                       ui: ui.value
                     }, () => {
                       var _a5;
-                      _push2(ssrRenderComponent(_sfc_main$U, {
+                      _push2(ssrRenderComponent(_sfc_main$V, {
                         as: { img: "img" },
                         src: createObjectUrl(file),
                         icon: __props.fileIcon || unref(appConfig).ui.icons.file,
@@ -561,7 +561,7 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign({ inheritAttrs: false }, {
                     }, () => {
                       var _a5;
                       if (__props.fileDelete) {
-                        _push2(ssrRenderComponent(_sfc_main$R, mergeProps({ color: "neutral" }, { ref_for: true }, {
+                        _push2(ssrRenderComponent(_sfc_main$S, mergeProps({ color: "neutral" }, { ref_for: true }, {
                           ...layout.value === "grid" ? {
                             variant: "solid",
                             size: "xs"
@@ -629,7 +629,7 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign({ inheritAttrs: false }, {
                             }, () => {
                               var _a5;
                               return [
-                                createVNode(_sfc_main$U, {
+                                createVNode(_sfc_main$V, {
                                   as: { img: "img" },
                                   src: createObjectUrl(file),
                                   icon: __props.fileIcon || unref(appConfig).ui.icons.file,
@@ -673,7 +673,7 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign({ inheritAttrs: false }, {
                             }, () => {
                               var _a5;
                               return [
-                                __props.fileDelete ? (openBlock(), createBlock(_sfc_main$R, mergeProps({
+                                __props.fileDelete ? (openBlock(), createBlock(_sfc_main$S, mergeProps({
                                   key: 0,
                                   color: "neutral"
                                 }, { ref_for: true }, {
@@ -751,13 +751,13 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign({ inheritAttrs: false }, {
                       ssrRenderSlot(_ctx.$slots, "leading", { ui: ui.value }, () => {
                         var _a4, _b2;
                         if (variant.value === "button") {
-                          _push3(ssrRenderComponent(_sfc_main$W, {
+                          _push3(ssrRenderComponent(_sfc_main$X, {
                             name: __props.icon || unref(appConfig).ui.icons.upload,
                             "data-slot": "icon",
                             class: ui.value.icon({ class: (_a4 = unref(uiProp)) == null ? void 0 : _a4.icon })
                           }, null, _parent3, _scopeId2));
                         } else {
-                          _push3(ssrRenderComponent(_sfc_main$U, {
+                          _push3(ssrRenderComponent(_sfc_main$V, {
                             icon: __props.icon || unref(appConfig).ui.icons.upload,
                             size: props.size,
                             "data-slot": "avatar",
@@ -815,12 +815,12 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign({ inheritAttrs: false }, {
                         renderSlot(_ctx.$slots, "leading", { ui: ui.value }, () => {
                           var _a4, _b2;
                           return [
-                            variant.value === "button" ? (openBlock(), createBlock(_sfc_main$W, {
+                            variant.value === "button" ? (openBlock(), createBlock(_sfc_main$X, {
                               key: 0,
                               name: __props.icon || unref(appConfig).ui.icons.upload,
                               "data-slot": "icon",
                               class: ui.value.icon({ class: (_a4 = unref(uiProp)) == null ? void 0 : _a4.icon })
-                            }, null, 8, ["name", "class"])) : (openBlock(), createBlock(_sfc_main$U, {
+                            }, null, 8, ["name", "class"])) : (openBlock(), createBlock(_sfc_main$V, {
                               key: 1,
                               icon: __props.icon || unref(appConfig).ui.icons.upload,
                               size: props.size,
@@ -920,12 +920,12 @@ const _sfc_main$1 = /* @__PURE__ */ Object.assign({ inheritAttrs: false }, {
                           renderSlot(_ctx.$slots, "leading", { ui: ui.value }, () => {
                             var _a4, _b2;
                             return [
-                              variant.value === "button" ? (openBlock(), createBlock(_sfc_main$W, {
+                              variant.value === "button" ? (openBlock(), createBlock(_sfc_main$X, {
                                 key: 0,
                                 name: __props.icon || unref(appConfig).ui.icons.upload,
                                 "data-slot": "icon",
                                 class: ui.value.icon({ class: (_a4 = unref(uiProp)) == null ? void 0 : _a4.icon })
-                              }, null, 8, ["name", "class"])) : (openBlock(), createBlock(_sfc_main$U, {
+                              }, null, 8, ["name", "class"])) : (openBlock(), createBlock(_sfc_main$V, {
                                 key: 1,
                                 icon: __props.icon || unref(appConfig).ui.icons.upload,
                                 size: props.size,
@@ -9097,12 +9097,12 @@ networks:
       }
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UButton = _sfc_main$R;
-      const _component_UCard = _sfc_main$n;
-      const _component_UIcon = _sfc_main$W;
-      const _component_UInput = _sfc_main$v;
-      const _component_UBadge = _sfc_main$M;
-      const _component_UModal = _sfc_main$G;
+      const _component_UButton = _sfc_main$S;
+      const _component_UCard = _sfc_main$p;
+      const _component_UIcon = _sfc_main$X;
+      const _component_UInput = _sfc_main$w;
+      const _component_UBadge = _sfc_main$N;
+      const _component_UModal = _sfc_main$H;
       const _component_UFileUpload = _sfc_main$1;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "space-y-6" }, _attrs))}><div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white"> \u5E94\u7528\u5546\u5E97\u7BA1\u7406 </h1><p class="mt-2 text-sm text-gray-500 dark:text-gray-400"> \u5168\u91CF\u5E94\u7528\u5143\u6570\u636E\u7BA1\u7406\u3001\u81EA\u5B9A\u4E49 MySQL / Redis / \u5BB9\u5668\u5E94\u7528\u53D1\u5E03\uFF0C\u4E00\u952E\u6784\u5EFA GoPanel \u7EAF\u51C0\u79BB\u7EBF\u5305\u3002 </p></div><div class="flex flex-wrap items-center gap-2.5">`);
       _push(ssrRenderComponent(_component_UButton, {

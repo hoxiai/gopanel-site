@@ -1,4 +1,4 @@
-import { u as useI18n, e as useToast, f as useAdminPermissions, _ as _sfc_main$W, a as _sfc_main$w, l as _sfc_main$u, i as _sfc_main$R, b as _sfc_main$v, B as _sfc_main$l, o as navigateTo } from './server.mjs';
+import { u as useI18n, e as useToast, f as useAdminPermissions, _ as _sfc_main$X, a as _sfc_main$x, l as _sfc_main$v, i as _sfc_main$S, b as _sfc_main$w, B as _sfc_main$l, o as navigateTo } from './server.mjs';
 import { _ as __nuxt_component_2, i as isSettingsTabId } from './Nav-BfctuFgG.mjs';
 import { defineComponent, computed, ref, mergeProps, unref, withCtx, createVNode, createTextVNode, toDisplayString, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate, ssrRenderList } from 'vue/server-renderer';
@@ -126,12 +126,12 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UIcon = _sfc_main$W;
+      const _component_UIcon = _sfc_main$X;
       const _component_AdminSettingsNav = __nuxt_component_2;
-      const _component_UFormField = _sfc_main$w;
-      const _component_USelect = _sfc_main$u;
-      const _component_UButton = _sfc_main$R;
-      const _component_UInput = _sfc_main$v;
+      const _component_UFormField = _sfc_main$x;
+      const _component_USelect = _sfc_main$v;
+      const _component_UButton = _sfc_main$S;
+      const _component_UInput = _sfc_main$w;
       const _component_UCheckbox = _sfc_main$l;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "mx-auto pb-12" }, _attrs))}><div class="mb-8"><h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-3">`);
       _push(ssrRenderComponent(_component_UIcon, {

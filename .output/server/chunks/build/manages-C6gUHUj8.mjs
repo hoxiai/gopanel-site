@@ -1,4 +1,4 @@
-import { u as useI18n, d as useFormatTime, e as useToast, q as useConfirm, f as useAdminPermissions, g as useAdminExtensions, w as themeExtensionPermissionCode, A as ADMIN_PERMISSIONS, m as moduleViewCode, h as moduleEditCode, x as usePagination, y as useFetch, p as useRouter, _ as _sfc_main$W, i as _sfc_main$R, j as _sfc_main$s, z as _sfc_main$y, a as _sfc_main$w, b as _sfc_main$v, o as navigateTo } from './server.mjs';
+import { u as useI18n, d as useFormatTime, e as useToast, q as useConfirm, f as useAdminPermissions, g as useAdminExtensions, w as themeExtensionPermissionCode, A as ADMIN_PERMISSIONS, m as moduleViewCode, h as moduleEditCode, x as usePagination, y as useFetch, p as useRouter, _ as _sfc_main$X, i as _sfc_main$S, j as _sfc_main$t, z as _sfc_main$z, a as _sfc_main$x, b as _sfc_main$w, o as navigateTo } from './server.mjs';
 import { _ as __nuxt_component_2, i as isSettingsTabId } from './Nav-BfctuFgG.mjs';
 import { _ as __nuxt_component_7 } from './FullScreenModal-Dpul9c_Q.mjs';
 import { defineComponent, computed, withAsyncContext, ref, reactive, mergeProps, unref, withCtx, createTextVNode, toDisplayString, createVNode, openBlock, createBlock, createCommentVNode, isRef, withModifiers, Fragment, renderList, useSSRContext } from 'vue';
@@ -297,14 +297,14 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UIcon = _sfc_main$W;
-      const _component_UButton = _sfc_main$R;
+      const _component_UIcon = _sfc_main$X;
+      const _component_UButton = _sfc_main$S;
       const _component_AdminSettingsNav = __nuxt_component_2;
-      const _component_UTable = _sfc_main$s;
-      const _component_UPagination = _sfc_main$y;
+      const _component_UTable = _sfc_main$t;
+      const _component_UPagination = _sfc_main$z;
       const _component_FullScreenModal = __nuxt_component_7;
-      const _component_UFormField = _sfc_main$w;
-      const _component_UInput = _sfc_main$v;
+      const _component_UFormField = _sfc_main$x;
+      const _component_UInput = _sfc_main$w;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "mx-auto pb-12" }, _attrs))}><div class="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"><div><h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-3">`);
       _push(ssrRenderComponent(_component_UIcon, {
         name: "ph:users-four",

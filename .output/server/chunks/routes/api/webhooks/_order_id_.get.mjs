@@ -1,4 +1,4 @@
-import { d as defineEventHandler, eh as setHeader, f as getRouterParam, dh as setResponseStatus, b as db, z as orders } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, el as setHeader, f as getRouterParam, dl as setResponseStatus, b as db, z as orders } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import postHandler from './_order_id_.post.mjs';
 import 'node:crypto';

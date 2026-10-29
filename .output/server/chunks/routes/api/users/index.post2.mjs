@@ -1,4 +1,4 @@
-import { d as defineEventHandler, c as getRequestLocale, cT as requireUserSession, e as createError, r as readBody, b as db, cl as userTokens, eA as apiTokenScope, dt as normalizeMcpScopes, dw as MCP_DEFAULT_SCOPES, dH as generateMcpAccessToken, eB as API_TOKEN_PREFIX } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, cX as requireUserSession, e as createError, r as readBody, b as db, cp as userTokens, eF as apiTokenScope, dx as normalizeMcpScopes, dA as MCP_DEFAULT_SCOPES, dL as generateMcpAccessToken, eG as API_TOKEN_PREFIX } from '../../../nitro/nitro.mjs';
 import crypto from 'crypto';
 import { z } from 'zod';
 import { count, and, eq } from 'drizzle-orm';

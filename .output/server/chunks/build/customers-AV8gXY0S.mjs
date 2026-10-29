@@ -1,4 +1,4 @@
-import { u as useI18n, d as useFormatTime, F as useCurrencyFormat, e as useToast, q as useConfirm, f as useAdminPermissions, x as usePagination, y as useFetch, p as useRouter, k as _sfc_main$M, i as _sfc_main$R, _ as _sfc_main$W, l as _sfc_main$u, b as _sfc_main$v, j as _sfc_main$s, z as _sfc_main$y, n as _sfc_main$G, a as _sfc_main$w, r as useSettings } from './server.mjs';
+import { u as useI18n, d as useFormatTime, F as useCurrencyFormat, e as useToast, q as useConfirm, f as useAdminPermissions, x as usePagination, y as useFetch, p as useRouter, k as _sfc_main$N, i as _sfc_main$S, _ as _sfc_main$X, l as _sfc_main$v, b as _sfc_main$w, j as _sfc_main$t, z as _sfc_main$z, n as _sfc_main$H, a as _sfc_main$x, r as useSettings } from './server.mjs';
 import { _ as _sfc_main$3 } from './Tabs-BzdAuwjs.mjs';
 import { defineComponent, computed, ref, watch, withAsyncContext, reactive, mergeProps, withCtx, createTextVNode, toDisplayString, unref, createVNode, openBlock, createBlock, createCommentVNode, withModifiers, isRef, Fragment, renderList, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent, ssrRenderClass, ssrRenderAttr, ssrRenderList } from 'vue/server-renderer';
@@ -198,9 +198,9 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
     };
     return (_ctx, _push, _parent, _attrs) => {
       const _component_FullScreenModal = __nuxt_component_7;
-      const _component_UIcon = _sfc_main$W;
-      const _component_UButton = _sfc_main$R;
-      const _component_UBadge = _sfc_main$M;
+      const _component_UIcon = _sfc_main$X;
+      const _component_UButton = _sfc_main$S;
+      const _component_UBadge = _sfc_main$N;
       _push(ssrRenderComponent(_component_FullScreenModal, mergeProps({
         modelValue: isOpen.value,
         "onUpdate:modelValue": ($event) => isOpen.value = $event,
@@ -673,9 +673,9 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
     return (_ctx, _push, _parent, _attrs) => {
       const _component_FullScreenModal = __nuxt_component_7;
-      const _component_UIcon = _sfc_main$W;
-      const _component_UBadge = _sfc_main$M;
-      const _component_UButton = _sfc_main$R;
+      const _component_UIcon = _sfc_main$X;
+      const _component_UBadge = _sfc_main$N;
+      const _component_UButton = _sfc_main$S;
       _push(ssrRenderComponent(_component_FullScreenModal, mergeProps({
         modelValue: isOpen.value,
         "onUpdate:modelValue": ($event) => isOpen.value = $event,
@@ -1819,16 +1819,16 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UBadge = _sfc_main$M;
-      const _component_UButton = _sfc_main$R;
-      const _component_UIcon = _sfc_main$W;
+      const _component_UBadge = _sfc_main$N;
+      const _component_UButton = _sfc_main$S;
+      const _component_UIcon = _sfc_main$X;
       const _component_UTabs = _sfc_main$3;
-      const _component_USelect = _sfc_main$u;
-      const _component_UInput = _sfc_main$v;
-      const _component_UTable = _sfc_main$s;
-      const _component_UPagination = _sfc_main$y;
-      const _component_UModal = _sfc_main$G;
-      const _component_UFormField = _sfc_main$w;
+      const _component_USelect = _sfc_main$v;
+      const _component_UInput = _sfc_main$w;
+      const _component_UTable = _sfc_main$t;
+      const _component_UPagination = _sfc_main$z;
+      const _component_UModal = _sfc_main$H;
+      const _component_UFormField = _sfc_main$x;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "h-[calc(100vh-7rem)] flex flex-col space-y-4" }, _attrs))}><div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 shrink-0"><div><div class="flex items-center gap-2"><h1 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">${ssrInterpolate(activeTab.value === "users" ? _ctx.$t("admin.users.registered") : _ctx.$t("admin.customers.title"))}</h1>`);
       _push(ssrRenderComponent(_component_UBadge, {
         color: "primary",

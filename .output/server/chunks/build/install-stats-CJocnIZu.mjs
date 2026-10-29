@@ -1,4 +1,4 @@
-import { d as useFormatTime, e as useToast, i as _sfc_main$R, G as _sfc_main$n, _ as _sfc_main$W, v as _sfc_main$o, j as _sfc_main$s, k as _sfc_main$M, z as _sfc_main$y, b as _sfc_main$v, n as _sfc_main$G } from './server.mjs';
+import { d as useFormatTime, e as useToast, i as _sfc_main$S, G as _sfc_main$p, _ as _sfc_main$X, v as _sfc_main$q, j as _sfc_main$t, k as _sfc_main$N, z as _sfc_main$z, b as _sfc_main$w, n as _sfc_main$H } from './server.mjs';
 import { defineComponent, h, ref, computed, watch, mergeProps, withCtx, createTextVNode, createVNode, toDisplayString, openBlock, createBlock, createCommentVNode, unref, Fragment, renderList, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrRenderList, ssrInterpolate, ssrRenderClass } from 'vue/server-renderer';
 import '../nitro/nitro.mjs';
@@ -236,15 +236,15 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     watch(serverPage, loadServers);
     watch(eventPage, loadEvents);
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UButton = _sfc_main$R;
-      const _component_UCard = _sfc_main$n;
-      const _component_UIcon = _sfc_main$W;
-      const _component_UInput = _sfc_main$v;
-      const _component_UAlert = _sfc_main$o;
-      const _component_UTable = _sfc_main$s;
-      const _component_UBadge = _sfc_main$M;
-      const _component_UPagination = _sfc_main$y;
-      const _component_UModal = _sfc_main$G;
+      const _component_UButton = _sfc_main$S;
+      const _component_UCard = _sfc_main$p;
+      const _component_UIcon = _sfc_main$X;
+      const _component_UInput = _sfc_main$w;
+      const _component_UAlert = _sfc_main$q;
+      const _component_UTable = _sfc_main$t;
+      const _component_UBadge = _sfc_main$N;
+      const _component_UPagination = _sfc_main$z;
+      const _component_UModal = _sfc_main$H;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "space-y-6" }, _attrs))}><div class="flex items-end justify-between gap-4"><div><h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white"> \u5B89\u88C5\u4E0E\u5347\u7EA7\u7EDF\u8BA1 </h1><p class="mt-2 text-sm text-gray-500 dark:text-gray-400"> \u6BCF\u53F0\u670D\u52A1\u5668\uFF08install_id\uFF09\u4E00\u6761\u8BB0\u5F55\uFF0CIP \u4E0E\u5730\u533A\u53D6\u81EA\u4E0A\u62A5\u8BF7\u6C42\u6765\u6E90\uFF1B\u70B9\u300C\u8BB0\u5F55\u300D\u67E5\u770B\u8BE5\u670D\u52A1\u5668\u7684\u5B89\u88C5\u3001\u5347\u7EA7\u660E\u7EC6\u3002 </p></div>`);
       _push(ssrRenderComponent(_component_UButton, {
         color: "neutral",

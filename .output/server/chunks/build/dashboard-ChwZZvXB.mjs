@@ -1,4 +1,4 @@
-import { u as useI18n, r as useSettings, br as useSeoMeta, _ as _sfc_main$W } from './server.mjs';
+import { u as useI18n, r as useSettings, br as useSeoMeta, _ as _sfc_main$X } from './server.mjs';
 import { defineComponent, computed, mergeProps, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderList, ssrInterpolate, ssrRenderComponent } from 'vue/server-renderer';
 import '../nitro/nitro.mjs';
@@ -79,7 +79,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       robots: "noindex, nofollow"
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UIcon = _sfc_main$W;
+      const _component_UIcon = _sfc_main$X;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "space-y-6" }, _attrs))}><div class="grid grid-cols-1 gap-4 sm:grid-cols-3"><!--[-->`);
       ssrRenderList(cards.value, (card) => {
         _push(`<div class="rounded-2xl border border-gray-100 bg-white p-5"><div class="flex items-center justify-between"><span class="text-sm text-gray-500">${ssrInterpolate(card.label)}</span>`);

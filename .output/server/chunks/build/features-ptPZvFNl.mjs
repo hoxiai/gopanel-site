@@ -1,4 +1,4 @@
-import { D as useLocaleRouter, r as useSettings, u as useI18n, br as useSeoMeta, i as _sfc_main$R, _ as _sfc_main$W } from './server.mjs';
+import { D as useLocaleRouter, r as useSettings, u as useI18n, br as useSeoMeta, i as _sfc_main$S, _ as _sfc_main$X } from './server.mjs';
 import { defineComponent, computed, mergeProps, unref, withCtx, createTextVNode, toDisplayString, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent, ssrRenderList } from 'vue/server-renderer';
 import '../nitro/nitro.mjs';
@@ -98,8 +98,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       (void 0).open("https://demo.gopanel.run", "_blank");
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UButton = _sfc_main$R;
-      const _component_UIcon = _sfc_main$W;
+      const _component_UButton = _sfc_main$S;
+      const _component_UIcon = _sfc_main$X;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "relative bg-white overflow-hidden selection:bg-blue-100" }, _attrs))}><div class="absolute inset-x-0 -top-20 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true"><div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#9089fc] to-[#3b82f6] opacity-10 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div></div><section class="max-w-[1400px] mx-auto px-6 pt-16 pb-16 lg:pb-24"><div class="mx-auto max-w-5xl text-center"><div class="mb-10 flex justify-center"><div class="relative rounded-full px-4 py-1.5 text-sm font-medium leading-6 text-blue-600 bg-blue-50 ring-1 ring-blue-500/20 hover:bg-blue-100 transition-colors flex items-center gap-2 cursor-pointer"><span class="flex h-2 w-2 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span> ${ssrInterpolate(_ctx.$t("panel.features.badge"))}</div></div><h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-6xl mb-8 leading-[1.1]">${ssrInterpolate(_ctx.$t("panel.features.titleA"))} <span class="text-blue-600">${ssrInterpolate(_ctx.$t("panel.features.titleB"))}</span> ${ssrInterpolate(_ctx.$t("panel.features.titleC"))}</h1><p class="mt-6 text-xl leading-8 text-gray-500 mb-12 max-w-4xl mx-auto">${ssrInterpolate(_ctx.$t("panel.features.subtitle"))}</p><div class="flex flex-col sm:flex-row items-center justify-center gap-4">`);
       _push(ssrRenderComponent(_component_UButton, {
         to: unref(localePath)("/"),

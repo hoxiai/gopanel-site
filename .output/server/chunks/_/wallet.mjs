@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import { g1 as getWebhookSubscriptionUrl, cH as getIntegrationToken, g2 as $fetch, g3 as refundEventId, b as db, u as users } from '../nitro/nitro.mjs';
+import { g3 as getWebhookSubscriptionUrl, cL as getIntegrationToken, g4 as $fetch, g5 as refundEventId, b as db, u as users } from '../nitro/nitro.mjs';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
@@ -172,7 +172,7 @@ async function creditCompensationInAINode(input) {
     direction: "credit",
     amount: input.amount,
     eventId: input.eventId,
-    type: "admin_recharge",
+    type: input.kind || "admin_recharge",
     sourceId: input.sourceId,
     remark: input.remark
   });

@@ -1,4 +1,4 @@
-import { H as useRoute, D as useLocaleRouter, by as useUserSession, u as useI18n, aw as _sfc_main$U, O as __nuxt_component_3$1, _ as _sfc_main$W } from './server.mjs';
+import { H as useRoute, D as useLocaleRouter, by as useUserSession, u as useI18n, aw as _sfc_main$V, O as __nuxt_component_3$1, _ as _sfc_main$X } from './server.mjs';
 import { defineComponent, computed, mergeProps, unref, withCtx, createVNode, toDisplayString, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate, ssrRenderList, ssrRenderSlot } from 'vue/server-renderer';
 import '../nitro/nitro.mjs';
@@ -102,9 +102,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       return (match == null ? void 0 : match.label) || t("panel.member.nav.dashboard");
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UAvatar = _sfc_main$U;
+      const _component_UAvatar = _sfc_main$V;
       const _component_NuxtLink = __nuxt_component_3$1;
-      const _component_UIcon = _sfc_main$W;
+      const _component_UIcon = _sfc_main$X;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "bg-gray-50" }, _attrs))}><div class="max-w-[1400px] mx-auto px-6 lg:px-10 py-8"><div class="flex flex-col gap-8 lg:flex-row"><aside class="w-full lg:w-60 lg:shrink-0"><div class="lg:sticky lg:top-24 space-y-4"><div class="rounded-2xl border border-gray-100 bg-white p-4"><div class="flex items-center gap-3">`);
       _push(ssrRenderComponent(_component_UAvatar, {
         src: userAvatar.value,

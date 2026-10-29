@@ -1,6 +1,6 @@
 import { computed, mergeProps, unref, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderAttr, ssrRenderClass, ssrRenderComponent, ssrRenderSlot } from 'vue/server-renderer';
-import { a1 as useAppConfig, a2 as useComponentUI, bj as useRuntimeConfig, a6 as tv, _ as _sfc_main$W } from './server.mjs';
+import { a1 as useAppConfig, a2 as useComponentUI, bj as useRuntimeConfig, a6 as tv, _ as _sfc_main$X } from './server.mjs';
 import '../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
@@ -104,7 +104,7 @@ const _sfc_main = {
       }, _attrs))}>`);
       if (__props.id && generate.value) {
         _push(`<a${ssrRenderAttr("href", `#${__props.id}`)} class="${ssrRenderClass(ui.value.link({ class: (_b = unref(uiProp)) == null ? void 0 : _b.link }))}"><span class="${ssrRenderClass(ui.value.leading({ class: (_c = unref(uiProp)) == null ? void 0 : _c.leading }))}">`);
-        _push(ssrRenderComponent(_sfc_main$W, {
+        _push(ssrRenderComponent(_sfc_main$X, {
           name: unref(appConfig).ui.icons.hash,
           class: ui.value.leadingIcon({ class: (_d = unref(uiProp)) == null ? void 0 : _d.leadingIcon })
         }, null, _parent));

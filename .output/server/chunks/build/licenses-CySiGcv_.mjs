@@ -1,4 +1,4 @@
-import { r as useSettings, u as useI18n, br as useSeoMeta, b as _sfc_main$v, i as _sfc_main$R, _ as _sfc_main$W } from './server.mjs';
+import { r as useSettings, u as useI18n, br as useSeoMeta, b as _sfc_main$w, i as _sfc_main$S, _ as _sfc_main$X } from './server.mjs';
 import { defineComponent, computed, ref, mergeProps, isRef, unref, withCtx, createTextVNode, toDisplayString, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent, ssrRenderClass } from 'vue/server-renderer';
 import '../nitro/nitro.mjs';
@@ -116,9 +116,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UInput = _sfc_main$v;
-      const _component_UButton = _sfc_main$R;
-      const _component_UIcon = _sfc_main$W;
+      const _component_UInput = _sfc_main$w;
+      const _component_UButton = _sfc_main$S;
+      const _component_UIcon = _sfc_main$X;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-screen bg-white selection:bg-blue-100" }, _attrs))}><section class="max-w-[1400px] mx-auto px-6 pt-16 pb-16 lg:pb-24"><div class="mx-auto max-w-4xl text-center"><div class="mb-8 flex justify-center"><div class="relative rounded-full px-4 py-1.5 text-sm font-medium leading-6 text-blue-600 bg-blue-50 ring-1 ring-blue-500/20 hover:bg-blue-100 transition-colors flex items-center gap-2">${ssrInterpolate(_ctx.$t("panel.licenses.badge"))}</div></div><h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-6xl mb-6 leading-[1.1]">${ssrInterpolate(_ctx.$t("panel.licenses.title"))}</h1><p class="text-lg text-gray-600 leading-relaxed">${ssrInterpolate(_ctx.$t("panel.licenses.subtitle"))}</p></div></section><section class="bg-gray-50 border-y border-gray-100"><div class="max-w-[1400px] mx-auto px-6 py-16"><div class="grid grid-cols-1 lg:grid-cols-3 gap-10"><div class="lg:col-span-1"><div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 sticky top-24"><h2 class="text-xl font-bold text-gray-900 mb-2">${ssrInterpolate(_ctx.$t("panel.licenses.query"))}</h2><p class="text-sm text-gray-500 mb-8">${ssrInterpolate(_ctx.$t("panel.licenses.queryDesc"))}</p><div class="space-y-4"><div><div class="text-sm font-semibold text-gray-700 mb-2">${ssrInterpolate(_ctx.$t("panel.licenses.orderId"))}</div>`);
       _push(ssrRenderComponent(_component_UInput, {
         modelValue: unref(orderId),

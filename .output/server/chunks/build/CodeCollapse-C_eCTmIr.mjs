@@ -1,6 +1,6 @@
 import { useModel, computed, mergeProps, unref, mergeModels, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderSlot, ssrRenderClass, ssrRenderComponent } from 'vue/server-renderer';
-import { ao as useLocale, a1 as useAppConfig, a2 as useComponentUI, a6 as tv, i as _sfc_main$R } from './server.mjs';
+import { ao as useLocale, a1 as useAppConfig, a2 as useComponentUI, a6 as tv, i as _sfc_main$S } from './server.mjs';
 import '../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
@@ -116,7 +116,7 @@ const _sfc_main = {
       }, _attrs))}>`);
       ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
       _push(`<div class="${ssrRenderClass(ui.value.footer({ class: (_b = unref(uiProp)) == null ? void 0 : _b.footer }))}">`);
-      _push(ssrRenderComponent(_sfc_main$R, {
+      _push(ssrRenderComponent(_sfc_main$S, {
         icon: __props.icon || unref(appConfig).ui.icons.chevronDown,
         color: "neutral",
         variant: "outline",

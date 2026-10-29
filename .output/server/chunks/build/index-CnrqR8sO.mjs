@@ -1,4 +1,4 @@
-import { D as useLocaleRouter, u as useI18n, br as useSeoMeta, bs as useLocalizedProduct, y as useFetch, bx as useCollectionPageJsonLd, i as _sfc_main$R, O as __nuxt_component_3$1, _ as _sfc_main$W, k as _sfc_main$M, bv as __nuxt_component_4$2 } from './server.mjs';
+import { D as useLocaleRouter, u as useI18n, br as useSeoMeta, bs as useLocalizedProduct, y as useFetch, bx as useCollectionPageJsonLd, i as _sfc_main$S, O as __nuxt_component_3$1, _ as _sfc_main$X, k as _sfc_main$N, bv as __nuxt_component_4$2 } from './server.mjs';
 import { defineComponent, computed, mergeProps, unref, withCtx, createTextVNode, toDisplayString, createVNode, openBlock, createBlock, Fragment, renderList, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent, ssrRenderList, ssrRenderClass } from 'vue/server-renderer';
 import '../nitro/nitro.mjs';
@@ -114,10 +114,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UButton = _sfc_main$R;
+      const _component_UButton = _sfc_main$S;
       const _component_NuxtLink = __nuxt_component_3$1;
-      const _component_UIcon = _sfc_main$W;
-      const _component_UBadge = _sfc_main$M;
+      const _component_UIcon = _sfc_main$X;
+      const _component_UBadge = _sfc_main$N;
       const _component_ProductPrice = __nuxt_component_4$2;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-screen bg-gray-50 py-16 relative overflow-hidden" }, _attrs))}><div class="max-w-7xl mx-auto px-6 relative z-10"><div class="mb-12 text-center"><h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-4">${ssrInterpolate(_ctx.$t("panel.products.title"))}</h1><p class="text-gray-600 text-lg max-w-2xl mx-auto">${ssrInterpolate(_ctx.$t("panel.products.subtitle"))}</p><div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">`);
       _push(ssrRenderComponent(_component_UButton, {

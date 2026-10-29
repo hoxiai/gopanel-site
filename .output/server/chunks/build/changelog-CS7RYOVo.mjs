@@ -1,4 +1,4 @@
-import { D as useLocaleRouter, u as useI18n, br as useSeoMeta, d as useFormatTime, y as useFetch, i as _sfc_main$S, _ as _sfc_main$X } from './server.mjs';
+import { D as useLocaleRouter, u as useI18n, br as useSeoMeta, d as useFormatTime, y as useFetch, i as _sfc_main$T, _ as _sfc_main$Y } from './server.mjs';
 import { defineComponent, ref, computed, watch, reactive, mergeProps, unref, withCtx, createTextVNode, toDisplayString, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent, ssrRenderList } from 'vue/server-renderer';
 import '../nitro/nitro.mjs';
@@ -134,8 +134,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       return;
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UButton = _sfc_main$S;
-      const _component_UIcon = _sfc_main$X;
+      const _component_UButton = _sfc_main$T;
+      const _component_UIcon = _sfc_main$Y;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-screen bg-white selection:bg-blue-100" }, _attrs))}><section class="max-w-[1400px] mx-auto px-6 pt-16 pb-10 lg:pb-16"><div class="mx-auto max-w-4xl text-center"><div class="mb-8 flex justify-center"><div class="relative rounded-full px-4 py-1.5 text-sm font-medium leading-6 text-blue-600 bg-blue-50 ring-1 ring-blue-500/20 hover:bg-blue-100 transition-colors flex items-center gap-2">${ssrInterpolate(_ctx.$t("panel.changelog.badge"))}</div></div><h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-6xl mb-6 leading-[1.1]">${ssrInterpolate(_ctx.$t("panel.changelog.title"))}</h1><p class="text-lg text-gray-600 leading-relaxed">${ssrInterpolate(_ctx.$t("panel.changelog.subtitle"))}</p></div></section><section class="bg-gray-50 border-y border-gray-100"><div class="max-w-[1400px] mx-auto px-6 py-16"><div class="grid grid-cols-1 lg:grid-cols-12 gap-10"><aside class="lg:col-span-4"><div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 sticky top-24"><div class="text-lg font-bold text-gray-900 mb-2">${ssrInterpolate(_ctx.$t("panel.changelog.noteTitle"))}</div><div class="text-sm text-gray-600 leading-relaxed">${ssrInterpolate(_ctx.$t("panel.changelog.notePrefix"))} <span class="font-mono text-xs px-2 py-0.5 rounded bg-gray-50 border border-gray-100">posts.type = changelog</span> ${ssrInterpolate(_ctx.$t("panel.changelog.noteSuffix"))}</div><div class="mt-8 pt-6 border-t border-gray-100"><div class="text-sm font-bold text-gray-900 mb-3">${ssrInterpolate(_ctx.$t("panel.changelog.shortcuts"))}</div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">`);
       _push(ssrRenderComponent(_component_UButton, {
         to: unref(localePath)("/docs"),

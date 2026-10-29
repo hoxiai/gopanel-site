@@ -1,4 +1,4 @@
-import { d as defineEventHandler, $ as resolveClientIp, a0 as checkIpRateLimit, e as createError, cG as createCaptchaChallengeToken, cH as generateCaptchaBackgroundWithSlot, cI as generateCaptchaPiece, cJ as PUZZLE_PATH, cK as CAPTCHA_BACKGROUNDS } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, $ as resolveClientIp, a0 as checkIpRateLimit, e as createError, cH as createCaptchaChallengeToken, cI as generateCaptchaBackgroundWithSlot, cJ as generateCaptchaPiece, cK as PUZZLE_PATH, cL as CAPTCHA_BACKGROUNDS } from '../../../../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';

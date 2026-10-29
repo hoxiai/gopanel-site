@@ -1,5 +1,5 @@
 import { _ as __nuxt_component_0 } from './EmailVerificationBanner-Ca1zQsBp.mjs';
-import { r as useSettings, D as useLocaleRouter, bq as useCustomerAuth, p as useRouter, u as useI18n, O as __nuxt_component_3$1, _ as _sfc_main$X, bz as __nuxt_component_2$2 } from './server.mjs';
+import { r as useSettings, D as useLocaleRouter, bq as useCustomerAuth, p as useRouter, u as useI18n, O as __nuxt_component_3$1, _ as _sfc_main$Y, bz as __nuxt_component_2$3 } from './server.mjs';
 import { _ as _sfc_main$1 } from './DropdownMenu-Cf2yW8HY.mjs';
 import { defineComponent, ref, computed, mergeProps, unref, withCtx, createVNode, createTextVNode, toDisplayString, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrRenderClass, ssrRenderAttr, ssrInterpolate, ssrRenderStyle, ssrRenderList, ssrRenderSlot } from 'vue/server-renderer';
@@ -2049,8 +2049,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       const _component_EmailVerificationBanner = __nuxt_component_0;
       const _component_NuxtLink = __nuxt_component_3$1;
       const _component_UDropdownMenu = _sfc_main$1;
-      const _component_UIcon = _sfc_main$X;
-      const _component_ClientOnly = __nuxt_component_2$2;
+      const _component_UIcon = _sfc_main$Y;
+      const _component_ClientOnly = __nuxt_component_2$3;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-screen bg-white text-gray-900 flex flex-col font-sans selection:bg-blue-100" }, _attrs))}>`);
       _push(ssrRenderComponent(_component_EmailVerificationBanner, null, null, _parent));
       _push(`<div>${(_a = unref(getSetting)("site_notice")) != null ? _a : ""}</div><header class="${ssrRenderClass([{ "shadow-sm": unref(isScrolled) }, "sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 transition-all duration-300"])}"><nav class="max-w-[1400px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">`);

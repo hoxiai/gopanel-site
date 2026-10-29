@@ -1,10 +1,10 @@
-import { u as useI18n, e as useToast, D as useLocaleRouter, q as useConfirm, r as useSettings, f as useAdminPermissions, i as _sfc_main$S, k as _sfc_main$N, _ as _sfc_main$X, b as _sfc_main$w, c as _sfc_main$s } from './server.mjs';
+import { u as useI18n, e as useToast, D as useLocaleRouter, q as useConfirm, r as useSettings, f as useAdminPermissions, i as _sfc_main$T, k as _sfc_main$O, _ as _sfc_main$Y, b as _sfc_main$A, c as _sfc_main$s } from './server.mjs';
 import { _ as _sfc_main$1 } from './Switch-CHpGzJxp.mjs';
 import { _ as _sfc_main$2 } from './SelectMenu-BBhjXnJu.mjs';
 import { defineComponent, defineAsyncComponent, computed, ref, reactive, watch, mergeProps, withCtx, createTextVNode, toDisplayString, unref, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate, ssrRenderClass, ssrRenderList, ssrIncludeBooleanAttr, ssrRenderAttr } from 'vue/server-renderer';
 import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router';
-import { gv as localePathForSeo } from '../nitro/nitro.mjs';
+import { gw as localePathForSeo } from '../nitro/nitro.mjs';
 import { G as GeoCitationFieldsCard, a as GeoSeoInspectorCard } from './GeoSeoInspectorCard-BbDxsfN7.mjs';
 import { u as useImageProxy } from './useImageProxy-DBzzMBty.mjs';
 
@@ -404,10 +404,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       return true;
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UButton = _sfc_main$S;
-      const _component_UBadge = _sfc_main$N;
-      const _component_UIcon = _sfc_main$X;
-      const _component_UInput = _sfc_main$w;
+      const _component_UButton = _sfc_main$T;
+      const _component_UBadge = _sfc_main$O;
+      const _component_UIcon = _sfc_main$Y;
+      const _component_UInput = _sfc_main$A;
       const _component_UTextarea = _sfc_main$s;
       const _component_USwitch = _sfc_main$1;
       const _component_USelectMenu = _sfc_main$2;

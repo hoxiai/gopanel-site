@@ -1,6 +1,6 @@
 import { ssrRenderComponent, ssrRenderVNode, ssrInterpolate, ssrRenderSlot } from 'vue/server-renderer';
 import { defineComponent, withAsyncContext, computed, shallowRef, watch, withCtx, createVNode, resolveDynamicComponent, openBlock, createBlock, unref, createTextVNode, toDisplayString, useSSRContext } from 'vue';
-import { u as useI18n, o as navigateTo, r as useSettings, b9 as usePageFailureLog, ba as useRequestEvent, bc as themePageModules, bb as corePageModules, bd as useActiveTheme, S as PageRequestError, _ as _sfc_main$X, i as _sfc_main$S, be as __nuxt_component_4$1, bf as isPathLocaleAllowed, M as setResponseStatus } from './server.mjs';
+import { u as useI18n, o as navigateTo, r as useSettings, b9 as usePageFailureLog, ba as useRequestEvent, bc as themePageModules, bb as corePageModules, bd as useActiveTheme, S as PageRequestError, _ as _sfc_main$Y, i as _sfc_main$T, be as __nuxt_component_4$1, bf as isPathLocaleAllowed, M as setResponseStatus } from './server.mjs';
 import { useRoute } from 'vue-router';
 import '../nitro/nitro.mjs';
 import 'drizzle-orm';
@@ -271,8 +271,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_NuxtErrorBoundary = _sfc_main$1;
       const _component_PageRequestError = PageRequestError;
-      const _component_UIcon = _sfc_main$X;
-      const _component_UButton = _sfc_main$S;
+      const _component_UIcon = _sfc_main$Y;
+      const _component_UButton = _sfc_main$T;
       const _component_ErrorDiagnostics = __nuxt_component_4$1;
       _push(ssrRenderComponent(_component_NuxtErrorBoundary, _attrs, {
         error: withCtx(({ error, clearError }, _push2, _parent2, _scopeId) => {

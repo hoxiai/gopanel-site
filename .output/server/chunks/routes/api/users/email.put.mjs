@@ -1,4 +1,4 @@
-import { d as defineEventHandler, at as requireTrustedRequestOrigin, c as getRequestLocale, cX as requireUserSession, e as createError, r as readBody, cr as validateEmail, b as db, u as users, a3 as verifyPassword, cs as normalizeEmail, d4 as getEmailVerifySendCooldown, ct as revokeEmailVerifyTokens, d5 as issueEmailVerification, cY as overwriteSessionUser } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, at as requireTrustedRequestOrigin, c as getRequestLocale, cY as requireUserSession, e as createError, r as readBody, cs as validateEmail, b as db, u as users, a3 as verifyPassword, ct as normalizeEmail, d5 as getEmailVerifySendCooldown, cu as revokeEmailVerifyTokens, d6 as issueEmailVerification, cZ as overwriteSessionUser } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';

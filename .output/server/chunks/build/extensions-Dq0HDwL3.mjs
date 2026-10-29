@@ -1,4 +1,4 @@
-import { e as useToast, u as useI18n, f as useAdminPermissions, r as useSettings, s as useRequestFetch, t as useAsyncData, _ as _sfc_main$X, v as _sfc_main$q, i as _sfc_main$S, k as _sfc_main$N, o as navigateTo } from './server.mjs';
+import { e as useToast, u as useI18n, f as useAdminPermissions, r as useSettings, s as useRequestFetch, t as useAsyncData, _ as _sfc_main$Y, v as _sfc_main$q, i as _sfc_main$T, k as _sfc_main$O, o as navigateTo } from './server.mjs';
 import { _ as __nuxt_component_2, i as isSettingsTabId } from './Nav-BfctuFgG.mjs';
 import { _ as _sfc_main$1 } from './Switch-CHpGzJxp.mjs';
 import { defineComponent, ref, withAsyncContext, computed, watch, mergeProps, unref, withCtx, createTextVNode, toDisplayString, createVNode, useSSRContext } from 'vue';
@@ -159,11 +159,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UIcon = _sfc_main$X;
+      const _component_UIcon = _sfc_main$Y;
       const _component_AdminSettingsNav = __nuxt_component_2;
       const _component_UAlert = _sfc_main$q;
-      const _component_UButton = _sfc_main$S;
-      const _component_UBadge = _sfc_main$N;
+      const _component_UButton = _sfc_main$T;
+      const _component_UBadge = _sfc_main$O;
       const _component_USwitch = _sfc_main$1;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "mx-auto pb-12" }, _attrs))}><div class="mb-8"><h1 class="flex items-center gap-3 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">`);
       _push(ssrRenderComponent(_component_UIcon, {

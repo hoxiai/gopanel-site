@@ -1,9 +1,9 @@
-import { u as useI18n, e as useToast, d as useFormatTime, q as useConfirm, D as useLocaleRouter, r as useSettings, f as useAdminPermissions, x as usePagination, y as useFetch, o as navigateTo, k as _sfc_main$N, i as _sfc_main$S, _ as _sfc_main$X, b as _sfc_main$w, l as _sfc_main$v, j as _sfc_main$t, z as _sfc_main$z } from './server.mjs';
+import { u as useI18n, e as useToast, d as useFormatTime, q as useConfirm, D as useLocaleRouter, r as useSettings, f as useAdminPermissions, x as usePagination, y as useFetch, o as navigateTo, k as _sfc_main$O, i as _sfc_main$T, _ as _sfc_main$Y, b as _sfc_main$A, l as _sfc_main$v, j as _sfc_main$t, z as _sfc_main$y } from './server.mjs';
 import { _ as _sfc_main$1 } from './DropdownMenu-Cf2yW8HY.mjs';
 import { _ as _sfc_main$2 } from './Switch-CHpGzJxp.mjs';
 import { defineComponent, computed, ref, watch, mergeProps, withCtx, createTextVNode, toDisplayString, unref, createVNode, openBlock, createBlock, createCommentVNode, withModifiers, isRef, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent, ssrRenderClass, ssrRenderAttr } from 'vue/server-renderer';
-import { gv as localePathForSeo } from '../nitro/nitro.mjs';
+import { gw as localePathForSeo } from '../nitro/nitro.mjs';
 import { u as useImageProxy } from './useImageProxy-DBzzMBty.mjs';
 import 'vue-router';
 import '@iconify/vue';
@@ -354,15 +354,15 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UBadge = _sfc_main$N;
-      const _component_UButton = _sfc_main$S;
+      const _component_UBadge = _sfc_main$O;
+      const _component_UButton = _sfc_main$T;
       const _component_UDropdownMenu = _sfc_main$1;
-      const _component_UIcon = _sfc_main$X;
-      const _component_UInput = _sfc_main$w;
+      const _component_UIcon = _sfc_main$Y;
+      const _component_UInput = _sfc_main$A;
       const _component_USelect = _sfc_main$v;
       const _component_UTable = _sfc_main$t;
       const _component_USwitch = _sfc_main$2;
-      const _component_UPagination = _sfc_main$z;
+      const _component_UPagination = _sfc_main$y;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "h-[calc(100vh-7rem)] flex flex-col space-y-4" }, _attrs))}><div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 shrink-0"><div><div class="flex items-center gap-2"><h1 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">${ssrInterpolate(_ctx.$t("admin.posts.title"))}</h1>`);
       _push(ssrRenderComponent(_component_UBadge, {
         color: "primary",

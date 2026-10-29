@@ -1,4 +1,4 @@
-import { E as useProductPricing, H as useRoute, D as useLocaleRouter, bs as useLocalizedProduct, y as useFetch, bt as usePageResourceState, bu as useProductJsonLd, br as useSeoMeta, S as PageRequestError, O as __nuxt_component_3$1, _ as _sfc_main$X, k as _sfc_main$N, bv as __nuxt_component_4$2, bw as __nuxt_component_5$1, i as _sfc_main$S } from './server.mjs';
+import { E as useProductPricing, H as useRoute, D as useLocaleRouter, bs as useLocalizedProduct, y as useFetch, bt as usePageResourceState, bu as useProductJsonLd, br as useSeoMeta, S as PageRequestError, O as __nuxt_component_3$1, _ as _sfc_main$Y, k as _sfc_main$O, bv as __nuxt_component_4$2, bw as __nuxt_component_5$1, i as _sfc_main$T } from './server.mjs';
 import { defineComponent, computed, mergeProps, unref, withCtx, createVNode, createTextVNode, toDisplayString, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate, ssrRenderList, ssrRenderClass } from 'vue/server-renderer';
 import '../nitro/nitro.mjs';
@@ -117,11 +117,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       var _a, _b, _c;
       const _component_PageRequestError = PageRequestError;
       const _component_NuxtLink = __nuxt_component_3$1;
-      const _component_UIcon = _sfc_main$X;
-      const _component_UBadge = _sfc_main$N;
+      const _component_UIcon = _sfc_main$Y;
+      const _component_UBadge = _sfc_main$O;
       const _component_ProductPrice = __nuxt_component_4$2;
       const _component_PaymentModal = __nuxt_component_5$1;
-      const _component_UButton = _sfc_main$S;
+      const _component_UButton = _sfc_main$T;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-screen bg-gray-50 py-16 relative" }, _attrs))}><div class="max-w-6xl mx-auto px-6">`);
       if (unref(pending)) {
         _push(`<div class="animate-pulse flex flex-col lg:flex-row gap-8"><div class="lg:col-span-2 flex-1 space-y-6"><div class="h-8 w-32 bg-gray-200 rounded"></div><div class="h-64 bg-white rounded-3xl border border-gray-100"></div><div class="h-48 bg-white rounded-3xl border border-gray-100"></div></div><div class="lg:col-span-1 w-full lg:w-96 shrink-0 h-96 bg-white rounded-3xl border border-gray-100"></div></div>`);

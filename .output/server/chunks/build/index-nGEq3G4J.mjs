@@ -1,4 +1,4 @@
-import { D as useLocaleRouter, r as useSettings, br as useSeoMeta, i as _sfc_main$S, _ as _sfc_main$X } from './server.mjs';
+import { D as useLocaleRouter, r as useSettings, br as useSeoMeta, i as _sfc_main$T, _ as _sfc_main$Y } from './server.mjs';
 import { defineComponent, computed, ref, mergeProps, withCtx, createTextVNode, toDisplayString, unref, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent, ssrRenderAttr, ssrRenderList } from 'vue/server-renderer';
 import '../nitro/nitro.mjs';
@@ -91,8 +91,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       return;
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UButton = _sfc_main$S;
-      const _component_UIcon = _sfc_main$X;
+      const _component_UButton = _sfc_main$T;
+      const _component_UIcon = _sfc_main$Y;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "relative bg-white overflow-hidden selection:bg-blue-100" }, _attrs))}><div class="absolute inset-x-0 -top-20 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true"><div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#9089fc] to-[#3b82f6] opacity-10 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div></div><section class="max-w-[1400px] mx-auto px-6 pt-16 pb-16 text-center lg:pb-24 relative overflow-hidden"><div class="absolute inset-0 -z-10 pointer-events-none"><div class="absolute inset-0 bg-gradient-to-b from-blue-50/80 via-white to-white"></div><div class="absolute -left-32 -top-28 w-[620px] h-[620px] bg-blue-500/15 rounded-full blur-3xl"></div><div class="absolute -right-32 top-8 w-[620px] h-[620px] bg-purple-500/15 rounded-full blur-3xl"></div><div class="absolute left-1/2 top-24 -translate-x-1/2 w-[880px] h-[560px] bg-gradient-to-tr from-blue-500/0 via-blue-500/12 to-purple-500/0 blur-2xl"></div></div><div class="mx-auto max-w-4xl"><div class="mb-10 flex justify-center"><div class="relative rounded-full px-4 py-1.5 text-sm font-medium leading-6 text-blue-600 bg-blue-50 ring-1 ring-blue-500/20 hover:bg-blue-100 transition-colors flex items-center gap-2 cursor-pointer"><span class="flex h-2 w-2 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span> ${ssrInterpolate(_ctx.$t("panel.home.badge"))}</div></div><h1 class="text-5xl font-extrabold tracking-tight text-gray-900 sm:text-7xl mb-8 leading-[1.1]">${ssrInterpolate(_ctx.$t("panel.home.title"))}</h1><p class="mt-6 text-xl leading-8 text-gray-500 mb-12 max-w-3xl mx-auto">${ssrInterpolate(_ctx.$t("panel.home.subtitle"))}</p><div class="flex flex-col sm:flex-row items-center justify-center gap-4">`);
       _push(ssrRenderComponent(_component_UButton, {
         size: "xl",

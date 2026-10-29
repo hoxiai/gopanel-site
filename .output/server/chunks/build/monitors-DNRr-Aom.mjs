@@ -1,4 +1,4 @@
-import { u as useI18n, d as useFormatTime, U as useRequestURL, br as useSeoMeta, i as _sfc_main$S, _ as _sfc_main$X, n as _sfc_main$H } from './server.mjs';
+import { u as useI18n, d as useFormatTime, U as useRequestURL, br as useSeoMeta, i as _sfc_main$T, _ as _sfc_main$Y, n as _sfc_main$I } from './server.mjs';
 import { defineComponent, ref, reactive, computed, mergeProps, withCtx, createTextVNode, toDisplayString, unref, createVNode, withDirectives, vModelText, openBlock, createBlock, createCommentVNode, Fragment, renderList, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent, ssrRenderList, ssrRenderClass, ssrRenderAttr } from 'vue/server-renderer';
 import '../nitro/nitro.mjs';
@@ -205,9 +205,9 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       robots: "noindex, nofollow"
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UButton = _sfc_main$S;
-      const _component_UIcon = _sfc_main$X;
-      const _component_UModal = _sfc_main$H;
+      const _component_UButton = _sfc_main$T;
+      const _component_UIcon = _sfc_main$Y;
+      const _component_UModal = _sfc_main$I;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "space-y-6" }, _attrs))}><div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><p class="text-sm text-gray-500">${ssrInterpolate(_ctx.$t("panel.monitor.usage", { used: used.value, limit: limit.value }))}</p><div class="flex items-center gap-2">`);
       _push(ssrRenderComponent(_component_UButton, {
         variant: "soft",

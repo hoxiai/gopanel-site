@@ -1,6 +1,6 @@
 import { computed, mergeProps, unref, withCtx, renderSlot, createVNode, toDisplayString, useSlots, openBlock, createBlock, createCommentVNode, useSSRContext } from 'vue';
 import { ssrRenderComponent, ssrRenderSlot, ssrRenderClass, ssrInterpolate } from 'vue/server-renderer';
-import { ao as useLocale, a1 as useAppConfig, a2 as useComponentUI, a6 as tv, bh as transformUI, _ as _sfc_main$X, a3 as useForwardPropsEmits, a4 as reactivePick } from './server.mjs';
+import { ao as useLocale, a1 as useAppConfig, a2 as useComponentUI, a6 as tv, bh as transformUI, _ as _sfc_main$Y, a3 as useForwardPropsEmits, a4 as reactivePick } from './server.mjs';
 import { C as CollapsibleRoot_default, a as CollapsibleTrigger_default, b as CollapsibleContent_default } from './CollapsibleTrigger-ByU-PT25.mjs';
 import '../nitro/nitro.mjs';
 import 'drizzle-orm';
@@ -210,7 +210,7 @@ const _sfc_main = {
           var _a, _b, _c, _d, _e, _f;
           if (_push2) {
             _push2(`<button class="${ssrRenderClass(ui.value.trigger({ class: (_a = unref(uiProp)) == null ? void 0 : _a.trigger }))}"${_scopeId}>`);
-            _push2(ssrRenderComponent(_sfc_main$X, {
+            _push2(ssrRenderComponent(_sfc_main$Y, {
               name: __props.icon || unref(appConfig).ui.icons.chevronDown,
               class: ui.value.triggerIcon({ class: (_b = unref(uiProp)) == null ? void 0 : _b.triggerIcon })
             }, null, _parent2, _scopeId));
@@ -220,7 +220,7 @@ const _sfc_main = {
               createVNode("button", {
                 class: ui.value.trigger({ class: (_d = unref(uiProp)) == null ? void 0 : _d.trigger })
               }, [
-                createVNode(_sfc_main$X, {
+                createVNode(_sfc_main$Y, {
                   name: __props.icon || unref(appConfig).ui.icons.chevronDown,
                   class: ui.value.triggerIcon({ class: (_e = unref(uiProp)) == null ? void 0 : _e.triggerIcon })
                 }, null, 8, ["name", "class"]),

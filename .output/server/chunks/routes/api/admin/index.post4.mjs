@@ -1,4 +1,4 @@
-import { d as defineEventHandler, r as readBody, e as createError, b8 as createRedeemCodes, b6 as RedeemError } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, r as readBody, D as getConfiguredTimezone, b8 as parseDateTimeInTimezone, e as createError, b9 as createRedeemCodes, b6 as RedeemError } from '../../../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -46,8 +46,9 @@ const index_post = defineEventHandler(async (event) => {
   const expiresRaw = body == null ? void 0 : body.expiresAt;
   let expiresAt = null;
   if (expiresRaw) {
-    expiresAt = new Date(expiresRaw);
-    if (Number.isNaN(expiresAt.getTime())) {
+    const tz = await getConfiguredTimezone();
+    expiresAt = parseDateTimeInTimezone(expiresRaw, tz);
+    if (!expiresAt || Number.isNaN(expiresAt.getTime())) {
       throw createError({ statusCode: 400, statusMessage: "\u6709\u6548\u671F\u4E0D\u662F\u5408\u6CD5\u65F6\u95F4" });
     }
   }

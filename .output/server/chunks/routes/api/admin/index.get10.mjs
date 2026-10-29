@@ -1,5 +1,5 @@
 import { desc } from 'drizzle-orm';
-import { d as defineEventHandler, g as getQuery, bc as normalizeAppKey, bd as normalizeReleaseChannel, b as db, be as releases, bf as mapDbRowToReleaseEntry, bg as compareSemVer, bh as listReleaseApps } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, g as getQuery, bd as normalizeAppKey, be as normalizeReleaseChannel, b as db, bf as releases, bg as mapDbRowToReleaseEntry, bh as compareSemVer, bi as listReleaseApps } from '../../../nitro/nitro.mjs';
 import 'node:crypto';
 import 'crypto';
 import 'fs';

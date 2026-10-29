@@ -1,4 +1,4 @@
-import { b as db, fe as ensureHoxiWorkMcpToolsRegistered, ff as ensureRewardOutboxWorkerStarted, fg as stopRewardOutboxWorker } from '../nitro/nitro.mjs';
+import { b as db, ff as ensureHoxiWorkMcpToolsRegistered, fg as ensureRewardOutboxWorkerStarted, fh as stopRewardOutboxWorker } from '../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';

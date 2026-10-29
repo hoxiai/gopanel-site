@@ -1,4 +1,4 @@
-import { p as useRouter, u as useI18n, d as useFormatTime, H as useRoute, y as useFetch, x as usePagination, q as useConfirm, f as useAdminPermissions, i as _sfc_main$S, S as PageRequestError, _ as _sfc_main$X, k as _sfc_main$N, G as _sfc_main$p, b as _sfc_main$w, z as _sfc_main$z, e as useToast } from './server.mjs';
+import { p as useRouter, u as useI18n, d as useFormatTime, H as useRoute, y as useFetch, x as usePagination, q as useConfirm, f as useAdminPermissions, i as _sfc_main$T, S as PageRequestError, _ as _sfc_main$Y, k as _sfc_main$O, G as _sfc_main$p, b as _sfc_main$A, z as _sfc_main$y, e as useToast } from './server.mjs';
 import { _ as _sfc_main$1 } from './Tooltip-D5fmsta9.mjs';
 import { _ as __nuxt_component_7 } from './FullScreenModal-Dpul9c_Q.mjs';
 import { g as getVisitorStatsCopy, a as getSafeExternalUrl, f as formatExternalUrlLabel, b as getSourceTypeColor, c as formatVisitorLocation, d as getSafeInternalPath, e as formatRegionCity, _ as __nuxt_component_5, h as __nuxt_component_6, i as formatStatsNumber, j as getStatsTrendWidth, k as formatStatsPercent, s as shortenVisitorId } from './visitorStatsCopy-kJ7wc3Fj.mjs';
@@ -564,15 +564,15 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
     }
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UButton = _sfc_main$S;
+      const _component_UButton = _sfc_main$T;
       const _component_PageRequestError = PageRequestError;
       const _component_UTooltip = _sfc_main$1;
-      const _component_UIcon = _sfc_main$X;
-      const _component_UBadge = _sfc_main$N;
+      const _component_UIcon = _sfc_main$Y;
+      const _component_UBadge = _sfc_main$O;
       const _component_UCard = _sfc_main$p;
-      const _component_UInput = _sfc_main$w;
+      const _component_UInput = _sfc_main$A;
       const _component_FullScreenModal = __nuxt_component_7;
-      const _component_UPagination = _sfc_main$z;
+      const _component_UPagination = _sfc_main$y;
       const _component_AdminStatsVisitorDetailModal = __nuxt_component_5;
       const _component_AdminStatsIpDetailModal = __nuxt_component_6;
       _push(`<!--[--><div class="min-h-[calc(100vh-8rem)]"><div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between mb-8"><div><h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">${ssrInterpolate(unref(t)("admin.stats.title"))}</h1><p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">${ssrInterpolate(unref(t)("admin.stats.subtitle"))}</p></div><div class="flex flex-wrap items-center gap-2"><div class="flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#121214] p-1"><!--[-->`);

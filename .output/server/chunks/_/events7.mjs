@@ -1,4 +1,4 @@
-import { fi as evaluateMonitors } from '../nitro/nitro.mjs';
+import { fj as evaluateMonitors } from '../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';

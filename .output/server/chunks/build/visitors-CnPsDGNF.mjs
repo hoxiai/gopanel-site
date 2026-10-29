@@ -1,4 +1,4 @@
-import { H as useRoute, p as useRouter, u as useI18n, d as useFormatTime, x as usePagination, y as useFetch, i as _sfc_main$S, _ as _sfc_main$X, k as _sfc_main$N, S as PageRequestError, z as _sfc_main$z } from './server.mjs';
+import { H as useRoute, p as useRouter, u as useI18n, d as useFormatTime, x as usePagination, y as useFetch, i as _sfc_main$T, _ as _sfc_main$Y, k as _sfc_main$O, S as PageRequestError, z as _sfc_main$y } from './server.mjs';
 import { g as getVisitorStatsCopy, b as getSourceTypeColor, f as formatExternalUrlLabel, d as getSafeInternalPath, c as formatVisitorLocation, a as getSafeExternalUrl, l as getInternalReferrerPath, _ as __nuxt_component_5, h as __nuxt_component_6, i as formatStatsNumber, s as shortenVisitorId } from './visitorStatsCopy-kJ7wc3Fj.mjs';
 import { defineComponent, computed, ref, watch, mergeProps, unref, withCtx, createTextVNode, toDisplayString, createVNode, isRef, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate, ssrRenderList, ssrRenderClass, ssrRenderAttr, ssrIncludeBooleanAttr, ssrLooseContain, ssrLooseEqual } from 'vue/server-renderer';
@@ -381,11 +381,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       return value;
     }
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UButton = _sfc_main$S;
-      const _component_UIcon = _sfc_main$X;
-      const _component_UBadge = _sfc_main$N;
+      const _component_UButton = _sfc_main$T;
+      const _component_UIcon = _sfc_main$Y;
+      const _component_UBadge = _sfc_main$O;
       const _component_PageRequestError = PageRequestError;
-      const _component_UPagination = _sfc_main$z;
+      const _component_UPagination = _sfc_main$y;
       const _component_AdminStatsVisitorDetailModal = __nuxt_component_5;
       const _component_AdminStatsIpDetailModal = __nuxt_component_6;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-[calc(100vh-8rem)]" }, _attrs))}><div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4"><div class="flex flex-wrap items-center gap-2.5">`);

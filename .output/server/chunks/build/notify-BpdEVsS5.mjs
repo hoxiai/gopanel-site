@@ -1,4 +1,4 @@
-import { u as useI18n, U as useRequestURL, br as useSeoMeta, i as _sfc_main$S, n as _sfc_main$H } from './server.mjs';
+import { u as useI18n, U as useRequestURL, br as useSeoMeta, i as _sfc_main$T, n as _sfc_main$I } from './server.mjs';
 import { defineComponent, ref, reactive, computed, mergeProps, withCtx, createTextVNode, toDisplayString, createVNode, openBlock, createBlock, Fragment, renderList, createCommentVNode, withDirectives, vModelText, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrIncludeBooleanAttr, ssrRenderStyle, ssrRenderComponent, ssrRenderList, ssrRenderClass, ssrRenderAttr } from 'vue/server-renderer';
 import '../nitro/nitro.mjs';
@@ -192,8 +192,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       robots: "noindex, nofollow"
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UButton = _sfc_main$S;
-      const _component_UModal = _sfc_main$H;
+      const _component_UButton = _sfc_main$T;
+      const _component_UModal = _sfc_main$I;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "space-y-6" }, _attrs))}>`);
       if (error.value) {
         _push(`<div class="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-600"><span>${ssrInterpolate(error.value)}</span><button type="button" class="ml-2 font-semibold underline">${ssrInterpolate(_ctx.$t("panel.notify.retry"))}</button></div>`);

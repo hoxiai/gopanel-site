@@ -1,4 +1,4 @@
-import { u as useI18n, e as useToast, d as useFormatTime, F as useCurrencyFormat, r as useSettings, f as useAdminPermissions, y as useFetch, i as _sfc_main$S, _ as _sfc_main$X, k as _sfc_main$N, b as _sfc_main$w, l as _sfc_main$v, j as _sfc_main$t, a as _sfc_main$x, n as _sfc_main$H, c as _sfc_main$s } from './server.mjs';
+import { u as useI18n, e as useToast, d as useFormatTime, F as useCurrencyFormat, r as useSettings, f as useAdminPermissions, y as useFetch, i as _sfc_main$T, _ as _sfc_main$Y, k as _sfc_main$O, b as _sfc_main$A, l as _sfc_main$v, j as _sfc_main$t, a as _sfc_main$w, n as _sfc_main$I, c as _sfc_main$s } from './server.mjs';
 import { _ as _sfc_main$1 } from './Switch-CHpGzJxp.mjs';
 import { defineComponent, withAsyncContext, computed, ref, reactive, watchEffect, mergeProps, unref, withCtx, createTextVNode, toDisplayString, createVNode, openBlock, createBlock, createCommentVNode, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent, ssrRenderList, ssrRenderClass } from 'vue/server-renderer';
@@ -549,14 +549,14 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     }
     return (_ctx, _push, _parent, _attrs) => {
       var _a, _b, _c, _d, _e, _f, _g, _h, _i;
-      const _component_UButton = _sfc_main$S;
-      const _component_UIcon = _sfc_main$X;
-      const _component_UBadge = _sfc_main$N;
-      const _component_UInput = _sfc_main$w;
+      const _component_UButton = _sfc_main$T;
+      const _component_UIcon = _sfc_main$Y;
+      const _component_UBadge = _sfc_main$O;
+      const _component_UInput = _sfc_main$A;
       const _component_USelect = _sfc_main$v;
       const _component_UTable = _sfc_main$t;
-      const _component_UFormField = _sfc_main$x;
-      const _component_UModal = _sfc_main$H;
+      const _component_UFormField = _sfc_main$w;
+      const _component_UModal = _sfc_main$I;
       const _component_USwitch = _sfc_main$1;
       const _component_UTextarea = _sfc_main$s;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-[calc(100vh-7rem)] flex flex-col gap-6" }, _attrs))}><div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between shrink-0"><div><h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">${ssrInterpolate(_ctx.$t("admin.promo.title"))}</h1><p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">${ssrInterpolate(_ctx.$t("admin.promo.subtitle"))}</p></div><div class="flex items-center gap-3">`);

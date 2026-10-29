@@ -1,4 +1,4 @@
-import { fa as ensureCodexSchedulerJob, fb as runCodexAutonomousSync } from '../nitro/nitro.mjs';
+import { fb as ensureCodexSchedulerJob, fc as runCodexAutonomousSync } from '../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';

@@ -1,4 +1,4 @@
-import { u as useI18n, d as useFormatTime, e as useToast, q as useConfirm, f as useAdminPermissions, g as useAdminExtensions, A as ADMIN_PERMISSIONS, m as moduleViewCode, h as moduleEditCode, _ as _sfc_main$X, i as _sfc_main$S, j as _sfc_main$t, k as _sfc_main$N, a as _sfc_main$x, b as _sfc_main$w, l as _sfc_main$v, n as _sfc_main$H, o as navigateTo, c as _sfc_main$s, p as useRouter } from './server.mjs';
+import { u as useI18n, d as useFormatTime, e as useToast, q as useConfirm, f as useAdminPermissions, g as useAdminExtensions, A as ADMIN_PERMISSIONS, m as moduleViewCode, h as moduleEditCode, _ as _sfc_main$Y, i as _sfc_main$T, j as _sfc_main$t, k as _sfc_main$O, a as _sfc_main$w, b as _sfc_main$A, l as _sfc_main$v, n as _sfc_main$I, o as navigateTo, c as _sfc_main$s, p as useRouter } from './server.mjs';
 import { _ as __nuxt_component_2, i as isSettingsTabId } from './Nav-BfctuFgG.mjs';
 import { defineComponent, computed, reactive, ref, mergeProps, unref, withCtx, createTextVNode, toDisplayString, openBlock, createBlock, createCommentVNode, createVNode, withModifiers, Fragment, renderList, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate, ssrRenderList, ssrIncludeBooleanAttr } from 'vue/server-renderer';
@@ -73,9 +73,9 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UIcon = _sfc_main$X;
-      const _component_UFormField = _sfc_main$x;
-      const _component_UInput = _sfc_main$w;
+      const _component_UIcon = _sfc_main$Y;
+      const _component_UFormField = _sfc_main$w;
+      const _component_UInput = _sfc_main$A;
       const _component_UTextarea = _sfc_main$s;
       _push(`<!--[--><div class="bg-white dark:bg-[#121214] border border-gray-200 dark:border-gray-800/60 shadow-xl rounded-2xl overflow-hidden"><div class="px-6 py-5 border-b border-gray-200 dark:border-gray-800/60 bg-gray-100 dark:bg-gray-900/20 flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400">`);
       _push(ssrRenderComponent(_component_UIcon, {
@@ -608,17 +608,17 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       }
     };
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_UIcon = _sfc_main$X;
+      const _component_UIcon = _sfc_main$Y;
       const _component_AdminSettingsNav = __nuxt_component_2;
-      const _component_UButton = _sfc_main$S;
+      const _component_UButton = _sfc_main$T;
       const _component_AdminSettingsIntegrationTab = __nuxt_component_3;
       const _component_UTable = _sfc_main$t;
-      const _component_UBadge = _sfc_main$N;
+      const _component_UBadge = _sfc_main$O;
       const _component_FullScreenModal = __nuxt_component_7;
-      const _component_UFormField = _sfc_main$x;
-      const _component_UInput = _sfc_main$w;
+      const _component_UFormField = _sfc_main$w;
+      const _component_UInput = _sfc_main$A;
       const _component_USelect = _sfc_main$v;
-      const _component_UModal = _sfc_main$H;
+      const _component_UModal = _sfc_main$I;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "mx-auto pb-12" }, _attrs))}><div class="mb-8"><h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight flex items-center gap-3">`);
       _push(ssrRenderComponent(_component_UIcon, {
         name: "ph:key-fill",

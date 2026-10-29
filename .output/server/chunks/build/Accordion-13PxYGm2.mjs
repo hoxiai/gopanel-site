@@ -1,9 +1,9 @@
 import { useSlots, computed, ref, mergeProps, unref, withCtx, createVNode, resolveDynamicComponent, openBlock, createBlock, renderSlot, createCommentVNode, createTextVNode, toDisplayString, Fragment, renderList, defineComponent, toRefs, withKeys, useSSRContext } from 'vue';
 import { ssrRenderComponent, ssrRenderVNode, ssrRenderList, ssrRenderSlot, ssrRenderClass, ssrInterpolate } from 'vue/server-renderer';
-import { a1 as useAppConfig, a2 as useComponentUI, a6 as tv, bh as transformUI, a3 as useForwardPropsEmits, a4 as reactivePick, av as get, _ as _sfc_main$X, a9 as useDirection, X as useForwardExpose, Z as Primitive, al as useId, W as useVModel, a0 as createContext, bg as isValueEqualOrExist } from './server.mjs';
+import { a1 as useAppConfig, a2 as useComponentUI, a6 as tv, bh as transformUI, a3 as useForwardPropsEmits, a4 as reactivePick, av as get, _ as _sfc_main$Y, a9 as useDirection, X as useForwardExpose, Z as Primitive, al as useId, W as useVModel, a0 as createContext, bg as isValueEqualOrExist } from './server.mjs';
 import { u as useArrowNavigation } from './useArrowNavigation-C4FOBlvk.mjs';
 import { C as CollapsibleRoot_default, a as CollapsibleTrigger_default, b as CollapsibleContent_default } from './CollapsibleTrigger-ByU-PT25.mjs';
-import { g9 as isEqual } from '../nitro/nitro.mjs';
+import { ga as isEqual } from '../nitro/nitro.mjs';
 import 'vue-router';
 import '@iconify/vue';
 import '@iconify/utils/lib/css/icon';
@@ -534,7 +534,7 @@ const _sfc_main$1 = {
                                 }, () => {
                                   var _a6, _b5;
                                   if (item.icon) {
-                                    _push5(ssrRenderComponent(_sfc_main$X, {
+                                    _push5(ssrRenderComponent(_sfc_main$Y, {
                                       name: item.icon,
                                       "data-slot": "leadingIcon",
                                       class: ui.value.leadingIcon({ class: [(_a6 = unref(uiProp)) == null ? void 0 : _a6.leadingIcon, (_b5 = item == null ? void 0 : item.ui) == null ? void 0 : _b5.leadingIcon] })
@@ -563,7 +563,7 @@ const _sfc_main$1 = {
                                   ui: ui.value
                                 }, () => {
                                   var _a6, _b5;
-                                  _push5(ssrRenderComponent(_sfc_main$X, {
+                                  _push5(ssrRenderComponent(_sfc_main$Y, {
                                     name: item.trailingIcon || __props.trailingIcon || unref(appConfig).ui.icons.chevronDown,
                                     "data-slot": "trailingIcon",
                                     class: ui.value.trailingIcon({ class: [(_a6 = unref(uiProp)) == null ? void 0 : _a6.trailingIcon, (_b5 = item.ui) == null ? void 0 : _b5.trailingIcon] })
@@ -579,7 +579,7 @@ const _sfc_main$1 = {
                                   }, () => {
                                     var _a6, _b5;
                                     return [
-                                      item.icon ? (openBlock(), createBlock(_sfc_main$X, {
+                                      item.icon ? (openBlock(), createBlock(_sfc_main$Y, {
                                         key: 0,
                                         name: item.icon,
                                         "data-slot": "leadingIcon",
@@ -608,7 +608,7 @@ const _sfc_main$1 = {
                                   }, () => {
                                     var _a6, _b5;
                                     return [
-                                      createVNode(_sfc_main$X, {
+                                      createVNode(_sfc_main$Y, {
                                         name: item.trailingIcon || __props.trailingIcon || unref(appConfig).ui.icons.chevronDown,
                                         "data-slot": "trailingIcon",
                                         class: ui.value.trailingIcon({ class: [(_a6 = unref(uiProp)) == null ? void 0 : _a6.trailingIcon, (_b5 = item.ui) == null ? void 0 : _b5.trailingIcon] })
@@ -637,7 +637,7 @@ const _sfc_main$1 = {
                                   }, () => {
                                     var _a6, _b5;
                                     return [
-                                      item.icon ? (openBlock(), createBlock(_sfc_main$X, {
+                                      item.icon ? (openBlock(), createBlock(_sfc_main$Y, {
                                         key: 0,
                                         name: item.icon,
                                         "data-slot": "leadingIcon",
@@ -666,7 +666,7 @@ const _sfc_main$1 = {
                                   }, () => {
                                     var _a6, _b5;
                                     return [
-                                      createVNode(_sfc_main$X, {
+                                      createVNode(_sfc_main$Y, {
                                         name: item.trailingIcon || __props.trailingIcon || unref(appConfig).ui.icons.chevronDown,
                                         "data-slot": "trailingIcon",
                                         class: ui.value.trailingIcon({ class: [(_a6 = unref(uiProp)) == null ? void 0 : _a6.trailingIcon, (_b5 = item.ui) == null ? void 0 : _b5.trailingIcon] })
@@ -765,7 +765,7 @@ const _sfc_main$1 = {
                                   }, () => {
                                     var _a6, _b5;
                                     return [
-                                      item.icon ? (openBlock(), createBlock(_sfc_main$X, {
+                                      item.icon ? (openBlock(), createBlock(_sfc_main$Y, {
                                         key: 0,
                                         name: item.icon,
                                         "data-slot": "leadingIcon",
@@ -794,7 +794,7 @@ const _sfc_main$1 = {
                                   }, () => {
                                     var _a6, _b5;
                                     return [
-                                      createVNode(_sfc_main$X, {
+                                      createVNode(_sfc_main$Y, {
                                         name: item.trailingIcon || __props.trailingIcon || unref(appConfig).ui.icons.chevronDown,
                                         "data-slot": "trailingIcon",
                                         class: ui.value.trailingIcon({ class: [(_a6 = unref(uiProp)) == null ? void 0 : _a6.trailingIcon, (_b5 = item.ui) == null ? void 0 : _b5.trailingIcon] })
@@ -885,7 +885,7 @@ const _sfc_main$1 = {
                                   }, () => {
                                     var _a6, _b5;
                                     return [
-                                      item.icon ? (openBlock(), createBlock(_sfc_main$X, {
+                                      item.icon ? (openBlock(), createBlock(_sfc_main$Y, {
                                         key: 0,
                                         name: item.icon,
                                         "data-slot": "leadingIcon",
@@ -914,7 +914,7 @@ const _sfc_main$1 = {
                                   }, () => {
                                     var _a6, _b5;
                                     return [
-                                      createVNode(_sfc_main$X, {
+                                      createVNode(_sfc_main$Y, {
                                         name: item.trailingIcon || __props.trailingIcon || unref(appConfig).ui.icons.chevronDown,
                                         "data-slot": "trailingIcon",
                                         class: ui.value.trailingIcon({ class: [(_a6 = unref(uiProp)) == null ? void 0 : _a6.trailingIcon, (_b5 = item.ui) == null ? void 0 : _b5.trailingIcon] })

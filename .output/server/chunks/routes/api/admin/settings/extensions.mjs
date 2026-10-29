@@ -1,4 +1,4 @@
-import { d as defineEventHandler, bx as extensionManifests, by as readExtensionMigrationStatus, bz as readEnabledExtensionIds, e as createError, r as readBody, bA as migrateExtensionDatabase, s as setAuditMeta, bB as normalizeEnabledExtensionIds, b as db, b1 as settings, bC as ENABLED_EXTENSIONS_SETTING_KEY } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, by as extensionManifests, bz as readExtensionMigrationStatus, bA as readEnabledExtensionIds, e as createError, r as readBody, bB as migrateExtensionDatabase, s as setAuditMeta, bC as normalizeEnabledExtensionIds, b as db, b1 as settings, bD as ENABLED_EXTENSIONS_SETTING_KEY } from '../../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';

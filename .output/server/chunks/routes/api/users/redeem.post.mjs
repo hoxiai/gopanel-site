@@ -1,4 +1,4 @@
-import { d as defineEventHandler, cX as requireUserSession, e as createError, r as readBody, eE as redeemCode, b6 as RedeemError } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, cY as requireUserSession, e as createError, r as readBody, eF as redeemCode, b6 as RedeemError } from '../../../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -69,7 +69,7 @@ const redeem_post = defineEventHandler(async (event) => {
     const result = await redeemCode(userId, body == null ? void 0 : body.code);
     return {
       code: 0,
-      message: `\u5151\u6362\u6210\u529F\uFF0C\u5DF2\u5230\u8D26 ${result.amount} ${result.currency}`,
+      message: result.alreadyProcessed ? "\u8BE5\u5151\u6362\u7801\u5DF2\u5151\u6362\uFF0C\u65E0\u9700\u91CD\u590D\u63D0\u4EA4" : `\u5151\u6362\u6210\u529F\uFF0C\u5DF2\u5230\u8D26 ${result.amount} ${result.currency}`,
       data: result
     };
   } catch (error) {

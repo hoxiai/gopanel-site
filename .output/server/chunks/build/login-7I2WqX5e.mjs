@@ -1,4 +1,4 @@
-import { u as useI18n, H as useRoute, D as useLocaleRouter, bq as useCustomerAuth, br as useSeoMeta, O as __nuxt_component_3$1, _ as _sfc_main$X, o as navigateTo } from './server.mjs';
+import { u as useI18n, H as useRoute, D as useLocaleRouter, bq as useCustomerAuth, br as useSeoMeta, O as __nuxt_component_3$1, _ as _sfc_main$Y, o as navigateTo } from './server.mjs';
 import { _ as __nuxt_component_2 } from './CaptchaSlider-CxMTbgbW.mjs';
 import { defineComponent, reactive, ref, computed, mergeProps, unref, withCtx, createVNode, createTextVNode, toDisplayString, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrRenderAttr, ssrInterpolate, ssrIncludeBooleanAttr } from 'vue/server-renderer';
@@ -136,7 +136,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_NuxtLink = __nuxt_component_3$1;
-      const _component_UIcon = _sfc_main$X;
+      const _component_UIcon = _sfc_main$Y;
       const _component_CaptchaSlider = __nuxt_component_2;
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-[calc(100vh-8rem)] flex items-center justify-center px-4 py-12 bg-gray-50" }, _attrs))}><div class="w-full max-w-md rounded-2xl border border-gray-100 bg-white p-7 sm:p-8 shadow-sm"><div class="flex flex-col items-center text-center mb-6">`);
       _push(ssrRenderComponent(_component_NuxtLink, {

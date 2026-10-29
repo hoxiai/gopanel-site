@@ -4,7 +4,7 @@ import { _ as _sfc_main$2 } from './SelectMenu-BBhjXnJu.mjs';
 import { defineComponent, defineAsyncComponent, computed, ref, reactive, watch, mergeProps, withCtx, createTextVNode, toDisplayString, unref, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent, ssrInterpolate, ssrRenderClass, ssrRenderList, ssrIncludeBooleanAttr, ssrRenderAttr } from 'vue/server-renderer';
 import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router';
-import { gB as localePathForSeo } from '../nitro/nitro.mjs';
+import { gw as localePathForSeo } from '../nitro/nitro.mjs';
 import { G as GeoCitationFieldsCard, a as GeoSeoInspectorCard } from './GeoSeoInspectorCard-BbDxsfN7.mjs';
 import { u as useImageProxy } from './useImageProxy-DBzzMBty.mjs';
 

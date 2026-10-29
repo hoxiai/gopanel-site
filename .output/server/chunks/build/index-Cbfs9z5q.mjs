@@ -3,7 +3,7 @@ import { _ as _sfc_main$1 } from './DropdownMenu-Cf2yW8HY.mjs';
 import { _ as _sfc_main$2 } from './Switch-CHpGzJxp.mjs';
 import { defineComponent, computed, ref, watch, mergeProps, withCtx, createTextVNode, toDisplayString, unref, createVNode, openBlock, createBlock, createCommentVNode, withModifiers, isRef, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrInterpolate, ssrRenderComponent, ssrRenderClass, ssrRenderAttr } from 'vue/server-renderer';
-import { gw as localePathForSeo } from '../nitro/nitro.mjs';
+import { gB as localePathForSeo } from '../nitro/nitro.mjs';
 import { u as useImageProxy } from './useImageProxy-DBzzMBty.mjs';
 import 'vue-router';
 import '@iconify/vue';

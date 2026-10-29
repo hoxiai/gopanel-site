@@ -1,6 +1,6 @@
 import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import * as vue from 'vue';
 import { defineComponent, computed, openBlock, createElementBlock, Fragment, createCommentVNode, createBlock, mergeProps, renderList, useSlots, useId as useId$1, useAttrs, unref, withCtx, createVNode, resolveDynamicComponent, renderSlot, createTextVNode, toDisplayString as toDisplayString$1, hasInjectionContext, inject, h, getCurrentInstance, ref, watch, nextTick, toValue, provide, watchEffect, markRaw, customRef, shallowRef, toRefs, watchPostEffect, toRef as toRef$1, camelize as camelize$1, reactive, normalizeStyle, mergeDefaults, Teleport, useModel, mergeModels, useTemplateRef, toHandlerKey, getCurrentScope, onScopeDispose, shallowReadonly, isRef, toHandlers, normalizeProps, guardReactiveProps, readonly, cloneVNode, withKeys, withModifiers, resolveComponent, onServerPrefetch, Comment, defineAsyncComponent, withAsyncContext, createSlots, resolveDirective, createElementVNode, effectScope, useSSRContext, toRaw, shallowReactive, Suspense, createApp, Text, onErrorCaptured, isReadonly, isShallow, isReactive } from 'vue';
-import { g7 as serialize, g8 as createPricingContext, dm as setResponseStatus$1, cj as getRequestURL, g9 as defu, ga as isEqual$1, gb as getErrorRequestId, e as createError$1, gc as resolveActiveTheme, gd as SEO_LOCALE_LANGUAGE, bK as normalizeGeoKeySpecs, bL as normalizeGeoFaqs, ge as upperFirst, dS as quoteProductPrice, gf as defuFn, gg as resolveLocalizedSetting, gh as parse$1, db as getRequestHeader, gi as errorRecord, gj as errorData, gk as appendResponseHeader, gl as sanitizeStatusCode, gm as getContext, gn as setCookie, dg as getCookie, go as deleteCookie, bM as normalizeGeoRelatedLinks, eb as getRequestHeaders, gp as htmlToCleanMarkdown, g5 as $fetch$1, gq as baseURL, gr as hash, gs as createHooks, gt as executeAsync, gu as normalizeSiteOrigin, gv as stripLocalePrefix$1, bP as classifySeoRoute, bQ as seoRouteRegistry, gw as localePathForSeo, gx as isMarkdownMirrorPath, gy as safeJsonLd, gz as localeDomainUrl, gA as getRequestProtocol, gB as themeHostConfigs } from '../nitro/nitro.mjs';
+import { ge as serialize, gf as createPricingContext, dq as setResponseStatus$1, cj as getRequestURL, gg as defu, gh as isEqual$1, gi as getErrorRequestId, e as createError$1, gj as resolveActiveTheme, gk as SEO_LOCALE_LANGUAGE, bK as normalizeGeoKeySpecs, bL as normalizeGeoFaqs, gl as upperFirst, dU as quoteProductPrice, gm as defuFn, gn as resolveLocalizedSetting, go as parse$1, dg as getRequestHeader, gp as errorRecord, gq as errorData, gr as appendResponseHeader, gs as sanitizeStatusCode, gt as getContext, cS as setCookie, cQ as getCookie, cR as deleteCookie, bM as normalizeGeoRelatedLinks, ed as getRequestHeaders, gu as htmlToCleanMarkdown, gc as $fetch$1, gv as baseURL, gw as hash, gx as createHooks, gy as executeAsync, gz as normalizeSiteOrigin, gA as stripLocalePrefix$1, bP as classifySeoRoute, bQ as seoRouteRegistry, gB as localePathForSeo, gC as isMarkdownMirrorPath, gD as safeJsonLd, gE as localeDomainUrl, gF as getRequestProtocol, gG as themeHostConfigs } from '../nitro/nitro.mjs';
 import { useRoute as useRoute$1, useRouter as useRouter$1, RouterView, isNavigationFailure, createMemoryHistory, createRouter, START_LOCATION } from 'vue-router';
 import { Icon, getIcon, loadIcon as loadIcon$1, _api, addAPIProvider, setCustomIconsLoader } from '@iconify/vue';
 import { getIconCSS } from '@iconify/utils/lib/css/icon';
@@ -1023,7 +1023,7 @@ const _routes = [
     name: "admin-login",
     path: "/admin/login",
     meta: __nuxt_page_meta$i || {},
-    component: () => import('./login-DPcT8R7F.mjs')
+    component: () => import('./login-BgkIHVam.mjs')
   },
   {
     name: "admin-logs",
@@ -5709,7 +5709,7 @@ const cfg0 = defineAppConfig({
   }
 });
 const inlineConfig = {
-  "appVersion": "1.1.6",
+  "appVersion": "1.1.7",
   "nuxt": {},
   "ui": {
     "colors": {
@@ -21073,6 +21073,7 @@ const __vite_glob_0_7 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   default: _sfc_main$D
 }, Symbol.toStringTag, { value: "Module" }));
 const _sfc_main$C = /* @__PURE__ */ defineComponent({
+  ...{ directoryLayout: false },
   __name: "index",
   __ssrInlineRender: true,
   async setup(__props) {
@@ -25979,7 +25980,7 @@ const themeAdminLocaleZhModules = {
   ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({})).map(([file, module]) => [file.replace("/", "../"), module]))
 };
 const themeLayoutLoaders = {
-  "panel": () => import('./default-4_mSvCx_.mjs')
+  "panel": () => import('./default-Dp5i4tEy.mjs')
 };
 const schemaVersion$2 = 1;
 const id$2 = "apps";
@@ -30474,101 +30475,39 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
   __ssrInlineRender: true,
   async setup(__props) {
     let __temp, __restore;
-    const { locale } = useI18n();
+    const { t, locale } = useI18n();
     const isZh = computed(() => locale.value.startsWith("zh"));
-    const dictionary = {
-      en: {
-        title: "Client telemetry",
-        description: "Anonymous install, activation and version mix reported by installed marketplace apps. Downloads come from the package endpoint; installs are deduplicated by installId.",
-        refresh: "Refresh",
-        lastDays: "Last {days}d",
-        empty: "No telemetry recorded yet.",
-        appsTitle: "Apps",
-        dailyTitle: "Daily installs",
-        versionsTitle: "Installed versions",
-        app: "App",
-        version: "Current version",
-        installs: "Installs",
-        active30: "Active (30d)",
-        downloads: "Downloads",
-        uninstalls: "Uninstalls",
-        active: "active",
-        cardInstallsAll: "Installs (all-time)",
-        cardInstalls: "Installs ({days}d)",
-        cardActive7: "Active 7d",
-        cardActive30: "Active 30d",
-        cardDownloads: "Downloads ({days}d)",
-        cardUninstalls: "Uninstalls ({days}d)",
-        failed: "Request failed"
-      },
-      zh: {
-        title: "客户端观测",
-        description: "已安装的应用上报的匿名安装、活跃与版本分布。下载量来自安装包分发接口，安装量按 installId 去重。",
-        refresh: "刷新",
-        lastDays: "近 {days} 天",
-        empty: "暂无上报数据。",
-        appsTitle: "应用",
-        dailyTitle: "每日安装",
-        versionsTitle: "已安装版本分布",
-        app: "应用",
-        version: "当前版本",
-        installs: "安装",
-        active30: "活跃（30 天）",
-        downloads: "下载",
-        uninstalls: "卸载",
-        active: "活跃",
-        cardInstallsAll: "累计安装",
-        cardInstalls: "近 {days} 天安装",
-        cardActive7: "7 天活跃",
-        cardActive30: "30 天活跃",
-        cardDownloads: "近 {days} 天下载",
-        cardUninstalls: "近 {days} 天卸载",
-        failed: "请求失败"
-      }
-    };
-    const text2 = computed(() => isZh.value ? dictionary.zh : dictionary.en);
     const windowDays = ref(30);
     const errorMsg = ref("");
-    const { data: catalogData } = ([__temp, __restore] = withAsyncContext(() => useFetch(
-      "/api/admin/plugins/apps/catalog/list",
-      {
-        query: { page: 1, pageSize: 100 }
-      },
-      "$YybSFpNyT3"
-      /* nuxt-injected */
-    )), __temp = await __temp, __restore(), __temp);
     const { data: telemetry, pending, refresh } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       "/api/admin/plugins/apps/catalog/telemetry",
       {
         query: { days: windowDays },
         watch: [windowDays],
         onResponseError: ({ error }) => {
-          errorMsg.value = error?.message || text2.value.failed;
+          errorMsg.value = error?.message || t("admin.appsTelemetry.failed", "请求失败");
         },
         onResponse: () => {
           errorMsg.value = "";
         }
       },
-      "$Qbl8VP8ZX6"
+      "$YybSFpNyT3"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
-    const catalogNames = computed(() => new Map((catalogData.value?.data || []).map((item) => [item.uniqueName, item])));
-    const apps = computed(() => (telemetry.value?.apps || []).map((row) => {
-      const item = catalogNames.value.get(row.uniqueName);
-      return { ...row, name: item?.name || "", version: item?.version || "" };
-    }));
+    const apps = computed(() => telemetry.value?.apps || []);
     const daily = computed(() => telemetry.value?.daily || []);
     const versions = computed(() => telemetry.value?.versions || []);
     const dailyMax = computed(() => Math.max(1, ...daily.value.map((point) => point.installs)));
     const summaryCards = computed(() => {
       const totals = telemetry.value?.totals;
+      const days = String(windowDays.value);
       return [
-        { label: text2.value.cardInstallsAll.replace("{days}", String(windowDays.value)), value: totals?.installsAllTime || 0, class: "text-emerald-500" },
-        { label: text2.value.cardInstalls.replace("{days}", String(windowDays.value)), value: totals?.installs || 0, class: "text-blue-500" },
-        { label: text2.value.cardActive7, value: totals?.active7d || 0, class: "text-violet-500" },
-        { label: text2.value.cardActive30, value: totals?.active30d || 0, class: "text-violet-500" },
-        { label: text2.value.cardDownloads.replace("{days}", String(windowDays.value)), value: totals?.downloads || 0, class: "text-cyan-500" },
-        { label: text2.value.cardUninstalls.replace("{days}", String(windowDays.value)), value: totals?.uninstalls || 0, class: "text-rose-500" }
+        { label: t("admin.appsTelemetry.cardInstallsAll", "累计安装").replace("{days}", days), value: totals?.installsAllTime || 0, class: "text-emerald-500" },
+        { label: t("admin.appsTelemetry.cardInstalls", "近 {days} 天安装").replace("{days}", days), value: totals?.installs || 0, class: "text-blue-500" },
+        { label: t("admin.appsTelemetry.cardActive7", "7 天活跃"), value: totals?.active7d || 0, class: "text-violet-500" },
+        { label: t("admin.appsTelemetry.cardActive30", "30 天活跃"), value: totals?.active30d || 0, class: "text-violet-500" },
+        { label: t("admin.appsTelemetry.cardDownloads", "近 {days} 天下载").replace("{days}", days), value: totals?.downloads || 0, class: "text-cyan-500" },
+        { label: t("admin.appsTelemetry.cardUninstalls", "近 {days} 天卸载").replace("{days}", days), value: totals?.uninstalls || 0, class: "text-rose-500" }
       ];
     });
     const fmtNum = (value) => new Intl.NumberFormat(isZh.value ? "zh-CN" : "en-US").format(value || 0);
@@ -30586,7 +30525,7 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
         _push(ssrRenderComponent(_component_UAlert, {
           color: "error",
           variant: "subtle",
-          title: "请求异常",
+          title: unref(t)("admin.appsTelemetry.failed", "请求失败"),
           description: unref(errorMsg)
         }, null, _parent));
       } else {
@@ -30600,9 +30539,9 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
               name: "ph:chart-line-up",
               class: "w-5 h-5 text-blue-500"
             }, null, _parent2, _scopeId));
-            _push2(`<span${_scopeId}>${ssrInterpolate(unref(text2).title)}</span></h2><p class="mt-1 text-sm text-gray-500 dark:text-gray-400"${_scopeId}>${ssrInterpolate(unref(text2).description)}</p></div><div class="flex items-center gap-2"${_scopeId}><div class="flex rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden"${_scopeId}><!--[-->`);
+            _push2(`<span${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.title", "客户端观测"))}</span></h2><p class="mt-1 text-sm text-gray-500 dark:text-gray-400"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.subtitle", "桌面客户端安装、启动、更新与卸载统计（按 install_id 去重）"))}</p></div><div class="flex items-center gap-2"${_scopeId}><div class="flex rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden"${_scopeId}><!--[-->`);
             ssrRenderList([7, 30, 90], (option) => {
-              _push2(`<button type="button" class="${ssrRenderClass([option === unref(windowDays) ? "bg-blue-500 text-white" : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800", "px-3 py-1.5 text-xs"])}"${_scopeId}>${ssrInterpolate(unref(text2).lastDays.replace("{days}", String(option)))}</button>`);
+              _push2(`<button type="button" class="${ssrRenderClass([option === unref(windowDays) ? "bg-blue-500 text-white" : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800", "px-3 py-1.5 text-xs"])}"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.lastDays", "近 {days} 天").replace("{days}", String(option)))}</button>`);
             });
             _push2(`<!--]--></div>`);
             _push2(ssrRenderComponent(_component_UButton, {
@@ -30615,10 +30554,10 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`${ssrInterpolate(unref(text2).refresh)}`);
+                  _push3(`${ssrInterpolate(unref(t)("admin.appsTelemetry.refresh", "刷新"))}`);
                 } else {
                   return [
-                    createTextVNode(toDisplayString$1(unref(text2).refresh), 1)
+                    createTextVNode(toDisplayString$1(unref(t)("admin.appsTelemetry.refresh", "刷新")), 1)
                   ];
                 }
               }),
@@ -30634,9 +30573,9 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
                       name: "ph:chart-line-up",
                       class: "w-5 h-5 text-blue-500"
                     }),
-                    createVNode("span", null, toDisplayString$1(unref(text2).title), 1)
+                    createVNode("span", null, toDisplayString$1(unref(t)("admin.appsTelemetry.title", "客户端观测")), 1)
                   ]),
-                  createVNode("p", { class: "mt-1 text-sm text-gray-500 dark:text-gray-400" }, toDisplayString$1(unref(text2).description), 1)
+                  createVNode("p", { class: "mt-1 text-sm text-gray-500 dark:text-gray-400" }, toDisplayString$1(unref(t)("admin.appsTelemetry.subtitle", "桌面客户端安装、启动、更新与卸载统计（按 install_id 去重）")), 1)
                 ]),
                 createVNode("div", { class: "flex items-center gap-2" }, [
                   createVNode("div", { class: "flex rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden" }, [
@@ -30646,7 +30585,7 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
                         type: "button",
                         class: ["px-3 py-1.5 text-xs", option === unref(windowDays) ? "bg-blue-500 text-white" : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"],
                         onClick: ($event) => setWindow(option)
-                      }, toDisplayString$1(unref(text2).lastDays.replace("{days}", String(option))), 11, ["onClick"]);
+                      }, toDisplayString$1(unref(t)("admin.appsTelemetry.lastDays", "近 {days} 天").replace("{days}", String(option))), 11, ["onClick"]);
                     }), 64))
                   ]),
                   createVNode(_component_UButton, {
@@ -30658,7 +30597,7 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
                     onClick: ($event) => unref(refresh)()
                   }, {
                     default: withCtx(() => [
-                      createTextVNode(toDisplayString$1(unref(text2).refresh), 1)
+                      createTextVNode(toDisplayString$1(unref(t)("admin.appsTelemetry.refresh", "刷新")), 1)
                     ]),
                     _: 1
                   }, 8, ["loading", "onClick"])
@@ -30675,17 +30614,17 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
             });
             _push2(`<!--]--></div>`);
             if (!unref(pending) && !unref(apps).length) {
-              _push2(`<div class="py-10 text-center text-sm text-gray-400"${_scopeId}>${ssrInterpolate(unref(text2).empty)}</div>`);
+              _push2(`<div class="py-10 text-center text-sm text-gray-400"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.empty", "暂无上报数据。"))}</div>`);
             } else {
-              _push2(`<div class="mt-6 space-y-8"${_scopeId}><section${_scopeId}><h3 class="mb-3 text-sm font-semibold text-gray-900 dark:text-white"${_scopeId}>${ssrInterpolate(unref(text2).appsTitle)}</h3><div class="overflow-x-auto"${_scopeId}><table class="w-full text-sm"${_scopeId}><thead${_scopeId}><tr class="text-left text-xs uppercase tracking-wide text-gray-400"${_scopeId}><th class="px-3 py-2"${_scopeId}>${ssrInterpolate(unref(text2).app)}</th><th class="px-3 py-2"${_scopeId}>${ssrInterpolate(unref(text2).version)}</th><th class="px-3 py-2 text-right"${_scopeId}>${ssrInterpolate(unref(text2).installs)}</th><th class="px-3 py-2 text-right"${_scopeId}>${ssrInterpolate(unref(text2).active30)}</th><th class="px-3 py-2 text-right"${_scopeId}>${ssrInterpolate(unref(text2).downloads)}</th><th class="px-3 py-2 text-right"${_scopeId}>${ssrInterpolate(unref(text2).uninstalls)}</th></tr></thead><tbody${_scopeId}><!--[-->`);
+              _push2(`<div class="mt-6 space-y-8"${_scopeId}><section${_scopeId}><h3 class="mb-3 text-sm font-semibold text-gray-900 dark:text-white"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.byApp", "分应用汇总"))}</h3><div class="overflow-x-auto"${_scopeId}><table class="w-full text-sm"${_scopeId}><thead${_scopeId}><tr class="text-left text-xs uppercase tracking-wide text-gray-400"${_scopeId}><th class="px-3 py-2"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.colApp", "应用"))}</th><th class="px-3 py-2"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.colCurrentVersion", "当前版本"))}</th><th class="px-3 py-2 text-right"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.colInstalls", "安装"))}</th><th class="px-3 py-2 text-right"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.colActiveWindow", "{days} 日活跃").replace("{days}", String(unref(windowDays))))}</th><th class="px-3 py-2 text-right"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.downloads", "下载"))}</th><th class="px-3 py-2 text-right"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.colUninstalled", "已卸载"))}</th></tr></thead><tbody${_scopeId}><!--[-->`);
               ssrRenderList(unref(apps), (row) => {
                 _push2(`<tr class="border-t border-gray-100 dark:border-gray-800"${_scopeId}><td class="px-3 py-2"${_scopeId}><div class="font-medium text-gray-900 dark:text-white"${_scopeId}>${ssrInterpolate(row.name || row.uniqueName)}</div><div class="font-mono text-xs text-gray-400"${_scopeId}>${ssrInterpolate(row.uniqueName)}</div></td><td class="px-3 py-2 font-mono text-gray-600 dark:text-gray-300"${_scopeId}>${ssrInterpolate(row.version || "—")}</td><td class="px-3 py-2 text-right tabular-nums text-gray-900 dark:text-white"${_scopeId}>${ssrInterpolate(fmtNum(row.installs))}</td><td class="px-3 py-2 text-right tabular-nums text-violet-500"${_scopeId}>${ssrInterpolate(fmtNum(row.active))}</td><td class="px-3 py-2 text-right tabular-nums text-cyan-500"${_scopeId}>${ssrInterpolate(fmtNum(row.downloads))}</td><td class="px-3 py-2 text-right tabular-nums text-rose-500"${_scopeId}>${ssrInterpolate(fmtNum(row.uninstalls))}</td></tr>`);
               });
-              _push2(`<!--]--></tbody></table></div></section><section${_scopeId}><h3 class="mb-3 text-sm font-semibold text-gray-900 dark:text-white"${_scopeId}>${ssrInterpolate(unref(text2).dailyTitle)}</h3><div class="flex h-28 items-end gap-1"${_scopeId}><!--[-->`);
+              _push2(`<!--]--></tbody></table></div></section><section${_scopeId}><h3 class="mb-3 text-sm font-semibold text-gray-900 dark:text-white"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.dailyTrend", "每日新装 / 活跃趋势"))}</h3><div class="flex h-28 items-end gap-1"${_scopeId}><!--[-->`);
               ssrRenderList(unref(daily), (point) => {
-                _push2(`<div class="${ssrRenderClass([point.installs ? "bg-blue-500/70" : "bg-gray-200 dark:bg-gray-700", "flex-1 rounded-t"])}" style="${ssrRenderStyle(barStyle(point.installs))}"${ssrRenderAttr("title", `${point.date} · ${unref(text2).installs} ${point.installs} · ${unref(text2).active} ${point.active} · ${unref(text2).downloads} ${point.downloads}`)}${_scopeId}></div>`);
+                _push2(`<div class="${ssrRenderClass([point.installs ? "bg-blue-500/70" : "bg-gray-200 dark:bg-gray-700", "flex-1 rounded-t"])}" style="${ssrRenderStyle(barStyle(point.installs))}"${ssrRenderAttr("title", `${point.date} · ${unref(t)("admin.appsTelemetry.colInstalls", "安装")} ${point.installs} · ${unref(t)("admin.appsTelemetry.active", "活跃")} ${point.active} · ${unref(t)("admin.appsTelemetry.downloads", "下载")} ${point.downloads}`)}${_scopeId}></div>`);
               });
-              _push2(`<!--]--></div><div class="mt-1 flex justify-between text-[11px] text-gray-400"${_scopeId}><span${_scopeId}>${ssrInterpolate(unref(daily)[0]?.date)}</span><span${_scopeId}>${ssrInterpolate(unref(daily)[unref(daily).length - 1]?.date)}</span></div></section><section${_scopeId}><h3 class="mb-3 text-sm font-semibold text-gray-900 dark:text-white"${_scopeId}>${ssrInterpolate(unref(text2).versionsTitle)}</h3><div class="overflow-x-auto"${_scopeId}><table class="w-full text-sm"${_scopeId}><thead${_scopeId}><tr class="text-left text-xs uppercase tracking-wide text-gray-400"${_scopeId}><th class="px-3 py-2"${_scopeId}>${ssrInterpolate(unref(text2).app)}</th><th class="px-3 py-2"${_scopeId}>${ssrInterpolate(unref(text2).version)}</th><th class="px-3 py-2 text-right"${_scopeId}>${ssrInterpolate(unref(text2).installs)}</th></tr></thead><tbody${_scopeId}><!--[-->`);
+              _push2(`<!--]--></div><div class="mt-1 flex justify-between text-[11px] text-gray-400"${_scopeId}><span${_scopeId}>${ssrInterpolate(unref(daily)[0]?.date)}</span><span${_scopeId}>${ssrInterpolate(unref(daily)[unref(daily).length - 1]?.date)}</span></div></section><section${_scopeId}><h3 class="mb-3 text-sm font-semibold text-gray-900 dark:text-white"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.versionDist", "已安装版本分布"))}</h3><div class="overflow-x-auto"${_scopeId}><table class="w-full text-sm"${_scopeId}><thead${_scopeId}><tr class="text-left text-xs uppercase tracking-wide text-gray-400"${_scopeId}><th class="px-3 py-2"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.colApp", "应用"))}</th><th class="px-3 py-2"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.colVersion", "版本"))}</th><th class="px-3 py-2 text-right"${_scopeId}>${ssrInterpolate(unref(t)("admin.appsTelemetry.colCount", "设备数"))}</th></tr></thead><tbody${_scopeId}><!--[-->`);
               ssrRenderList(unref(versions), (row) => {
                 _push2(`<tr class="border-t border-gray-100 dark:border-gray-800"${_scopeId}><td class="px-3 py-2 font-mono text-xs text-gray-600 dark:text-gray-300"${_scopeId}>${ssrInterpolate(row.uniqueName)}</td><td class="px-3 py-2 font-mono text-gray-900 dark:text-white"${_scopeId}>${ssrInterpolate(row.version || "—")}</td><td class="px-3 py-2 text-right tabular-nums text-gray-900 dark:text-white"${_scopeId}>${ssrInterpolate(fmtNum(row.installs))}</td></tr>`);
               });
@@ -30709,22 +30648,22 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
               !unref(pending) && !unref(apps).length ? (openBlock(), createBlock("div", {
                 key: 0,
                 class: "py-10 text-center text-sm text-gray-400"
-              }, toDisplayString$1(unref(text2).empty), 1)) : (openBlock(), createBlock("div", {
+              }, toDisplayString$1(unref(t)("admin.appsTelemetry.empty", "暂无上报数据。")), 1)) : (openBlock(), createBlock("div", {
                 key: 1,
                 class: "mt-6 space-y-8"
               }, [
                 createVNode("section", null, [
-                  createVNode("h3", { class: "mb-3 text-sm font-semibold text-gray-900 dark:text-white" }, toDisplayString$1(unref(text2).appsTitle), 1),
+                  createVNode("h3", { class: "mb-3 text-sm font-semibold text-gray-900 dark:text-white" }, toDisplayString$1(unref(t)("admin.appsTelemetry.byApp", "分应用汇总")), 1),
                   createVNode("div", { class: "overflow-x-auto" }, [
                     createVNode("table", { class: "w-full text-sm" }, [
                       createVNode("thead", null, [
                         createVNode("tr", { class: "text-left text-xs uppercase tracking-wide text-gray-400" }, [
-                          createVNode("th", { class: "px-3 py-2" }, toDisplayString$1(unref(text2).app), 1),
-                          createVNode("th", { class: "px-3 py-2" }, toDisplayString$1(unref(text2).version), 1),
-                          createVNode("th", { class: "px-3 py-2 text-right" }, toDisplayString$1(unref(text2).installs), 1),
-                          createVNode("th", { class: "px-3 py-2 text-right" }, toDisplayString$1(unref(text2).active30), 1),
-                          createVNode("th", { class: "px-3 py-2 text-right" }, toDisplayString$1(unref(text2).downloads), 1),
-                          createVNode("th", { class: "px-3 py-2 text-right" }, toDisplayString$1(unref(text2).uninstalls), 1)
+                          createVNode("th", { class: "px-3 py-2" }, toDisplayString$1(unref(t)("admin.appsTelemetry.colApp", "应用")), 1),
+                          createVNode("th", { class: "px-3 py-2" }, toDisplayString$1(unref(t)("admin.appsTelemetry.colCurrentVersion", "当前版本")), 1),
+                          createVNode("th", { class: "px-3 py-2 text-right" }, toDisplayString$1(unref(t)("admin.appsTelemetry.colInstalls", "安装")), 1),
+                          createVNode("th", { class: "px-3 py-2 text-right" }, toDisplayString$1(unref(t)("admin.appsTelemetry.colActiveWindow", "{days} 日活跃").replace("{days}", String(unref(windowDays)))), 1),
+                          createVNode("th", { class: "px-3 py-2 text-right" }, toDisplayString$1(unref(t)("admin.appsTelemetry.downloads", "下载")), 1),
+                          createVNode("th", { class: "px-3 py-2 text-right" }, toDisplayString$1(unref(t)("admin.appsTelemetry.colUninstalled", "已卸载")), 1)
                         ])
                       ]),
                       createVNode("tbody", null, [
@@ -30749,14 +30688,14 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
                   ])
                 ]),
                 createVNode("section", null, [
-                  createVNode("h3", { class: "mb-3 text-sm font-semibold text-gray-900 dark:text-white" }, toDisplayString$1(unref(text2).dailyTitle), 1),
+                  createVNode("h3", { class: "mb-3 text-sm font-semibold text-gray-900 dark:text-white" }, toDisplayString$1(unref(t)("admin.appsTelemetry.dailyTrend", "每日新装 / 活跃趋势")), 1),
                   createVNode("div", { class: "flex h-28 items-end gap-1" }, [
                     (openBlock(true), createBlock(Fragment, null, renderList(unref(daily), (point) => {
                       return openBlock(), createBlock("div", {
                         key: point.date,
                         class: ["flex-1 rounded-t", point.installs ? "bg-blue-500/70" : "bg-gray-200 dark:bg-gray-700"],
                         style: barStyle(point.installs),
-                        title: `${point.date} · ${unref(text2).installs} ${point.installs} · ${unref(text2).active} ${point.active} · ${unref(text2).downloads} ${point.downloads}`
+                        title: `${point.date} · ${unref(t)("admin.appsTelemetry.colInstalls", "安装")} ${point.installs} · ${unref(t)("admin.appsTelemetry.active", "活跃")} ${point.active} · ${unref(t)("admin.appsTelemetry.downloads", "下载")} ${point.downloads}`
                       }, null, 14, ["title"]);
                     }), 128))
                   ]),
@@ -30766,14 +30705,14 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
                   ])
                 ]),
                 createVNode("section", null, [
-                  createVNode("h3", { class: "mb-3 text-sm font-semibold text-gray-900 dark:text-white" }, toDisplayString$1(unref(text2).versionsTitle), 1),
+                  createVNode("h3", { class: "mb-3 text-sm font-semibold text-gray-900 dark:text-white" }, toDisplayString$1(unref(t)("admin.appsTelemetry.versionDist", "已安装版本分布")), 1),
                   createVNode("div", { class: "overflow-x-auto" }, [
                     createVNode("table", { class: "w-full text-sm" }, [
                       createVNode("thead", null, [
                         createVNode("tr", { class: "text-left text-xs uppercase tracking-wide text-gray-400" }, [
-                          createVNode("th", { class: "px-3 py-2" }, toDisplayString$1(unref(text2).app), 1),
-                          createVNode("th", { class: "px-3 py-2" }, toDisplayString$1(unref(text2).version), 1),
-                          createVNode("th", { class: "px-3 py-2 text-right" }, toDisplayString$1(unref(text2).installs), 1)
+                          createVNode("th", { class: "px-3 py-2" }, toDisplayString$1(unref(t)("admin.appsTelemetry.colApp", "应用")), 1),
+                          createVNode("th", { class: "px-3 py-2" }, toDisplayString$1(unref(t)("admin.appsTelemetry.colVersion", "版本")), 1),
+                          createVNode("th", { class: "px-3 py-2 text-right" }, toDisplayString$1(unref(t)("admin.appsTelemetry.colCount", "设备数")), 1)
                         ])
                       ]),
                       createVNode("tbody", null, [
@@ -47093,8 +47032,8 @@ const __nuxt_component_1 = defineComponent({
   }
 });
 const layouts = {
-  admin: defineAsyncComponent(() => import('./admin-mxG1bj4r.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-DUSUxB3S.mjs').then((m) => m.default || m)),
+  admin: defineAsyncComponent(() => import('./admin-CbKbs760.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-BlChpOAO.mjs').then((m) => m.default || m)),
   empty: defineAsyncComponent(() => import('./empty-D0_T3mKM.mjs').then((m) => m.default || m))
 };
 const routeRulesMatcher = _routeRulesMatcher;

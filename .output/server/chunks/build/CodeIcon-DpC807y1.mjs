@@ -1,6 +1,6 @@
 import { computed, mergeProps, useSSRContext } from 'vue';
 import { ssrRenderComponent } from 'vue/server-renderer';
-import { f$ as defu } from '../nitro/nitro.mjs';
+import { g6 as defu } from '../nitro/nitro.mjs';
 import { a1 as useAppConfig, _ as _sfc_main$W } from './server.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
@@ -36,9 +36,9 @@ import 'jose';
 import 'node:child_process';
 import 'process';
 import 'buffer';
-import 'node:fs/promises';
 import 'node:dns/promises';
 import 'node:net';
+import 'node:fs/promises';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
 import 'vue-router';

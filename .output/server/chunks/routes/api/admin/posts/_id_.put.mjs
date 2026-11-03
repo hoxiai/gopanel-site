@@ -1,4 +1,4 @@
-import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, r as readBody, b as db, aJ as posts, aK as assertPostMutable, aL as normalizePostLocale, aM as notifyIndexNowEntityChange, aN as notifySubscribersOnPostPublished, aO as findUniqueViolation } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, r as readBody, b as db, aV as posts, aW as assertPostMutable, aX as normalizePostLocale, aY as notifyIndexNowEntityChange, aZ as notifySubscribersOnPostPublished, a_ as findUniqueViolation } from '../../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const normalizePostMetaData = (value) => {
   if (value === null || value === void 0 || value === "") return null;
@@ -50,6 +50,11 @@ const normalizePostMetaData = (value) => {
     }
   }
   return typeof value === "object" ? value : null;
+};
+const normalizeCategoryId = (value) => {
+  if (value === null || value === void 0 || value === "") return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.trunc(parsed) : null;
 };
 const _id__put = defineEventHandler(async (event) => {
   const locale = getRequestLocale(event);
@@ -75,6 +80,7 @@ const _id__put = defineEventHandler(async (event) => {
       key: normalizedKey || null,
       sort: normalizedSort,
       locale: normalizedLocale,
+      categoryId: body.categoryId === void 0 ? void 0 : normalizeCategoryId(body.categoryId),
       description: body.description || null,
       content: body.content || null,
       type: postType,

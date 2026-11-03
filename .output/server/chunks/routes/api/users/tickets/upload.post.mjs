@@ -1,4 +1,4 @@
-import { d as defineEventHandler, d1 as requireUserSession, e as createError, ck as uploadTicketAttachment } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, dy as requireUserSession, e as createError, cQ as uploadTicketAttachment } from '../../../../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const upload_post = defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event);

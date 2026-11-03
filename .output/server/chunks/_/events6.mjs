@@ -1,4 +1,4 @@
-import { ae as readMinimalCheckoutBridgeMeta, fk as sendMinimalCheckoutPaidNotification } from '../nitro/nitro.mjs';
+import { b as db, fS as ensureHoxiWorkMcpToolsRegistered, fT as ensureRewardOutboxWorkerStarted, fU as startAaDailySyncWorker, fV as stopRewardOutboxWorker, fW as stopAaDailySyncWorker } from '../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,41 +31,28 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 function getThemeEventRules() {
-  return [
-    {
-      key: "minimal:checkout_notify",
-      event: "order.paid",
-      theme: "minimal",
-      label: "\u6781\u7B80\u6536\u94F6\uFF1A\u5916\u90E8\u4E2D\u7EE7\u8BA2\u5355\u652F\u4ED8\u901A\u77E5\u4E0E\u56DE\u8C03",
-      description: "\u5916\u90E8\u4E2D\u7EE7\u652F\u4ED8\u8BA2\u5355\u652F\u4ED8\u6210\u529F\u540E\uFF0C\u81EA\u52A8\u5411\u7B2C\u4E09\u65B9\u7CFB\u7EDF\u53D1\u9001 Webhook \u56DE\u8C03\u901A\u77E5\u5E76\u7B7E\u540D\u9A8C\u7B7E",
-      mode: "async",
-      handler: async (payload) => {
-        const order = payload;
-        const bridgeMeta = readMinimalCheckoutBridgeMeta(order == null ? void 0 : order.metaData);
-        if (!bridgeMeta) {
-          return { ok: true };
-        }
-        try {
-          const res = await sendMinimalCheckoutPaidNotification(order);
-          return { ok: res.delivered || res.skipped };
-        } catch (err) {
-          console.error(`[MinimalCheckoutEvent] notification failed for order ${order == null ? void 0 : order.id}:`, err);
-          return { ok: false, errorMessage: (err == null ? void 0 : err.message) || String(err) };
-        }
-      }
-    }
-  ];
+  return [];
+}
+function registerThemeMcpTools() {
+  ensureHoxiWorkMcpToolsRegistered();
+}
+function startThemeBackgroundWorkers(database = db) {
+  ensureRewardOutboxWorkerStarted(database, 6e4, { immediateSweep: true });
+  startAaDailySyncWorker(database);
+}
+function stopThemeBackgroundWorkers() {
+  stopRewardOutboxWorker();
+  stopAaDailySyncWorker();
 }
 
-export { getThemeEventRules };
+export { getThemeEventRules, registerThemeMcpTools, startThemeBackgroundWorkers, stopThemeBackgroundWorkers };
 //# sourceMappingURL=events6.mjs.map

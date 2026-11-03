@@ -1,4 +1,4 @@
-import { d as defineEventHandler, c as getRequestLocale, $ as resolveClientIp, a0 as checkIpRateLimit, e as createError, r as readBody, cs as validateEmail, b as db, u as users, j as hashPassword, al as emitEvent, cM as getIntegrationToken, b1 as settings } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, ab as resolveClientIp, ac as checkIpRateLimit, e as createError, r as readBody, cY as validateEmail, b as db, u as users, j as hashPassword, ax as emitEvent, dg as getIntegrationToken, bg as settings } from '../../../nitro/nitro.mjs';
 import { timingSafeEqual } from 'node:crypto';
 import { eq, like } from 'drizzle-orm';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 function safeTokenMatch(a, b) {
   if (!a || !b) return false;
@@ -61,7 +61,7 @@ async function isAuthorizedIdentityCaller(event) {
   if (process.env.APAY_INTEGRATION_TOKEN) candidates.add(process.env.APAY_INTEGRATION_TOKEN.trim());
   if (process.env.INTERNAL_API_SECRET) candidates.add(process.env.INTERNAL_API_SECRET.trim());
   try {
-    const tenantTokenRows = await db.select({ value: settings.value }).from(settings).where(like(settings.key, "%_ainode_tenant_token"));
+    const tenantTokenRows = await db.select({ value: settings.value }).from(settings).where(like(settings.key, "%_tenant_token"));
     for (const row of tenantTokenRows) {
       const val = String(row.value || "").trim();
       if (val) candidates.add(val);

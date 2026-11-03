@@ -1,4 +1,4 @@
-import { d as defineEventHandler, c as getRequestLocale, g as getQuery, cA as fetchExternalUsersMap, u as users, b as db, cc as userWallets, cq as userTokens, e as createError } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, d4 as fetchExternalUsersMap, u as users, b as db, cJ as userWallets, cW as userTokens, e as createError } from '../../../../nitro/nitro.mjs';
 import { sql, eq, or, like, count, and, gt } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const summary_get = defineEventHandler(async (event) => {
   var _a;
@@ -55,8 +55,8 @@ const summary_get = defineEventHandler(async (event) => {
       id: users.id,
       email: users.email,
       nickname: users.nickname,
-      cashBalance: userWallets.cashBalance,
-      grantBalance: userWallets.grantBalance,
+      cashBalance: sql`coalesce(sum(${userWallets.cashBalance}), 0)`,
+      grantBalance: sql`coalesce(sum(${userWallets.grantBalance}), 0)`,
       status: users.status
     }).from(users).leftJoin(userWallets, eq(userWallets.userId, users.id));
     if (keyword) {
@@ -66,7 +66,12 @@ const summary_get = defineEventHandler(async (event) => {
         like(idLower, likePattern)
       ));
     }
-    const allUsers = await usersQuery;
+    const allUsers = await usersQuery.groupBy(
+      users.id,
+      users.email,
+      users.nickname,
+      users.status
+    );
     const mergedUsers = allUsers.map((user) => {
       const extData = externalUsersMap.get(user.id) || {};
       return {

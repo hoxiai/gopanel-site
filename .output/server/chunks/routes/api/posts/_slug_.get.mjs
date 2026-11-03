@@ -1,4 +1,4 @@
-import { ef as defineCachedEventHandler, f as getRouterParam, eg as resolvePostRequestLocaleHint, c as getRequestLocale, e as createError, b as db, aJ as posts } from '../../../nitro/nitro.mjs';
+import { eL as defineCachedEventHandler, f as getRouterParam, eM as resolvePostRequestLocaleHint, c as getRequestLocale, e as createError, b as db, aV as posts, a$ as postCategories, eN as resolvePostLocaleContext, eO as localizePostCategory } from '../../../nitro/nitro.mjs';
 import { and, or, eq, sql } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const _slug__get = defineCachedEventHandler(async (event) => {
   const locale = getRequestLocale(event);
@@ -61,8 +61,17 @@ const _slug__get = defineCachedEventHandler(async (event) => {
       console.error("Failed to parse metaData JSON", e);
     }
   }
+  let category = null;
+  if (post.categoryId != null) {
+    const categoryRows = await db.select().from(postCategories).where(eq(postCategories.id, post.categoryId)).limit(1);
+    if (categoryRows[0]) {
+      const localeContext = await resolvePostLocaleContext(event);
+      category = localizePostCategory(categoryRows[0], localeContext.locale);
+    }
+  }
   return {
     ...post,
+    category,
     metaData: parsedMetaData
   };
 }, {

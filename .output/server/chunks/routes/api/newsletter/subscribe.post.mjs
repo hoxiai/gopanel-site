@@ -1,4 +1,4 @@
-import { d as defineEventHandler, $ as resolveClientIp, a0 as checkIpRateLimit, e as createError, r as readBody, dv as normalizeSubscriberChannel, dw as normalizeSubscriberTopic, c as getRequestLocale, dx as validateAndNormalizeTarget, W as subscribeNewsletter } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, ab as resolveClientIp, ac as checkIpRateLimit, e as createError, r as readBody, d$ as normalizeSubscriberChannel, e0 as normalizeSubscriberTopic, c as getRequestLocale, e1 as validateAndNormalizeTarget, a6 as subscribeNewsletter } from '../../../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const subscribe_post = defineEventHandler(async (event) => {
   var _a;

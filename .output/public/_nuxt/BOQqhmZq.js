@@ -1,0 +1,1 @@
+import{F as o,o as t}from"./2Jmku0Py.js";import{m as a,l as r,c as s,o as n}from"./CBybPWDt.js";import"./CDbrxY-m.js";import"./CI8YCusp.js";import"./CfYFMnge.js";const c={class:"py-16"},h=a({__name:"index",setup(p){const{localePath:e}=o();return r(()=>{t(e("/user/dashboard"),{replace:!0})}),(m,i)=>(n(),s("div",c))}});export{h as default};

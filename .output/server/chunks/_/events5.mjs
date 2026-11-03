@@ -1,4 +1,4 @@
-import { b as db, fh as ensureHoxiWorkMcpToolsRegistered, fi as ensureRewardOutboxWorkerStarted, fj as stopRewardOutboxWorker } from '../nitro/nitro.mjs';
+import { fQ as ensureHarvestJob, fR as runHarvest, b as db } from '../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,27 +31,33 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
-function getThemeEventRules() {
-  return [];
+let timer = null;
+async function startThemeBackgroundWorkers() {
+  await ensureHarvestJob().catch(() => {
+  });
+  runHarvest(db).catch(() => {
+  });
+  if (!timer) {
+    timer = setInterval(() => {
+      runHarvest(db).catch(() => {
+      });
+    }, 6 * 60 * 60 * 1e3);
+  }
 }
-function registerThemeMcpTools() {
-  ensureHoxiWorkMcpToolsRegistered();
-}
-function startThemeBackgroundWorkers(database = db) {
-  ensureRewardOutboxWorkerStarted(database, 6e4, { immediateSweep: true });
-}
-function stopThemeBackgroundWorkers() {
-  stopRewardOutboxWorker();
+async function stopThemeBackgroundWorkers() {
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
 }
 
-export { getThemeEventRules, registerThemeMcpTools, startThemeBackgroundWorkers, stopThemeBackgroundWorkers };
+export { startThemeBackgroundWorkers, stopThemeBackgroundWorkers };
 //# sourceMappingURL=events5.mjs.map

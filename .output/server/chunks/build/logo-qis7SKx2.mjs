@@ -1,4 +1,4 @@
-import { f1 as buildAssetsURL } from '../nitro/nitro.mjs';
+import { fy as buildAssetsURL } from '../nitro/nitro.mjs';
 
 const _imports_0 = "" + buildAssetsURL("logo.amu2WdSZ.svg");
 

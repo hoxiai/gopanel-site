@@ -1,4 +1,4 @@
-import { d as defineEventHandler, b as db, b1 as settings, r as readBody, s as setAuditMeta, bE as EMAIL_VERIFY_POLICY_KEY, bF as invalidateEmailVerifyPolicyCache } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, b as db, bg as settings, r as readBody, s as setAuditMeta, bP as EMAIL_VERIFY_POLICY_KEY, bQ as invalidateEmailVerifyPolicyCache, bR as SINGLE_WEB_SESSION_POLICY_KEY, bS as invalidateSingleWebSessionPolicyCache, bT as runtimeExtensionSettingPrefixes, bU as runtimeThemeSettingPrefixes, bV as runtimeExtensionSettingKeys, bW as runtimeThemeSettingKeys, bO as invalidatePublicSettingsCache } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,30 +31,27 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const INTERNAL_RUNTIME_SETTING_PREFIXES = [
-  "shopark_license_version.",
-  "shopark_custom_store_limit.",
   "scheduler_state.",
   "extension_migration:",
   "extension_migration_failure:",
   "extension_migration_lock:",
-  "extension_migrations:"
+  "extension_migrations:",
+  ...runtimeExtensionSettingPrefixes || [],
+  ...runtimeThemeSettingPrefixes || []
 ];
 const INTERNAL_RUNTIME_SETTING_KEYS = /* @__PURE__ */ new Set([
-  "shopark_license_reconcile_state",
-  "shopark_leads_records",
-  "shopark_expiry_reminder_sent_log",
   "enabled_extensions",
-  "ainode_subscription_sync_since"
+  ...runtimeExtensionSettingKeys || [],
+  ...runtimeThemeSettingKeys || []
 ]);
 const isInternalRuntimeSettingKey = (key) => {
   if (INTERNAL_RUNTIME_SETTING_KEYS.has(key)) return true;
@@ -84,6 +82,10 @@ const index = defineEventHandler(async (event) => {
     if (EMAIL_VERIFY_POLICY_KEY in body) {
       invalidateEmailVerifyPolicyCache();
     }
+    if (SINGLE_WEB_SESSION_POLICY_KEY in body) {
+      invalidateSingleWebSessionPolicyCache();
+    }
+    invalidatePublicSettingsCache();
     setAuditMeta(event, {
       action: "update",
       resource: "settings",

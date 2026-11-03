@@ -1,4 +1,4 @@
-import { d as defineEventHandler, at as requireTrustedRequestOrigin, c as getRequestLocale, d1 as requireUserSession, e as createError, r as readBody, cs as validateEmail, b as db, u as users, a3 as verifyPassword, ct as normalizeEmail, da as getEmailVerifySendCooldown, cu as revokeEmailVerifyTokens, db as issueEmailVerification, d2 as overwriteSessionUser } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, aF as requireTrustedRequestOrigin, c as getRequestLocale, dy as requireUserSession, e as createError, r as readBody, cY as validateEmail, b as db, u as users, af as verifyPassword, cZ as normalizeEmail, dG as getEmailVerifySendCooldown, c_ as revokeEmailVerifyTokens, dH as issueEmailVerification, dz as overwriteSessionUser } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const email_put = defineEventHandler(async (event) => {
   const siteUrl = requireTrustedRequestOrigin(event);

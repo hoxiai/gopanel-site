@@ -1,4 +1,4 @@
-import { d as defineEventHandler, bI as resolveServerSeoContext, g as getQuery, eZ as generateAdaptiveSitemapXml, bQ as seoRouteRegistry, bP as classifySeoRoute, eo as setHeader, e as createError } from '../nitro/nitro.mjs';
+import { d as defineEventHandler, bY as resolveServerSeoContext, g as getQuery, fu as generateAdaptiveSitemapXml, c4 as seoRouteRegistry, c3 as classifySeoRoute, eV as setHeader, e as createError } from '../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const sitemap_xml_get = defineEventHandler(async (event) => {
   try {

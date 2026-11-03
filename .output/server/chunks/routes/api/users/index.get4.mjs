@@ -1,4 +1,4 @@
-import { d as defineEventHandler, d1 as requireUserSession, b as db, cq as userTokens, eI as apiTokenScope, dE as MCP_SCOPE_DEFINITIONS } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, dy as requireUserSession, b as db, cW as userTokens, fc as apiTokenScope, e8 as MCP_SCOPE_DEFINITIONS } from '../../../nitro/nitro.mjs';
 import { desc } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const index_get = defineEventHandler(async (event) => {
   const session = await requireUserSession(event);

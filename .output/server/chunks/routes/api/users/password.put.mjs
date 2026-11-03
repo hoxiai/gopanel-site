@@ -1,4 +1,4 @@
-import { d as defineEventHandler, c as getRequestLocale, d1 as requireUserSession, e as createError, r as readBody, cr as PASSWORD_MIN_LENGTH, b as db, u as users, a3 as verifyPassword, j as hashPassword } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, dy as requireUserSession, e as createError, r as readBody, cX as PASSWORD_MIN_LENGTH, b as db, u as users, af as verifyPassword, j as hashPassword } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const password_put = defineEventHandler(async (event) => {
   const locale = getRequestLocale(event);

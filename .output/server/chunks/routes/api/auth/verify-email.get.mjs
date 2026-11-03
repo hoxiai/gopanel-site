@@ -1,4 +1,4 @@
-import { d as defineEventHandler, g as getQuery, cP as sendLocalizedRedirect, b as db, cq as userTokens, cv as EMAIL_VERIFY_TOKEN_NAME, u as users, z as orders, bx as getUserSession, a5 as setUserSession } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, g as getQuery, dj as sendLocalizedRedirect, b as db, cW as userTokens, c$ as EMAIL_VERIFY_TOKEN_NAME, u as users, z as orders, bH as getUserSession, ah as setUserSession } from '../../../nitro/nitro.mjs';
 import { eq, and, isNull } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const verifyEmail_get = defineEventHandler(async (event) => {
   const query = getQuery(event);

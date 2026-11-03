@@ -1,5 +1,5 @@
-import { d as defineEventHandler, g as getQuery, aJ as posts, aL as normalizePostLocale, b as db } from '../../../nitro/nitro.mjs';
-import { eq, or, like, and, count, desc, sql } from 'drizzle-orm';
+import { d as defineEventHandler, g as getQuery, aV as posts, aX as normalizePostLocale, b as db } from '../../../nitro/nitro.mjs';
+import { eq, isNull, or, like, and, count, desc, sql } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
 import 'fs';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const index_get = defineEventHandler(async (event) => {
   var _a;
@@ -49,9 +49,20 @@ const index_get = defineEventHandler(async (event) => {
   const locale = String(query.locale || "").trim();
   const status = String(query.status || "").trim();
   const search = String(query.search || "").trim();
+  const category = String(query.category || "").trim();
   const conditions = [];
   if (type && type !== "all") {
     conditions.push(eq(posts.type, type));
+  }
+  if (category && category !== "all") {
+    if (category === "uncategorized" || category === "none" || category === "0") {
+      conditions.push(isNull(posts.categoryId));
+    } else {
+      const categoryId = Number.parseInt(category, 10);
+      if (Number.isFinite(categoryId)) {
+        conditions.push(eq(posts.categoryId, categoryId));
+      }
+    }
   }
   if (locale && locale !== "all") {
     const normalizedLocale = normalizePostLocale(locale);

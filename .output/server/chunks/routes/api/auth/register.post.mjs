@@ -1,4 +1,4 @@
-import { d as defineEventHandler, at as requireTrustedRequestOrigin, c as getRequestLocale, $ as resolveClientIp, a0 as checkIpRateLimit, e as createError, r as readBody, d3 as mergePromoTracking, d4 as capturePromoTracking, d5 as readPromoTracking, cr as PASSWORD_MIN_LENGTH, cs as validateEmail, b as db, u as users, j as hashPassword, au as ensurePromoMember, d6 as bindInviteRelation, d7 as requestPromoAgentJoin, al as emitEvent, d8 as promoAgentRelations, d9 as promoInviteRelations, aQ as promoMembers, cZ as issueWebSession, cC as trackVisitorEvent, c_ as ensureVisitorId, cq as userTokens, cv as EMAIL_VERIFY_TOKEN_NAME, X as getLocalizedSettingValue, Y as sendEmail } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, aF as requireTrustedRequestOrigin, c as getRequestLocale, ab as resolveClientIp, ac as checkIpRateLimit, e as createError, r as readBody, dA as mergePromoTracking, dB as capturePromoTracking, dC as readPromoTracking, cX as PASSWORD_MIN_LENGTH, cY as validateEmail, b as db, u as users, j as hashPassword, aG as ensurePromoMember, dD as bindInviteRelation, dE as requestPromoAgentJoin, ax as emitEvent, dF as promoAgentRelations, L as promoInviteRelations, b4 as promoMembers, du as issueWebSession, d6 as trackVisitorEvent, dv as ensureVisitorId, cW as userTokens, c$ as EMAIL_VERIFY_TOKEN_NAME, a7 as getLocalizedSettingValue, a8 as sendEmail } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import 'node:crypto';
 import 'crypto';
@@ -23,6 +23,7 @@ import 'drizzle-orm/sqlite-core';
 import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
+import 'node:fs/promises';
 import 'node:url';
 import 'zod';
 import '@iconify/utils';
@@ -30,14 +31,13 @@ import 'consola';
 import 'node:zlib';
 import 'ioredis';
 import 'jose';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
 import 'node:dns/promises';
 import 'node:net';
-import 'node:fs/promises';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 
 const register_post = defineEventHandler(async (event) => {
   const siteUrl = requireTrustedRequestOrigin(event);

@@ -1,16 +1,19 @@
-import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, I as topups, b as db, z as orders, u as users, cR as balanceLogs, cS as BALANCE_SCALE } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, R as topups, b as db, I as orders, q as products, v as users, cT as balanceLogs, cU as BALANCE_SCALE, cV as getTopupManagementActions } from '../../../../nitro/nitro.mjs';
 import { or, eq, inArray, desc } from 'drizzle-orm';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:crypto';
+import 'zod';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:fs';
 import 'node:path';
 import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
-import 'node:fs';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -25,14 +28,8 @@ import 'maxmind';
 import 'node:os';
 import 'node:fs/promises';
 import 'node:url';
-import 'zod';
 import '@iconify/utils';
 import 'consola';
-import 'node:zlib';
-import 'ioredis';
-import 'jose';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
@@ -73,16 +70,21 @@ const _id__get = defineEventHandler(async (event) => {
     paidAt: topups.paidAt,
     creditedAt: topups.creditedAt,
     refundedAt: topups.refundedAt,
+    archivedAt: topups.archivedAt,
+    archivedBy: topups.archivedBy,
+    archiveReason: topups.archiveReason,
     createdAt: topups.createdAt,
     updatedAt: topups.updatedAt,
     payMethod: orders.payMethod,
     tradeNo: orders.tradeNo,
     orderPayStatus: orders.payStatus,
     orderStatus: orders.status,
+    orderPaidAt: orders.paidAt,
+    productType: products.type,
     orderAmount: orders.amount,
     orderCurrency: orders.currency,
     contactEmail: orders.contactEmail
-  }).from(topups).leftJoin(users, eq(users.id, topups.userId)).leftJoin(orders, eq(orders.id, topups.orderId)).where(whereCondition).limit(1);
+  }).from(topups).leftJoin(users, eq(users.id, topups.userId)).leftJoin(orders, eq(orders.id, topups.orderId)).leftJoin(products, eq(products.id, orders.productId)).where(whereCondition).limit(1);
   if (!rows[0]) {
     throw createError({
       statusCode: 404,
@@ -113,6 +115,7 @@ const _id__get = defineEventHandler(async (event) => {
       ...row,
       creditAmount: Number(row.creditAmountCents || 0) / BALANCE_SCALE,
       shortfall: Number(row.shortfallCents || 0) / BALANCE_SCALE,
+      managementActions: getTopupManagementActions(row),
       balanceLogs: logs.map((l) => ({
         ...l,
         amount: Number(l.amountCents || 0) / BALANCE_SCALE,

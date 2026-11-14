@@ -1,16 +1,19 @@
-import { d as defineEventHandler, bH as getUserSession, e as createError, r as readBody, dk as getCookie, dR as diagnoseTicketIssue, b as db, J as tickets, cI as ticketMessages } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, b8 as getUserSession, e as createError, r as readBody, du as getCookie, e2 as diagnoseTicketIssue, b as db, u as tickets, x as ticketMessages } from '../../../nitro/nitro.mjs';
 import crypto from 'node:crypto';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'drizzle-orm';
+import 'zod';
 import 'crypto';
 import 'fs';
 import 'path';
+import 'node:fs';
 import 'node:path';
 import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
-import 'node:fs';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -25,14 +28,8 @@ import 'maxmind';
 import 'node:os';
 import 'node:fs/promises';
 import 'node:url';
-import 'zod';
 import '@iconify/utils';
 import 'consola';
-import 'node:zlib';
-import 'ioredis';
-import 'jose';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
@@ -66,7 +63,7 @@ const index_post = defineEventHandler(async (event) => {
   const randomSuffix = Math.floor(1e3 + Math.random() * 9e3);
   const ticketNo = `TK-${dateStr}-${randomSuffix}`;
   const accessToken = crypto.randomBytes(16).toString("hex");
-  const diagnosis = diagnoseTicketIssue({
+  const diagnosis = await diagnoseTicketIssue({
     category,
     title,
     content,

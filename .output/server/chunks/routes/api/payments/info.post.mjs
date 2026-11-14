@@ -1,16 +1,20 @@
-import { d as defineEventHandler, c as getRequestLocale, r as readBody, ex as resolveOrderAccess, aH as getSiteLocaleConfig, aI as resolveRequestLocale, eD as lockLegacyPendingOrderCurrency, b as db, aR as paymentMethods, aT as applyLocalPaymentPluginDefaults, eE as isPaymentMethodAvailableForLocale, eF as resolvePaymentPluginConfig, eG as isPaymentMethodCurrencySupported, eH as sortPaymentMethodsByGeo } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, eK as resolveOrderAccess, aN as getSiteLocaleConfig, aO as resolveRequestLocale, eP as lockLegacyPendingOrderCurrency, b as db, a0 as paymentMethods, eQ as isPaymentMethodAvailableForLocale, eR as resolvePaymentPluginConfig, eS as isPaymentMethodCurrencySupported, eT as renderPaymentMethodHtml, eU as sortPaymentMethodsByGeo, eV as toPublicPaymentMethodView } from '../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
 import fs from 'fs';
 import path from 'path';
+import { a as applyLocalPaymentPluginDefaults } from '../../../_/meta.mjs';
+import '@adonisjs/hash';
+import '@adonisjs/hash/drivers/scrypt';
 import 'node:crypto';
+import 'zod';
 import 'crypto';
+import 'node:fs';
 import 'node:path';
 import '@nuxthub/blob';
 import 'node:http';
 import 'node:https';
 import 'node:events';
 import 'node:buffer';
-import 'node:fs';
 import 'node:async_hooks';
 import 'postgres';
 import 'drizzle-orm/postgres-js';
@@ -25,14 +29,8 @@ import 'maxmind';
 import 'node:os';
 import 'node:fs/promises';
 import 'node:url';
-import 'zod';
 import '@iconify/utils';
 import 'consola';
-import 'node:zlib';
-import 'ioredis';
-import 'jose';
-import '@adonisjs/hash';
-import '@adonisjs/hash/drivers/scrypt';
 import 'node:child_process';
 import 'process';
 import 'buffer';
@@ -99,15 +97,16 @@ const info_post = defineEventHandler(async (event) => {
         }
       }
       if (!rawHtml) continue;
-      let content = rawHtml.replace(/\{\$orderId\}/g, orderId);
-      content = content.replace(/\{\$amount\}/g, order.amount.toString());
-      content = content.replace(/\{\$currency\}/g, String(order.currency || "USD"));
-      content = content.replace(/\{\$productId\}/g, order.productId.toString());
-      for (const [key, value] of Object.entries(configObj)) {
-        if (/(secret|private|password|token|mchkey|apikey|signkey|cert|pem)/i.test(key)) continue;
-        const regex = new RegExp(`\\{\\$config\\.${key}\\}`, "g");
-        content = content.replace(regex, String(value));
-      }
+      const content = renderPaymentMethodHtml(
+        rawHtml,
+        {
+          orderId: String(orderId),
+          amount: order.amount,
+          currency: String(order.currency || "USD"),
+          productId: order.productId
+        },
+        configObj
+      );
       availableMethods.push({
         code: method.code,
         name: method.name,
@@ -161,7 +160,7 @@ const info_post = defineEventHandler(async (event) => {
     return {
       code: 0,
       data: {
-        methods: geoSortedMethods,
+        methods: geoSortedMethods.map(toPublicPaymentMethodView),
         visitorCountry,
         amount: order.amount,
         currency: String(order.currency || "USD"),

@@ -1,6 +1,8 @@
 {
   "coreTheme": "core",
-  "publishedOptionalThemes": [],
-  "buildMode": "core-only",
-  "generatedAt": "2026-11-03T16:52:35.109Z"
+  "publishedOptionalThemes": [
+    "panel"
+  ],
+  "buildMode": "filtered",
+  "generatedAt": "2026-11-14T16:17:33.185Z"
 }

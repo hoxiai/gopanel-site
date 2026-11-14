@@ -1,5 +1,5 @@
 import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'vue-bundle-renderer/runtime';
-import { fy as buildAssetsURL, dr as useRuntimeConfig, fz as getResponseStatusText, fA as getResponseStatus, fB as defineRenderHandler, fC as publicAssetsURL, g as getQuery, e as createError, fD as destr, fE as getRouteRules, fF as joinURL, fG as useNitroApp } from '../nitro/nitro.mjs';
+import { fM as buildAssetsURL, dD as useRuntimeConfig, fN as getResponseStatusText, fO as getResponseStatus, fP as defineRenderHandler, fQ as publicAssetsURL, g as getQuery, e as createError, fR as destr, fS as getRouteRules, fT as joinURL, fU as useNitroApp } from '../nitro/nitro.mjs';
 import { renderToString } from 'vue/server-renderer';
 import { createHead as createHead$1, propsToString, renderSSRHead } from 'unhead/server';
 import { stringify, uneval } from 'devalue';
@@ -52,7 +52,7 @@ function clientUseHead(head, input, options = {}) {
   const vm = getCurrentInstance();
   if (vm) {
     onBeforeUnmount(() => {
-      entry?.dispose?.();
+      entry.dispose();
     });
     onDeactivated(() => {
       deactivated.value = true;

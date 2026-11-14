@@ -1,0 +1,1 @@
+import{_ as t}from"./BCoBCMBl.js";import{m as r,o as m,ar as p}from"./M8R0iJpG.js";import"./Cj9SvN-x.js";import"./C2hL5Euk.js";import"./C2teCZZ0.js";import"./CfYFMnge.js";import"./DkAZNlYy.js";import"./D0RMEd96.js";import"./8pc6jJln.js";import"./5sKH0RGn.js";const B=r({__name:"create",setup(e){return(n,_)=>{const o=t;return m(),p(o)}}});export{B as default};

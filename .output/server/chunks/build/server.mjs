@@ -899,279 +899,279 @@ const _routes = [
     name: "admin-posts-categories",
     path: "/admin/posts/categories",
     meta: __nuxt_page_meta$v || {},
-    component: () => import('./categories-DJYILm6J.mjs')
+    component: () => import('./categories-DOdkeL74.mjs')
   },
   {
     name: "admin-posts-create",
     path: "/admin/posts/create",
     meta: __nuxt_page_meta$u || {},
-    component: () => import('./create-fiWYfit1.mjs')
+    component: () => import('./create-D5dVsN6-.mjs')
   },
   {
     name: "admin-products-create",
     path: "/admin/products/create",
     meta: __nuxt_page_meta$t || {},
-    component: () => import('./create-DLocGxOG.mjs')
+    component: () => import('./create-B9WY0BmD.mjs')
   },
   {
     name: "admin-settings-authorization",
     path: "/admin/settings/authorization",
     meta: __nuxt_page_meta$s || {},
-    component: () => import('./authorization-4b_cJo9f.mjs')
+    component: () => import('./authorization-PSHwsFgy.mjs')
   },
   {
     name: "admin-settings-extensions",
     path: "/admin/settings/extensions",
     meta: __nuxt_page_meta$r || {},
-    component: () => import('./extensions-B0Wx55BG.mjs')
+    component: () => import('./extensions-gh1FWwQa.mjs')
   },
   {
     name: "admin-settings-manages",
     path: "/admin/settings/manages",
     meta: __nuxt_page_meta$q || {},
-    component: () => import('./manages-DoAMkz7J.mjs')
+    component: () => import('./manages-CK4fgbo0.mjs')
   },
   {
     name: "admin-settings-product-presets",
     path: "/admin/settings/product-presets",
     meta: __nuxt_page_meta$p || {},
-    component: () => import('./product-presets-Dz9H56Y2.mjs')
+    component: () => import('./product-presets-DUhUZXZh.mjs')
   },
   {
     name: "admin-settings-releases",
     path: "/admin/settings/releases",
     meta: __nuxt_page_meta$o || {},
-    component: () => import('./releases-Dvs8P3nE.mjs')
+    component: () => import('./releases-C0wOBY2k.mjs')
   },
   {
     name: "admin-settings-themes",
     path: "/admin/settings/themes",
     meta: __nuxt_page_meta$n || {},
-    component: () => import('./themes-DRMybMLN.mjs')
+    component: () => import('./themes-B6Z0kUNv.mjs')
   },
   {
     name: "admin-posts-id",
     path: "/admin/posts/:id()",
     meta: __nuxt_page_meta$m || {},
-    component: () => import('./_id_-EIOL7IQA.mjs')
+    component: () => import('./_id_-75Tm6K07.mjs')
   },
   {
     name: "admin-products-id",
     path: "/admin/products/:id()",
     meta: __nuxt_page_meta$l || {},
-    component: () => import('./_id_-DWMt5FaY.mjs')
+    component: () => import('./_id_-oorZ3Grn.mjs')
   },
   {
     name: "admin-extensions-slug",
     path: "/admin/extensions/:slug(.*)*",
     meta: __nuxt_page_meta$k || {},
-    component: () => import('./_...slug_-Ggqpm7ST.mjs')
+    component: () => import('./_...slug_-BNm8ojOl.mjs')
   },
   {
     name: "admin-plugins-slug",
     path: "/admin/plugins/:slug(.*)*",
     meta: __nuxt_page_meta$j || {},
-    component: () => import('./_...slug_-YjZvF8Ug.mjs')
+    component: () => import('./_...slug_-DdlFs8Zw.mjs')
   },
   {
     name: "user-plugins-slug___en",
     path: "/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-C1G1UfBq.mjs')
+    component: () => import('./_...slug_-B5F0j7du.mjs')
   },
   {
     name: "user-plugins-slug___zh___default",
     path: "/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-C1G1UfBq.mjs')
+    component: () => import('./_...slug_-B5F0j7du.mjs')
   },
   {
     name: "user-plugins-slug___zh",
     path: "/zh/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-C1G1UfBq.mjs')
+    component: () => import('./_...slug_-B5F0j7du.mjs')
   },
   {
     name: "user-plugins-slug___zh-HK___default",
     path: "/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-C1G1UfBq.mjs')
+    component: () => import('./_...slug_-B5F0j7du.mjs')
   },
   {
     name: "user-plugins-slug___zh-HK",
     path: "/zh-HK/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-C1G1UfBq.mjs')
+    component: () => import('./_...slug_-B5F0j7du.mjs')
   },
   {
     name: "user-plugins-slug___ja___default",
     path: "/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-C1G1UfBq.mjs')
+    component: () => import('./_...slug_-B5F0j7du.mjs')
   },
   {
     name: "user-plugins-slug___ja",
     path: "/ja/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-C1G1UfBq.mjs')
+    component: () => import('./_...slug_-B5F0j7du.mjs')
   },
   {
     name: "admin-cards",
     path: "/admin/cards",
-    component: () => import('./cards-BMmuZwfi.mjs')
+    component: () => import('./cards-vMw9rbVU.mjs')
   },
   {
     name: "admin-comments",
     path: "/admin/comments",
     meta: __nuxt_page_meta$i || {},
-    component: () => import('./comments-BJ7koKVl.mjs')
+    component: () => import('./comments-11CBLwqE.mjs')
   },
   {
     name: "admin-customers",
     path: "/admin/customers",
     meta: __nuxt_page_meta$h || {},
-    component: () => import('./customers-D0qT36Ly.mjs')
+    component: () => import('./customers-BN4fgg88.mjs')
   },
   {
     name: "admin-dashboard",
     path: "/admin/dashboard",
     meta: __nuxt_page_meta$g || {},
-    component: () => import('./dashboard-oBm1K_VX.mjs')
+    component: () => import('./dashboard-CpmdIU4-.mjs')
   },
   {
     name: "admin-login",
     path: "/admin/login",
     meta: __nuxt_page_meta$f || {},
-    component: () => import('./login-Bv7804gk.mjs')
+    component: () => import('./login-o1QvSgbV.mjs')
   },
   {
     name: "admin-logs",
     path: "/admin/logs",
     meta: __nuxt_page_meta$e || {},
-    component: () => import('./logs-BVyd4WY-.mjs')
+    component: () => import('./logs-NMpKHh7o.mjs')
   },
   {
     name: "admin-newsletter",
     path: "/admin/newsletter",
     meta: __nuxt_page_meta$d || {},
-    component: () => import('./newsletter-C7c0oRIi.mjs')
+    component: () => import('./newsletter-BSbrRXTc.mjs')
   },
   {
     name: "admin-orders",
     path: "/admin/orders",
     meta: __nuxt_page_meta$c || {},
-    component: () => import('./orders-2vgE2fgt.mjs')
+    component: () => import('./orders-CX6dGhxW.mjs')
   },
   {
     name: "admin-payments",
     path: "/admin/payments",
     meta: __nuxt_page_meta$b || {},
-    component: () => import('./payments-DwAZQbIB.mjs')
+    component: () => import('./payments-B8cdXaif.mjs')
   },
   {
     name: "admin-posts",
     path: "/admin/posts",
     meta: __nuxt_page_meta$a || {},
-    component: () => import('./index-CLgIGIPd.mjs')
+    component: () => import('./index-xTbRkWI0.mjs')
   },
   {
     name: "admin-products",
     path: "/admin/products",
     meta: __nuxt_page_meta$9 || {},
-    component: () => import('./index-BN_fDqK-.mjs')
+    component: () => import('./index-ug_SP-oh.mjs')
   },
   {
     name: "admin-profile",
     path: "/admin/profile",
     meta: __nuxt_page_meta$8 || {},
-    component: () => import('./profile-CbWXTI9M.mjs')
+    component: () => import('./profile-CfoP0i0q.mjs')
   },
   {
     name: "admin-promo",
     path: "/admin/promo",
     meta: __nuxt_page_meta$7 || {},
-    component: () => import('./promo-ly5dTCgB.mjs')
+    component: () => import('./promo-CIswqSEo.mjs')
   },
   {
     name: "admin-releases",
     path: "/admin/releases",
     meta: __nuxt_page_meta$6 || {},
-    component: () => import('./releases-risQvzYZ.mjs')
+    component: () => import('./releases-DXyneUE0.mjs')
   },
   {
     name: "admin-settings",
     path: "/admin/settings",
     meta: __nuxt_page_meta$5 || {},
-    component: () => import('./index-8T8YM5qd.mjs')
+    component: () => import('./index-Cw8aq1v5.mjs')
   },
   {
     name: "admin-setup",
     path: "/admin/setup",
     meta: __nuxt_page_meta$4 || {},
-    component: () => import('./setup-iqtd0Qq7.mjs')
+    component: () => import('./setup-DbwxwzJp.mjs')
   },
   {
     name: "admin-stats",
     path: "/admin/stats",
     meta: __nuxt_page_meta$3 || {},
-    component: () => import('./stats-KXbjlgv8.mjs')
+    component: () => import('./stats-C58ia3Xj.mjs')
   },
   {
     name: "admin-subscriptions",
     path: "/admin/subscriptions",
-    component: () => import('./subscriptions-BPUDLWR5.mjs')
+    component: () => import('./subscriptions-DAp8eJTE.mjs')
   },
   {
     name: "admin-tickets",
     path: "/admin/tickets",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./tickets-CwftfDTG.mjs')
+    component: () => import('./tickets-rpULsDSj.mjs')
   },
   {
     name: "admin-topups",
     path: "/admin/topups",
-    component: () => import('./topups-B-kk0SWB.mjs')
+    component: () => import('./topups-Ds9onwQF.mjs')
   },
   {
     name: "admin-visitors",
     path: "/admin/stats/visitors",
     meta: __nuxt_page_meta$1 || {},
     alias: ["/admin/visitors"],
-    component: () => import('./visitors-B9drNogP.mjs')
+    component: () => import('./visitors-BY-JUSa4.mjs')
   },
   {
     name: "admin",
     path: "/admin",
     meta: __nuxt_page_meta || {},
-    component: () => import('./index-DapFxK2z.mjs')
+    component: () => import('./index-BhFAak56.mjs')
   },
   {
     name: "slug___en",
     path: "/:slug(.*)*",
-    component: () => import('./_...slug_-okCFhz8z.mjs')
+    component: () => import('./_...slug_-DW-xArpI.mjs')
   },
   {
     name: "slug___zh___default",
     path: "/:slug(.*)*",
-    component: () => import('./_...slug_-okCFhz8z.mjs')
+    component: () => import('./_...slug_-DW-xArpI.mjs')
   },
   {
     name: "slug___zh",
     path: "/zh/:slug(.*)*",
-    component: () => import('./_...slug_-okCFhz8z.mjs')
+    component: () => import('./_...slug_-DW-xArpI.mjs')
   },
   {
     name: "slug___zh-HK___default",
     path: "/:slug(.*)*",
-    component: () => import('./_...slug_-okCFhz8z.mjs')
+    component: () => import('./_...slug_-DW-xArpI.mjs')
   },
   {
     name: "slug___zh-HK",
     path: "/zh-HK/:slug(.*)*",
-    component: () => import('./_...slug_-okCFhz8z.mjs')
+    component: () => import('./_...slug_-DW-xArpI.mjs')
   },
   {
     name: "slug___ja___default",
     path: "/:slug(.*)*",
-    component: () => import('./_...slug_-okCFhz8z.mjs')
+    component: () => import('./_...slug_-DW-xArpI.mjs')
   },
   {
     name: "slug___ja",
     path: "/ja/:slug(.*)*",
-    component: () => import('./_...slug_-okCFhz8z.mjs')
+    component: () => import('./_...slug_-DW-xArpI.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -14616,72 +14616,72 @@ const localeCodes = [
 const localeLoaders = {
   en: [
     {
-      key: "locale_common_46json_0a149f33",
+      key: "locale_common_46json_7035a586",
       load: () => import(
         './common-CwWEomJY.mjs'
-        /* webpackChunkName: "locale_common_46json_0a149f33" */
+        /* webpackChunkName: "locale_common_46json_7035a586" */
       ),
       cache: true
     },
     {
-      key: "locale_site_46json_a27f2702",
+      key: "locale_site_46json_06a3ee16",
       load: () => import(
         './site-CotAxWow.mjs'
-        /* webpackChunkName: "locale_site_46json_a27f2702" */
+        /* webpackChunkName: "locale_site_46json_06a3ee16" */
       ),
       cache: true
     }
   ],
   zh: [
     {
-      key: "locale_common_46json_c9d46352",
+      key: "locale_common_46json_dc25f49f",
       load: () => import(
         './common-BJmwMvwu.mjs'
-        /* webpackChunkName: "locale_common_46json_c9d46352" */
+        /* webpackChunkName: "locale_common_46json_dc25f49f" */
       ),
       cache: true
     },
     {
-      key: "locale_site_46json_4fcc933f",
+      key: "locale_site_46json_13dfeaa3",
       load: () => import(
         './site-sEvoiAml.mjs'
-        /* webpackChunkName: "locale_site_46json_4fcc933f" */
+        /* webpackChunkName: "locale_site_46json_13dfeaa3" */
       ),
       cache: true
     }
   ],
   "zh-HK": [
     {
-      key: "locale_common_46json_62feff30",
+      key: "locale_common_46json_8f56212a",
       load: () => import(
         './common-C_WujmcQ.mjs'
-        /* webpackChunkName: "locale_common_46json_62feff30" */
+        /* webpackChunkName: "locale_common_46json_8f56212a" */
       ),
       cache: true
     },
     {
-      key: "locale_site_46json_4ae54b3f",
+      key: "locale_site_46json_6f04575f",
       load: () => import(
         './site-DmHw1A-e.mjs'
-        /* webpackChunkName: "locale_site_46json_4ae54b3f" */
+        /* webpackChunkName: "locale_site_46json_6f04575f" */
       ),
       cache: true
     }
   ],
   ja: [
     {
-      key: "locale_common_46json_8c145a04",
+      key: "locale_common_46json_da25b5f1",
       load: () => import(
         './common-BQOHkU-t.mjs'
-        /* webpackChunkName: "locale_common_46json_8c145a04" */
+        /* webpackChunkName: "locale_common_46json_da25b5f1" */
       ),
       cache: true
     },
     {
-      key: "locale_site_46json_358f5661",
+      key: "locale_site_46json_925a7683",
       load: () => import(
         './site-CTFgQ-4W.mjs'
-        /* webpackChunkName: "locale_site_46json_358f5661" */
+        /* webpackChunkName: "locale_site_46json_925a7683" */
       ),
       cache: true
     }
@@ -14694,11 +14694,11 @@ const normalizedLocales = [
     iso: "en-US",
     files: [
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-latest/locales/en/common.json",
+        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/en/common.json",
         cache: void 0
       },
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-latest/locales/en/site.json",
+        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/en/site.json",
         cache: void 0
       }
     ],
@@ -14717,11 +14717,11 @@ const normalizedLocales = [
     iso: "zh-CN",
     files: [
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-latest/locales/zh/common.json",
+        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/zh/common.json",
         cache: void 0
       },
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-latest/locales/zh/site.json",
+        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/zh/site.json",
         cache: void 0
       }
     ],
@@ -14740,11 +14740,11 @@ const normalizedLocales = [
     iso: "zh-HK",
     files: [
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-latest/locales/zh-HK/common.json",
+        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/zh-HK/common.json",
         cache: void 0
       },
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-latest/locales/zh-HK/site.json",
+        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/zh-HK/site.json",
         cache: void 0
       }
     ],
@@ -14761,11 +14761,11 @@ const normalizedLocales = [
     iso: "ja-JP",
     files: [
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-latest/locales/ja/common.json",
+        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/ja/common.json",
         cache: void 0
       },
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-latest/locales/ja/site.json",
+        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/ja/site.json",
         cache: void 0
       }
     ],
@@ -16721,7 +16721,7 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
       {
         key: "homepage-products"
       },
-      "$41igk-saOQ"
+      "$YFGoI0q320"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const products = computed(() => {
@@ -18159,7 +18159,7 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
         lazy: true,
         query: { orderId }
       },
-      "$hVQKbPu6cm"
+      "$4gzABYUxYI"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const pending = computed(() => status.value === "pending");
@@ -18984,7 +18984,7 @@ const _sfc_main$O = /* @__PURE__ */ defineComponent({
       {
         query: { limit: 100 }
       },
-      "$6WBO4l9zWs"
+      "$sNiVlIqYrT"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const plans = computed(() => {
@@ -21192,7 +21192,7 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
           return data;
         }
       },
-      "$Uv8g8sbluS"
+      "$HQI9_M-II0"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const { pending, requestFailed } = usePageResourceState(productData, status, error);
@@ -21593,7 +21593,7 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
     const { getLocalizedProduct } = useLocalizedProduct();
     const { data: productsData, status } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       "/api/products",
-      "$Pwl8NXAFr7"
+      "$hVqD0J4ibH"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const pending = computed(() => status.value === "pending");
@@ -23887,7 +23887,7 @@ const _sfc_main$A = /* @__PURE__ */ defineComponent({
       {
         query: inspectQuery
       },
-      "$Vh59XK-7_m"
+      "$yZU-ydRlZH"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const errorMessage = computed(() => {
@@ -24731,7 +24731,7 @@ const _sfc_main$y = /* @__PURE__ */ defineComponent({
     const url = computed(() => `/api/${props.admin ? "admin" : "users"}/orders/${encodeURIComponent(props.orderId)}/refund`);
     const { data, error, status, refresh } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       url,
-      "$iUh-9JtqUA"
+      "$n6vkgEiH5E"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const refund = computed(() => data.value?.data);
@@ -24986,7 +24986,7 @@ const _sfc_main$x = /* @__PURE__ */ defineComponent({
           }
         }
       },
-      "$XXoPdkd4BJ"
+      "$PC0FjXRcRp"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const pending = computed(() => status.value === "pending");
@@ -25983,7 +25983,7 @@ const _sfc_main$v = /* @__PURE__ */ defineComponent({
           }
         }
       },
-      "$xCYzlPu4RJ"
+      "$BJ6n8zCa67"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const orders = computed(() => ordersData.value?.data || []);
@@ -27874,7 +27874,7 @@ const _sfc_main$t = /* @__PURE__ */ defineComponent({
           }
         }
       },
-      "$jThUZgdACd"
+      "$Q2GN9IZxKw"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const tokens = computed(() => tokensData.value?.data || []);
@@ -28660,7 +28660,7 @@ const corePageModules = Object.fromEntries(Object.entries(/* @__PURE__ */ Object
   "/core/pages/user/tokens/index.vue": __vite_glob_0_12
 })).map(([file, module]) => [file.replace("/", "../"), module]));
 const themePageModules = {
-  ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({ "/themes/panel/pages/auth/login.vue": () => import('./login-CV6i-uXn.mjs'), "/themes/panel/pages/auth/register.vue": () => import('./register-CpjiJerc.mjs'), "/themes/panel/pages/blog/[slug].vue": () => import('./_slug_-CWzFqhnI.mjs'), "/themes/panel/pages/blog/category/[slug].vue": () => import('./_slug_-DE7T8sr4.mjs'), "/themes/panel/pages/blog/index.vue": () => import('./index-uzhGHv78.mjs'), "/themes/panel/pages/changelog.vue": () => import('./changelog-Dr6qiF5H.mjs'), "/themes/panel/pages/docs/[slug].vue": () => import('./_slug_-48Js9jN4.mjs'), "/themes/panel/pages/docs/index.vue": () => import('./index-C5DKC0wf.mjs'), "/themes/panel/pages/features.vue": () => import('./features-BlhzhQbe.mjs'), "/themes/panel/pages/index.vue": () => import('./index-B2yl9bUE.mjs'), "/themes/panel/pages/licenses.vue": () => import('./licenses-CG4eIsqF.mjs'), "/themes/panel/pages/products/[slug].vue": () => import('./_slug_-nSlh3Ovc.mjs'), "/themes/panel/pages/products/index.vue": () => import('./index-C2QdzHYd.mjs'), "/themes/panel/pages/user/dashboard.vue": () => import('./dashboard-G3WOIR98.mjs'), "/themes/panel/pages/user/index.vue": () => import('./index-B1ulY0Zz.mjs'), "/themes/panel/pages/user/layout.vue": () => import('./layout-CDYVgOuW.mjs'), "/themes/panel/pages/user/monitors.vue": () => import('./monitors-BgiDmun4.mjs'), "/themes/panel/pages/user/notify.vue": () => import('./notify-CIrdwisP.mjs') })).map(([file, module]) => [file.replace("/", "../"), module]))
+  ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({ "/themes/panel/pages/auth/login.vue": () => import('./login-C36jNUna.mjs'), "/themes/panel/pages/auth/register.vue": () => import('./register-D0CGQDtn.mjs'), "/themes/panel/pages/blog/[slug].vue": () => import('./_slug_-Bg3EZRzM.mjs'), "/themes/panel/pages/blog/category/[slug].vue": () => import('./_slug_-Dj9ETjcQ.mjs'), "/themes/panel/pages/blog/index.vue": () => import('./index-DqYtAZHE.mjs'), "/themes/panel/pages/changelog.vue": () => import('./changelog-RCOhDuy-.mjs'), "/themes/panel/pages/docs/[slug].vue": () => import('./_slug_-sD6n_4nC.mjs'), "/themes/panel/pages/docs/index.vue": () => import('./index-CKDN25OI.mjs'), "/themes/panel/pages/features.vue": () => import('./features-BbUSBFRp.mjs'), "/themes/panel/pages/index.vue": () => import('./index-DBt5gAXh.mjs'), "/themes/panel/pages/licenses.vue": () => import('./licenses-Bthqzd32.mjs'), "/themes/panel/pages/products/[slug].vue": () => import('./_slug_-DirELIb2.mjs'), "/themes/panel/pages/products/index.vue": () => import('./index-Dt-7vYLR.mjs'), "/themes/panel/pages/user/dashboard.vue": () => import('./dashboard-C0H3ArIn.mjs'), "/themes/panel/pages/user/index.vue": () => import('./index-xcTmlCeE.mjs'), "/themes/panel/pages/user/layout.vue": () => import('./layout-Cdedow7W.mjs'), "/themes/panel/pages/user/monitors.vue": () => import('./monitors-zYf5XPOZ.mjs'), "/themes/panel/pages/user/notify.vue": () => import('./notify-CMBh4ZAz.mjs') })).map(([file, module]) => [file.replace("/", "../"), module]))
 };
 const themeAdminManifestModules = {
   ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({
@@ -28668,7 +28668,7 @@ const themeAdminManifestModules = {
   })).map(([file, module]) => [file.replace("/", "../"), module]))
 };
 const themeAdminPageModules = {
-  ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({ "/themes/panel/admin/pages/appstore.vue": () => import('./appstore-BLcN1E6g.mjs'), "/themes/panel/admin/pages/install-stats.vue": () => import('./install-stats-DkugUwqx.mjs'), "/themes/panel/admin/pages/monitors.vue": () => import('./monitors-7F46vyjO.mjs') })).map(([file, module]) => [file.replace("/", "../"), module]))
+  ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({ "/themes/panel/admin/pages/appstore.vue": () => import('./appstore-DJq7JYc-.mjs'), "/themes/panel/admin/pages/install-stats.vue": () => import('./install-stats-BDO15h-O.mjs'), "/themes/panel/admin/pages/monitors.vue": () => import('./monitors-BU7DmN9D.mjs') })).map(([file, module]) => [file.replace("/", "../"), module]))
 };
 const themeAdminLocaleEnModules = {
   ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({})).map(([file, module]) => [file.replace("/", "../"), module]))
@@ -28677,7 +28677,7 @@ const themeAdminLocaleZhModules = {
   ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({})).map(([file, module]) => [file.replace("/", "../"), module]))
 };
 const themeLayoutLoaders = {
-  "panel": () => import('./default-CKhsh8Q2.mjs')
+  "panel": () => import('./default-CPFYdBLn.mjs')
 };
 const pageLayoutMeta = { "../core/pages/payment/[order_id].vue": { "layout": false }, "../core/pages/user/mcp-authorize/index.vue": { "directoryLayout": false } };
 const useActiveTheme = (options = {}) => {
@@ -29699,7 +29699,7 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
   __ssrInlineRender: true,
   async setup(__props) {
     let __temp, __restore;
-    const RichEditor = defineAsyncComponent(() => import('./RichEditor-hG15EmYY.mjs'));
+    const RichEditor = defineAsyncComponent(() => import('./RichEditor-Dhkd-y-l.mjs'));
     const copyItem = (item) => ({
       id: item?.id || "",
       name: item?.name || "",
@@ -29932,7 +29932,7 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
         query: { page, pageSize: pageSize2, keyword, status },
         watch: [page]
       },
-      "$JYxqrs3gUb"
+      "$W1MF22BUXo"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const rows = computed(() => data.value?.data || []);
@@ -32197,7 +32197,7 @@ const _sfc_main$p = /* @__PURE__ */ defineComponent({
           errorMsg.value = "";
         }
       },
-      "$twJO77Yb5T"
+      "$mUI__1h0Tz"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const apps = computed(() => telemetry.value?.apps || []);
@@ -33376,7 +33376,7 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
     const canEdit = computed(() => hasPerm(`plugin:shopark:${props.kind}:edit`));
     const { data: response, pending, error, refresh } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       `/api/admin/plugins/shopark/${props.kind}/list`,
-      "$kCW1OtnEIb"
+      "$sYV45jN8ea"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const keyword = ref("");
@@ -34434,13 +34434,13 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
     const settingUpScheduler = ref(false);
     const { data: connectionRes, pending, error, refresh } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       "/api/admin/plugins/shopark/connection/status",
-      "$wDj-V2RB6P"
+      "$Xs_Btgr8tZ"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const connection = computed(() => connectionRes.value?.data);
     const { data: readinessRes, pending: readinessPending, error: readinessError, refresh: refreshReadiness } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       "/api/admin/plugins/shopark/readiness/status",
-      "$s-8fSdIzOJ"
+      "$1Iv6HcdOYu"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const readiness = computed(() => readinessRes.value?.data);
@@ -37331,7 +37331,7 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
           filter: customerFilter.value
         }))
       },
-      "$oaia1mFEa7"
+      "$hbC94beu1l"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const customerRows = computed(() => customersRes.value?.data?.list || []);
@@ -37365,7 +37365,7 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
           status: selectedStatus.value === "all" ? "" : selectedStatus.value
         }))
       },
-      "$DcZjaocII7"
+      "$DRQWzX_txy"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const rows = computed(() => res.value?.data?.list || []);
@@ -39980,7 +39980,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
     const canEdit = computed(() => hasPerm("plugin:shopark:settings:edit"));
     const { data: response, pending, error, refresh } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       "/api/admin/plugins/shopark/settings/status",
-      "$UmrX2kCAEv"
+      "$wED899j8Ib"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const defaultTheme = ref("");
@@ -40539,7 +40539,7 @@ const _sfc_main$d = /* @__PURE__ */ defineComponent({
           currency: selectedCurrency.value === "all" ? void 0 : selectedCurrency.value
         }))
       },
-      "$eCQXnHH0Bm"
+      "$uanHtz8CWa"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const summary = computed(() => res.value?.data?.summary || {
@@ -41797,7 +41797,7 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
   __ssrInlineRender: true,
   async setup(__props) {
     let __temp, __restore;
-    const RichEditor = defineAsyncComponent(() => import('./RichEditor-hG15EmYY.mjs'));
+    const RichEditor = defineAsyncComponent(() => import('./RichEditor-Dhkd-y-l.mjs'));
     const copyItem = (item) => ({
       id: item?.id || "",
       name: item?.name || "",
@@ -42023,7 +42023,7 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
         query: { page, pageSize: pageSize2, keyword, status },
         watch: [page]
       },
-      "$gqcG1iwnOF"
+      "$HMbsQ4PiHO"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const rows = computed(() => data.value?.data || []);
@@ -45134,54 +45134,54 @@ const plugin_MeUvTuoKUi51yb_kBguab6hdcExVXeTtZtTg9TZZBB8 = /* @__PURE__ */ defin
   // For type portability
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 });
-const LazyProseA = defineAsyncComponent(() => import('./A-CCRNm5lr.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseAccordion = defineAsyncComponent(() => import('./Accordion-CeLXRtRe.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseAccordionItem = defineAsyncComponent(() => import('./AccordionItem-DPUn5Is2.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseBadge = defineAsyncComponent(() => import('./Badge-CuFzf9_l.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseBlockquote = defineAsyncComponent(() => import('./Blockquote-BmcpEE2o.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCallout = defineAsyncComponent(() => import('./Callout-COAS4S5w.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCard = defineAsyncComponent(() => import('./Card-R_7DQW2D.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCardGroup = defineAsyncComponent(() => import('./CardGroup-DH3sH8px.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCode = defineAsyncComponent(() => import('./Code-DJf1bBhk.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCodeCollapse = defineAsyncComponent(() => import('./CodeCollapse-B2hTUDnc.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCodeGroup = defineAsyncComponent(() => import('./CodeGroup-B852bvYW.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCodeIcon = defineAsyncComponent(() => import('./CodeIcon-D0Diun23.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCodePreview = defineAsyncComponent(() => import('./CodePreview-BmRABkqi.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCodeTree = defineAsyncComponent(() => import('./CodeTree-Cq-SeeLe.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCollapsible = defineAsyncComponent(() => import('./Collapsible-CN2kwJwF.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseEm = defineAsyncComponent(() => import('./Em-Cip6NnZk.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseField = defineAsyncComponent(() => import('./Field-D5hg-kwV.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseFieldGroup = defineAsyncComponent(() => import('./FieldGroup-erUiGBbg.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseH1 = defineAsyncComponent(() => import('./H1-Dv3mEAwU.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseH2 = defineAsyncComponent(() => import('./H2-wl2PoSkf.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseH3 = defineAsyncComponent(() => import('./H3-HjcLtNNx.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseH4 = defineAsyncComponent(() => import('./H4-B7wqL3h0.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseHr = defineAsyncComponent(() => import('./Hr-BKVohH3k.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseIcon = defineAsyncComponent(() => import('./Icon-B1ytWbag.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseImg = defineAsyncComponent(() => import('./Img-Dsm6YsXS.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseKbd = defineAsyncComponent(() => import('./Kbd-DJFRdEbV.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseLi = defineAsyncComponent(() => import('./Li-C5JdKSR8.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseOl = defineAsyncComponent(() => import('./Ol-BWfMI6tq.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseP = defineAsyncComponent(() => import('./P-CimN2NON.mjs').then((r) => r["default"] || r.default || r));
-const LazyProsePre = defineAsyncComponent(() => import('./Pre-CmfdHrmH.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseA = defineAsyncComponent(() => import('./A-DJqRoTMR.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseAccordion = defineAsyncComponent(() => import('./Accordion-CZMGMVdq.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseAccordionItem = defineAsyncComponent(() => import('./AccordionItem-DdIx7gwk.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseBadge = defineAsyncComponent(() => import('./Badge-DqChliho.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseBlockquote = defineAsyncComponent(() => import('./Blockquote-DpacNaj4.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCallout = defineAsyncComponent(() => import('./Callout-xboKo31M.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCard = defineAsyncComponent(() => import('./Card-DUnIyQAp.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCardGroup = defineAsyncComponent(() => import('./CardGroup-CBnx9-CX.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCode = defineAsyncComponent(() => import('./Code-DA86G8zs.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCodeCollapse = defineAsyncComponent(() => import('./CodeCollapse-BgVf9nSY.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCodeGroup = defineAsyncComponent(() => import('./CodeGroup-B0u5uqGn.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCodeIcon = defineAsyncComponent(() => import('./CodeIcon-DPE_le2q.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCodePreview = defineAsyncComponent(() => import('./CodePreview-DDzjR_nw.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCodeTree = defineAsyncComponent(() => import('./CodeTree-C0Ace0Tr.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCollapsible = defineAsyncComponent(() => import('./Collapsible-C2r9EVCp.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseEm = defineAsyncComponent(() => import('./Em-Bwg_7NDU.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseField = defineAsyncComponent(() => import('./Field-CTJklE0v.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseFieldGroup = defineAsyncComponent(() => import('./FieldGroup-0orfTwje.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseH1 = defineAsyncComponent(() => import('./H1-CJAF2Al7.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseH2 = defineAsyncComponent(() => import('./H2-C4wH2RED.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseH3 = defineAsyncComponent(() => import('./H3-BgpJ0iI2.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseH4 = defineAsyncComponent(() => import('./H4-DYQ9F9JI.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseHr = defineAsyncComponent(() => import('./Hr-Ca7UBPfc.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseIcon = defineAsyncComponent(() => import('./Icon-D8AoBHbh.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseImg = defineAsyncComponent(() => import('./Img-BzJ0hfD8.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseKbd = defineAsyncComponent(() => import('./Kbd-DkA9iFTQ.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseLi = defineAsyncComponent(() => import('./Li-Fvn4rjJN.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseOl = defineAsyncComponent(() => import('./Ol-cEZOsLjE.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseP = defineAsyncComponent(() => import('./P-Cc_AI6IE.mjs').then((r) => r["default"] || r.default || r));
+const LazyProsePre = defineAsyncComponent(() => import('./Pre-DGlFT3SV.mjs').then((r) => r["default"] || r.default || r));
 const LazyProseScript = defineAsyncComponent(() => import('./Script-BOX32BRp.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseSteps = defineAsyncComponent(() => import('./Steps-CqK3iUxf.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseStrong = defineAsyncComponent(() => import('./Strong-BmSYNin-.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTable = defineAsyncComponent(() => import('./Table-C7FPacr7.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTabs = defineAsyncComponent(() => import('./Tabs-CFGE9W1n.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTabsItem = defineAsyncComponent(() => import('./TabsItem-B5jdQSrR.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTbody = defineAsyncComponent(() => import('./Tbody-Cdtwmf9L.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTd = defineAsyncComponent(() => import('./Td-DAGaJg-3.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTh = defineAsyncComponent(() => import('./Th-DKJ_mMUx.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseThead = defineAsyncComponent(() => import('./Thead-BY-8fida.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTr = defineAsyncComponent(() => import('./Tr-BH5Ei0o4.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseUl = defineAsyncComponent(() => import('./Ul-D5oHPQLn.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCaution = defineAsyncComponent(() => import('./Caution-CFG564j_.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseNote = defineAsyncComponent(() => import('./Note-BBk61gcp.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTip = defineAsyncComponent(() => import('./Tip-BSi3J43C.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseWarning = defineAsyncComponent(() => import('./Warning-vQvxZD1a.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseH5 = defineAsyncComponent(() => import('./ProseH5-2LmJ-ML3.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseH6 = defineAsyncComponent(() => import('./ProseH6-BzDuh9Wb.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseSteps = defineAsyncComponent(() => import('./Steps-aTftrUQ_.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseStrong = defineAsyncComponent(() => import('./Strong-BohSvZOP.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTable = defineAsyncComponent(() => import('./Table-D2Dmdyoq.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTabs = defineAsyncComponent(() => import('./Tabs-YX0CG-jk.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTabsItem = defineAsyncComponent(() => import('./TabsItem-CTFcffxG.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTbody = defineAsyncComponent(() => import('./Tbody-D1oyV6mJ.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTd = defineAsyncComponent(() => import('./Td-0oxnUqXN.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTh = defineAsyncComponent(() => import('./Th-Zw9lLALn.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseThead = defineAsyncComponent(() => import('./Thead-BxNyesFm.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTr = defineAsyncComponent(() => import('./Tr-DVg76Pmd.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseUl = defineAsyncComponent(() => import('./Ul-CMDikgoe.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCaution = defineAsyncComponent(() => import('./Caution-B-VuKbcE.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseNote = defineAsyncComponent(() => import('./Note-D3l3rzDH.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTip = defineAsyncComponent(() => import('./Tip-pIb61ORt.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseWarning = defineAsyncComponent(() => import('./Warning-C65L0jip.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseH5 = defineAsyncComponent(() => import('./ProseH5-zn8crr8b.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseH6 = defineAsyncComponent(() => import('./ProseH6-GGxh4o22.mjs').then((r) => r["default"] || r.default || r));
 const LazyIcon = defineAsyncComponent(() => Promise.resolve().then(() => index).then((r) => r["default"] || r.default || r));
 const lazyGlobalComponents = [
   ["ProseA", LazyProseA],
@@ -48973,9 +48973,9 @@ const __nuxt_component_1 = defineComponent({
   }
 });
 const layouts = {
-  admin: defineAsyncComponent(() => import('./admin-BDxwq2BG.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-BDNRIqNr.mjs').then((m) => m.default || m)),
-  empty: defineAsyncComponent(() => import('./empty-Dm5vGylG.mjs').then((m) => m.default || m))
+  admin: defineAsyncComponent(() => import('./admin-Bp9moRZh.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-D6KdRm2F.mjs').then((m) => m.default || m)),
+  empty: defineAsyncComponent(() => import('./empty-DDMlDKd6.mjs').then((m) => m.default || m))
 };
 const routeRulesMatcher = _routeRulesMatcher;
 const LayoutLoader = defineComponent({

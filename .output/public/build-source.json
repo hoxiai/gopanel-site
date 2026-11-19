@@ -1,0 +1,24 @@
+{
+  "version": "1.1.11",
+  "theme": "panel",
+  "hostCommit": "be6a118aea5d7368a0c61007034b9a31f5d1e5b9",
+  "themeCommit": "f291b01ba07f1e01038463a1672fa30eee8e8554",
+  "includesHostWorkingTreeChanges": true,
+  "hostWorkingTreePatchSha256": "8b26c31f3612720ddc0ac4e43eaec819efb52e8aea36b0baa811c25bf6bf1bf7",
+  "hostWorkingTreeFiles": [
+    "app/middleware/locale-guard.global.ts",
+    "app/pages/[...slug].vue",
+    "app/plugins/i18n-seo.ts",
+    "app/utils/locale-guard.ts",
+    "scripts/check-locale-guard.mjs",
+    "server/middleware/geoip.ts",
+    "server/utils/siteSeo.ts",
+    "shared/seo/locales.ts",
+    "shared/siteSeo.ts"
+  ],
+  "validation": {
+    "prebuildChecks": 31,
+    "localeGuardSeoAndGeoipRegression": "passed",
+    "productionBuild": "passed"
+  }
+}

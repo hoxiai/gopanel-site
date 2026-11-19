@@ -1,13 +1,12 @@
-import { d as defineEventHandler, c as getRequestLocale, g as getQuery, L as getConfiguredTimezone, cm as parseStatsRange, cv as clampStatsPage, cw as clampStatsPageSize, e as createError, a4 as isVisitorRollupEnabled, a5 as resolveRollupSiteHost, a3 as getRequestHost, a6 as ensureRollupRange, cH as loadRollupVisitorList, a9 as loadVisitorReport, cI as matchesVisitorReportRow, b as db, v as users, cA as visitorSourceLabel, cz as formatSourceBrand, aa as createRollupBackgroundScheduler } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, P as getConfiguredTimezone, cx as parseStatsRange, cH as clampStatsPage, cI as clampStatsPageSize, e as createError, S as getRequestHost, a8 as isVisitorRollupEnabled, a9 as resolveRollupSiteHost, aa as ensureRollupRange, cT as loadRollupVisitorList, ad as loadVisitorReport, cU as matchesVisitorReportRow, b as db, w as users, cM as visitorSourceLabel, cL as formatSourceBrand, ae as createRollupBackgroundScheduler } from '../../../../nitro/nitro.mjs';
 import { inArray } from 'drizzle-orm';
+import 'node:crypto';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
-import 'node:crypto';
+import 'node:http2';
+import 'node:fs';
 import 'zod';
 import 'crypto';
-import 'fs';
-import 'path';
-import 'node:fs';
 import 'node:path';
 import '@nuxthub/blob';
 import 'node:http';
@@ -27,6 +26,8 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:fs/promises';
+import 'fs';
+import 'path';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
@@ -51,7 +52,8 @@ const visitors_get = defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: "Invalid analytics event filter" });
   }
   const search = stringQuery("search");
-  const siteHost = isVisitorRollupEnabled() ? await resolveRollupSiteHost(getRequestHost(event)) : null;
+  const requestHost = getRequestHost(event, { xForwardedHost: true });
+  const siteHost = isVisitorRollupEnabled() ? await resolveRollupSiteHost(requestHost) : null;
   if (siteHost) {
     const ensured = await ensureRollupRange(rangeStart, rangeEnd, { timezone, siteHost }, { schedule: createRollupBackgroundScheduler(event) });
     const list = await loadRollupVisitorList({
@@ -76,7 +78,7 @@ const visitors_get = defineEventHandler(async (event) => {
       }
     };
   }
-  const report = await loadVisitorReport(rangeStart, rangeEnd, getRequestHost(event));
+  const report = await loadVisitorReport(rangeStart, rangeEnd, requestHost);
   const baseFilter = {
     attribution,
     type,

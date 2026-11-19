@@ -1,13 +1,12 @@
-import { d as defineEventHandler, g as getQuery, L as getConfiguredTimezone, M as getStartOfDayUtc, N as shiftZonedDay, I as orders, O as ORDER_PAY_STATUS, b as db, P as buildLocaleCurrencyQuote, v as users, q as products, Q as subscriptions, R as topups, u as tickets, S as newsletterSubscribers, T as promoInviteRelations, C as comments, U as promoApplications, V as emailLogs, W as logs, X as paymentFailures, J as aggregateOrderAccountingTotals, Y as resolveOrderCurrencyAmounts, Z as getCurrencyTotal, p as cards, _ as toZonedDateKey, $ as getCurrentHour, a0 as paymentMethods, a1 as emailProviders, a2 as buildApayDashboardTelemetry, a3 as getRequestHost, a4 as isVisitorRollupEnabled, a5 as resolveRollupSiteHost, a6 as ensureRollupRange, a7 as loadRollupDashboardTraffic, a8 as buildRawDashboardTraffic, a9 as loadVisitorReport, aa as createRollupBackgroundScheduler } from '../../../nitro/nitro.mjs';
-import { and, gte, lt, eq, sql, desc, or, isNull, gt, inArray } from 'drizzle-orm';
+import { d as defineEventHandler, g as getQuery, P as getConfiguredTimezone, Q as getStartOfDayUtc, R as shiftZonedDay, S as getRequestHost, b as db, M as orders, q as products, T as subscriptions, w as users, U as topups, v as tickets, V as newsletterSubscribers, W as promoInviteRelations, G as comments, X as promoApplications, Y as emailLogs, Z as logs, _ as paymentFailures, $ as paymentMethods, a0 as emailProviders, a1 as buildLocaleCurrencyQuote, a2 as ORDER_PAY_STATUS, N as aggregateOrderAccountingTotals, a3 as resolveOrderCurrencyAmounts, a4 as getCurrencyTotal, p as cards, a5 as toZonedDateKey, a6 as getCurrentHour, a7 as buildApayDashboardTelemetry, a8 as isVisitorRollupEnabled, a9 as resolveRollupSiteHost, aa as ensureRollupRange, ab as loadRollupDashboardTraffic, ac as buildRawDashboardTraffic, ad as loadVisitorReport, ae as createRollupBackgroundScheduler } from '../../../nitro/nitro.mjs';
+import { sql, eq, and, or, isNull, gt, inArray, gte, lt, desc } from 'drizzle-orm';
+import 'node:crypto';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
-import 'node:crypto';
+import 'node:http2';
+import 'node:fs';
 import 'zod';
 import 'crypto';
-import 'fs';
-import 'path';
-import 'node:fs';
 import 'node:path';
 import '@nuxthub/blob';
 import 'node:http';
@@ -27,6 +26,8 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:fs/promises';
+import 'fs';
+import 'path';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
@@ -38,6 +39,12 @@ import 'node:net';
 
 let lifetimePaidDigestCache = null;
 const LIFETIME_DIGEST_TTL_MS = 3e4;
+const DEFAULT_CATEGORY_MIX = () => [
+  { type: "standard", count: 0, amount: 0 },
+  { type: "key", count: 0, amount: 0 },
+  { type: "subscription", count: 0, amount: 0 },
+  { type: "topup", count: 0, amount: 0 }
+];
 const safeCount = async (queryPromise) => {
   var _a;
   try {
@@ -74,8 +81,34 @@ const getDateKeyInTimezone = (value, timezone) => {
     day: "2-digit"
   }).format(date);
 };
+const computeCategoryMix = (paidOrders, baseCurrency) => {
+  var _a;
+  const mixMap = {
+    standard: { count: 0, amount: 0 },
+    key: { count: 0, amount: 0 },
+    subscription: { count: 0, amount: 0 },
+    topup: { count: 0, amount: 0 }
+  };
+  for (const order of paidOrders) {
+    let type = "standard";
+    try {
+      const meta = typeof order.metaData === "string" ? JSON.parse(order.metaData) : order.metaData;
+      if (meta == null ? void 0 : meta.product_type) type = meta.product_type;
+      else if ((meta == null ? void 0 : meta.is_subscription) || (meta == null ? void 0 : meta.subscription_id)) type = "subscription";
+      else if ((meta == null ? void 0 : meta.is_topup) || ((_a = order.id) == null ? void 0 : _a.startsWith("topup_"))) type = "topup";
+    } catch {
+    }
+    const mix = mixMap[type] || (mixMap[type] = { count: 0, amount: 0 });
+    mix.count++;
+    const amounts = resolveOrderCurrencyAmounts(order);
+    if (amounts.accountingCurrency === baseCurrency) {
+      mix.amount = Number((mix.amount + amounts.accountingAmount).toFixed(2));
+    }
+  }
+  return Object.entries(mixMap).map(([type, val]) => ({ type, count: val.count, amount: val.amount }));
+};
 const dashboard_get = defineEventHandler(async (event) => {
-  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j;
+  var _a;
   const startedAtMs = Date.now();
   const query = getQuery(event);
   const range = String(query.range || "today");
@@ -83,20 +116,11 @@ const dashboard_get = defineEventHandler(async (event) => {
   const now = /* @__PURE__ */ new Date();
   const startOfDay = getStartOfDayUtc(timezone);
   let periodStart = new Date(startOfDay.ms);
-  if (range === "7d") {
-    periodStart = shiftZonedDay(new Date(startOfDay.ms), -6, timezone);
-  } else if (range === "30d") {
-    periodStart = shiftZonedDay(new Date(startOfDay.ms), -29, timezone);
-  }
+  if (range === "7d") periodStart = shiftZonedDay(new Date(startOfDay.ms), -6, timezone);
+  else if (range === "30d") periodStart = shiftZonedDay(new Date(startOfDay.ms), -29, timezone);
   const since24h = new Date(now.getTime() - 24 * 60 * 60 * 1e3);
-  const periodCondition = and(gte(orders.createdAt, periodStart), lt(orders.createdAt, now));
-  const paidPeriodCondition = and(
-    eq(orders.payStatus, ORDER_PAY_STATUS.PAID),
-    gte(orders.paidAt, periodStart),
-    lt(orders.paidAt, now)
-  );
+  const host = getRequestHost(event, { xForwardedHost: true });
   const loadTraffic = async () => {
-    const host = getRequestHost(event);
     const siteHost = isVisitorRollupEnabled() ? await resolveRollupSiteHost(host) : null;
     if (siteHost) {
       const ensured = await ensureRollupRange(periodStart, now, { timezone, siteHost }, { schedule: createRollupBackgroundScheduler(event) });
@@ -108,6 +132,48 @@ const dashboard_get = defineEventHandler(async (event) => {
     }
     return buildRawDashboardTraffic(await loadVisitorReport(periodStart, now, host), timezone);
   };
+  const [
+    totalOrdersCount,
+    activeProductsCount,
+    activeSubsCount,
+    totalUsersCount,
+    pendingTopups,
+    pendingTickets,
+    periodNewUsersCount,
+    activeNewsletterCount,
+    promoInvitesCount,
+    pendingCommentsCount,
+    pendingPromoAppsCount,
+    failedEmails24hCount,
+    errorLogs24hCount,
+    paymentFailures24hCount,
+    activePaymentMethodsCount,
+    activeEmailProvidersCount,
+    baseQuote,
+    traffic
+  ] = await Promise.all([
+    safeCount(db.select({ count: sql`count(*)` }).from(orders)),
+    safeCount(db.select({ count: sql`count(*)` }).from(products).where(eq(products.isActive, true))),
+    safeCount(db.select({ count: sql`count(*)` }).from(subscriptions).where(and(
+      eq(subscriptions.status, "active"),
+      or(isNull(subscriptions.currentPeriodEnd), gt(subscriptions.currentPeriodEnd, now))
+    ))),
+    safeCount(db.select({ count: sql`count(*)` }).from(users)),
+    safeCount(db.select({ count: sql`count(*)` }).from(topups).where(inArray(topups.status, ["paid", "crediting", "credit_failed", "review_required"]))),
+    safeCount(db.select({ count: sql`count(*)` }).from(tickets).where(inArray(tickets.status, ["open", "in_progress"]))),
+    safeCount(db.select({ count: sql`count(*)` }).from(users).where(and(gte(users.createdAt, periodStart), lt(users.createdAt, now)))),
+    safeCount(db.select({ count: sql`count(*)` }).from(newsletterSubscribers).where(eq(newsletterSubscribers.status, "active"))),
+    safeCount(db.select({ count: sql`count(*)` }).from(promoInviteRelations)),
+    safeCount(db.select({ count: sql`count(*)` }).from(comments).where(eq(comments.status, "pending"))),
+    safeCount(db.select({ count: sql`count(*)` }).from(promoApplications).where(eq(promoApplications.status, "pending"))),
+    safeCount(db.select({ count: sql`count(*)` }).from(emailLogs).where(and(eq(emailLogs.status, "failed"), gte(emailLogs.createdAt, since24h)))),
+    safeCount(db.select({ count: sql`count(*)` }).from(logs).where(and(eq(logs.level, "error"), gte(logs.createdAt, since24h)))),
+    safeCount(db.select({ count: sql`count(*)` }).from(paymentFailures).where(gte(paymentFailures.createdAt, since24h))),
+    safeCount(db.select({ count: sql`count(*)` }).from(paymentMethods).where(eq(paymentMethods.isActive, true))),
+    safeCount(db.select({ count: sql`count(*)` }).from(emailProviders).where(eq(emailProviders.isActive, true))),
+    buildLocaleCurrencyQuote(0),
+    loadTraffic()
+  ]);
   const selectFields = {
     id: orders.id,
     amount: orders.amount,
@@ -121,112 +187,56 @@ const dashboard_get = defineEventHandler(async (event) => {
     paidAt: orders.paidAt,
     visitorId: orders.visitorId
   };
+  const periodCondition = and(gte(orders.createdAt, periodStart), lt(orders.createdAt, now));
+  const paidPeriodCondition = and(eq(orders.payStatus, ORDER_PAY_STATUS.PAID), gte(orders.paidAt, periodStart), lt(orders.paidAt, now));
   const [
-    paidCountRows,
+    paidOrderCount,
     latestPaidOrderRows,
     rawPaidPeriodOrderRows,
     rawPeriodOrderRows,
-    totalOrderRows,
-    baseQuote,
-    totalUsersCount,
-    totalProductsCount,
-    activeSubscriptionsCount,
-    pendingFulfillmentsCount,
-    pendingTopupsCount,
+    pendingFulfillments,
     recentOrdersResult,
     keyProducts,
-    traffic,
-    pendingTicketsCount,
-    periodNewUsersCount,
-    activeNewsletterCount,
-    promoInvitesCount,
-    pendingCommentsCount,
-    pendingPromoAppsCount,
-    failedEmails24hCount,
-    errorLogs24hCount,
-    paymentFailures24hCount
+    recentErrorLogs,
+    recentPaymentFailures,
+    recentFailedEmails,
+    creditFailedTopups
   ] = await Promise.all([
-    db.select({ count: sql`count(*)` }).from(orders).where(eq(orders.payStatus, ORDER_PAY_STATUS.PAID)),
-    db.select({ paidAt: orders.paidAt }).from(orders).where(eq(orders.payStatus, ORDER_PAY_STATUS.PAID)).orderBy(desc(orders.paidAt)).limit(1),
-    // 当期已付款订单直接下推 SQL 时间窗口过滤，不再从全表内存中二次 filter
-    db.select({ id: orders.id, amount: orders.amount, currency: orders.currency, metaData: orders.metaData, paidAt: orders.paidAt }).from(orders).where(paidPeriodCondition),
-    db.select(selectFields).from(orders).where(periodCondition),
-    db.select({ count: sql`count(*)` }).from(orders),
-    buildLocaleCurrencyQuote(0),
-    db.select({ count: sql`count(*)` }).from(users),
-    db.select({ count: sql`count(*)` }).from(products).where(eq(products.isActive, true)),
-    db.select({ count: sql`count(*)` }).from(subscriptions).where(and(
-      eq(subscriptions.status, "active"),
-      // 到期由定时任务改状态，漏跑时库里仍是 active；只数 status 会虚高。
-      or(isNull(subscriptions.currentPeriodEnd), gt(subscriptions.currentPeriodEnd, /* @__PURE__ */ new Date()))
-    )),
-    db.select({ count: sql`count(*)` }).from(orders).where(and(eq(orders.payStatus, ORDER_PAY_STATUS.PAID), eq(orders.status, "pending"))),
-    db.select({ count: sql`count(*)` }).from(topups).where(inArray(topups.status, ["paid", "crediting", "credit_failed", "review_required"])),
-    db.select(selectFields).from(orders).orderBy(desc(orders.createdAt)).limit(6),
-    db.select({ id: products.id, name: products.name }).from(products).where(and(eq(products.type, "key"), eq(products.isActive, true))),
-    loadTraffic(),
-    db.select({ count: sql`count(*)` }).from(tickets).where(inArray(tickets.status, ["open", "in_progress"])),
-    safeCount(db.select({ count: sql`count(*)` }).from(users).where(and(gte(users.createdAt, periodStart), lt(users.createdAt, now)))),
-    safeCount(db.select({ count: sql`count(*)` }).from(newsletterSubscribers).where(eq(newsletterSubscribers.status, "active"))),
-    safeCount(db.select({ count: sql`count(*)` }).from(promoInviteRelations)),
-    safeCount(db.select({ count: sql`count(*)` }).from(comments).where(eq(comments.status, "pending"))),
-    safeCount(db.select({ count: sql`count(*)` }).from(promoApplications).where(eq(promoApplications.status, "pending"))),
-    safeCount(db.select({ count: sql`count(*)` }).from(emailLogs).where(and(eq(emailLogs.status, "failed"), gte(emailLogs.createdAt, since24h)))),
-    safeCount(db.select({ count: sql`count(*)` }).from(logs).where(and(eq(logs.level, "error"), gte(logs.createdAt, since24h)))),
-    safeCount(db.select({ count: sql`count(*)` }).from(paymentFailures).where(gte(paymentFailures.createdAt, since24h)))
+    totalOrdersCount > 0 ? safeCount(db.select({ count: sql`count(*)` }).from(orders).where(eq(orders.payStatus, ORDER_PAY_STATUS.PAID))) : Promise.resolve(0),
+    totalOrdersCount > 0 ? safeRows(db.select({ paidAt: orders.paidAt }).from(orders).where(eq(orders.payStatus, ORDER_PAY_STATUS.PAID)).orderBy(desc(orders.paidAt)).limit(1)) : Promise.resolve([]),
+    totalOrdersCount > 0 ? safeRows(db.select({ id: orders.id, amount: orders.amount, currency: orders.currency, metaData: orders.metaData, paidAt: orders.paidAt }).from(orders).where(paidPeriodCondition)) : Promise.resolve([]),
+    totalOrdersCount > 0 ? safeRows(db.select(selectFields).from(orders).where(periodCondition)) : Promise.resolve([]),
+    totalOrdersCount > 0 ? safeCount(db.select({ count: sql`count(*)` }).from(orders).where(and(eq(orders.payStatus, ORDER_PAY_STATUS.PAID), eq(orders.status, "pending")))) : Promise.resolve(0),
+    totalOrdersCount > 0 ? safeRows(db.select(selectFields).from(orders).orderBy(desc(orders.createdAt)).limit(6)) : Promise.resolve([]),
+    activeProductsCount > 0 ? safeRows(db.select({ id: products.id, name: products.name }).from(products).where(and(eq(products.type, "key"), eq(products.isActive, true)))) : Promise.resolve([]),
+    errorLogs24hCount > 0 ? safeRows(db.select({ id: logs.id, message: logs.message, source: logs.source, createdAt: logs.createdAt }).from(logs).where(and(eq(logs.level, "error"), gte(logs.createdAt, since24h))).orderBy(desc(logs.createdAt)).limit(20)) : Promise.resolve([]),
+    paymentFailures24hCount > 0 ? safeRows(db.select({ id: paymentFailures.id, orderId: paymentFailures.orderId, reason: paymentFailures.reason, payMethod: paymentFailures.payMethod, createdAt: paymentFailures.createdAt }).from(paymentFailures).where(gte(paymentFailures.createdAt, since24h)).orderBy(desc(paymentFailures.createdAt)).limit(20)) : Promise.resolve([]),
+    failedEmails24hCount > 0 ? safeRows(db.select({ id: emailLogs.id, provider: emailLogs.provider, error: emailLogs.error, createdAt: emailLogs.createdAt }).from(emailLogs).where(and(eq(emailLogs.status, "failed"), gte(emailLogs.createdAt, since24h))).orderBy(desc(emailLogs.createdAt)).limit(15)) : Promise.resolve([]),
+    pendingTopups > 0 ? safeRows(db.select({ id: topups.id, orderId: topups.orderId, status: topups.status, lastError: topups.lastError, updatedAt: topups.updatedAt, createdAt: topups.createdAt }).from(topups).where(inArray(topups.status, ["credit_failed", "review_required"])).orderBy(desc(topups.updatedAt)).limit(10)) : Promise.resolve([])
   ]);
   const baseCurrency = baseQuote.baseCurrency;
-  const paidOrderCount = Number(((_a = paidCountRows[0]) == null ? void 0 : _a.count) || 0);
-  const latestPaidDate = (_b = latestPaidOrderRows[0]) == null ? void 0 : _b.paidAt;
+  const latestPaidDate = (_a = latestPaidOrderRows[0]) == null ? void 0 : _a.paidAt;
   const latestPaidAtMs = latestPaidDate ? new Date(latestPaidDate).getTime() : 0;
   let totalRevenueByCurrency = [];
-  let categoryMix = [];
-  if (lifetimePaidDigestCache && lifetimePaidDigestCache.expiresAtMs > startedAtMs && lifetimePaidDigestCache.paidOrderCount === paidOrderCount && lifetimePaidDigestCache.latestPaidAtMs === latestPaidAtMs && lifetimePaidDigestCache.baseCurrency === baseCurrency) {
-    totalRevenueByCurrency = lifetimePaidDigestCache.totalRevenueByCurrency;
-    categoryMix = lifetimePaidDigestCache.categoryMix;
-  } else {
-    const rawPaidOrderRows = await db.select({ id: orders.id, amount: orders.amount, currency: orders.currency, metaData: orders.metaData, paidAt: orders.paidAt }).from(orders).where(eq(orders.payStatus, ORDER_PAY_STATUS.PAID));
-    const paidOrders = rawPaidOrderRows;
-    totalRevenueByCurrency = aggregateOrderAccountingTotals(paidOrders);
-    const mixMap = {
-      standard: { count: 0, amount: 0 },
-      key: { count: 0, amount: 0 },
-      subscription: { count: 0, amount: 0 },
-      topup: { count: 0, amount: 0 }
-    };
-    for (const order of paidOrders) {
-      let type = "standard";
-      try {
-        const meta = typeof order.metaData === "string" ? JSON.parse(order.metaData) : order.metaData;
-        if (meta == null ? void 0 : meta.product_type) {
-          type = meta.product_type;
-        } else if ((meta == null ? void 0 : meta.is_subscription) || (meta == null ? void 0 : meta.subscription_id)) {
-          type = "subscription";
-        } else if ((meta == null ? void 0 : meta.is_topup) || ((_c = order.id) == null ? void 0 : _c.startsWith("topup_"))) {
-          type = "topup";
-        }
-      } catch {
-      }
-      const mix = mixMap[type] || (mixMap[type] = { count: 0, amount: 0 });
-      mix.count++;
-      const amounts = resolveOrderCurrencyAmounts(order);
-      if (amounts.accountingCurrency === baseCurrency) {
-        mix.amount = Number((mix.amount + amounts.accountingAmount).toFixed(2));
-      }
+  let categoryMix = DEFAULT_CATEGORY_MIX();
+  if (paidOrderCount > 0) {
+    if (lifetimePaidDigestCache && lifetimePaidDigestCache.expiresAtMs > startedAtMs && lifetimePaidDigestCache.paidOrderCount === paidOrderCount && lifetimePaidDigestCache.latestPaidAtMs === latestPaidAtMs && lifetimePaidDigestCache.baseCurrency === baseCurrency) {
+      totalRevenueByCurrency = lifetimePaidDigestCache.totalRevenueByCurrency;
+      categoryMix = lifetimePaidDigestCache.categoryMix;
+    } else {
+      const rawPaidOrderRows = await db.select({ id: orders.id, amount: orders.amount, currency: orders.currency, metaData: orders.metaData, paidAt: orders.paidAt }).from(orders).where(eq(orders.payStatus, ORDER_PAY_STATUS.PAID));
+      const paidOrders = rawPaidOrderRows;
+      totalRevenueByCurrency = aggregateOrderAccountingTotals(paidOrders);
+      categoryMix = computeCategoryMix(paidOrders, baseCurrency);
+      lifetimePaidDigestCache = {
+        expiresAtMs: Date.now() + LIFETIME_DIGEST_TTL_MS,
+        paidOrderCount,
+        latestPaidAtMs,
+        baseCurrency,
+        totalRevenueByCurrency,
+        categoryMix
+      };
     }
-    categoryMix = Object.entries(mixMap).map(([type, val]) => ({
-      type,
-      count: val.count,
-      amount: val.amount
-    }));
-    lifetimePaidDigestCache = {
-      expiresAtMs: Date.now() + LIFETIME_DIGEST_TTL_MS,
-      paidOrderCount,
-      latestPaidAtMs,
-      baseCurrency,
-      totalRevenueByCurrency,
-      categoryMix
-    };
   }
   const periodOrderRows = rawPeriodOrderRows;
   const paidPeriodOrders = rawPaidPeriodOrderRows.filter(
@@ -294,8 +304,7 @@ const dashboard_get = defineEventHandler(async (event) => {
     revenueSeries = new Array(24).fill(0);
     for (const order of periodOrderRows) {
       const hour = Number(getHourInTimezone(order.createdAt, timezone));
-      if (!Number.isInteger(hour) || hour < 0 || hour > 23) continue;
-      ordersSeries[hour] = (ordersSeries[hour] || 0) + 1;
+      if (Number.isInteger(hour) && hour >= 0 && hour <= 23) ordersSeries[hour] = (ordersSeries[hour] || 0) + 1;
     }
     for (const order of paidPeriodOrders) {
       const hour = Number(getHourInTimezone(order.paidAt, timezone));
@@ -318,87 +327,16 @@ const dashboard_get = defineEventHandler(async (event) => {
   const { sourceTypeCounts, specificSourceCounts, countryCounts, deviceCounts } = traffic;
   const insightTotal = traffic.visitorDays;
   const toPct = (val, total) => total > 0 ? Number((val / total * 100).toFixed(1)) : 0;
-  const defaultSourceTypes = ["direct", "search", "ai", "social", "referral", "campaign", "affiliate"];
-  for (const st of defaultSourceTypes) {
-    if (!sourceTypeCounts.has(st)) {
-      sourceTypeCounts.set(st, { count: 0, paidVisitors: 0 });
-    }
+  for (const st of ["direct", "search", "ai", "social", "referral", "campaign", "affiliate"]) {
+    if (!sourceTypeCounts.has(st)) sourceTypeCounts.set(st, { count: 0, paidVisitors: 0 });
   }
-  const trafficSources = [...sourceTypeCounts.entries()].map(([type, val]) => ({
-    type,
-    count: val.count,
-    paidVisitors: val.paidVisitors,
-    percentage: toPct(val.count, insightTotal)
-  })).sort((a, b) => b.count - a.count || a.type.localeCompare(b.type));
-  const topSources = [...specificSourceCounts.entries()].sort((a, b) => b[1].count - a[1].count || a[0].localeCompare(b[0])).slice(0, 6).map(([, item]) => ({
-    ...item,
-    percentage: toPct(item.count, insightTotal)
-  }));
+  const trafficSources = [...sourceTypeCounts.entries()].map(([type, val]) => ({ type, count: val.count, paidVisitors: val.paidVisitors, percentage: toPct(val.count, insightTotal) })).sort((a, b) => b.count - a.count || a.type.localeCompare(b.type));
+  const topSources = [...specificSourceCounts.entries()].sort((a, b) => b[1].count - a[1].count || a[0].localeCompare(b[0])).slice(0, 6).map(([, item]) => ({ ...item, percentage: toPct(item.count, insightTotal) }));
   const totalTrackedPageViews = traffic.totalTrackedPageViews || periodPageViews;
-  const topPages = traffic.pages.map((page) => ({
-    path: page.path,
-    views: page.views,
-    visitors: page.visitors,
-    percentage: toPct(page.views, totalTrackedPageViews)
-  })).sort((a, b) => b.views - a.views || b.visitors - a.visitors || a.path.localeCompare(b.path)).slice(0, 6);
-  const topCountries = [...countryCounts.entries()].map(([country, count]) => ({
-    country,
-    count,
-    percentage: toPct(count, insightTotal)
-  })).sort((a, b) => b.count - a.count || a.country.localeCompare(b.country)).slice(0, 5);
-  const devices = [...deviceCounts.entries()].map(([deviceType, count]) => ({
-    deviceType,
-    count,
-    percentage: toPct(count, insightTotal)
-  })).sort((a, b) => b.count - a.count || a.deviceType.localeCompare(b.deviceType));
-  const recentVisitors = traffic.recentVisitors;
-  const totalOrdersCount = Number(((_d = totalOrderRows[0]) == null ? void 0 : _d.count) || 0);
-  const activeProductsCount = Number(((_e = totalProductsCount[0]) == null ? void 0 : _e.count) || 0);
-  const activeSubsCount = Number(((_f = activeSubscriptionsCount[0]) == null ? void 0 : _f.count) || 0);
-  const pendingFulfillments = Number(((_g = pendingFulfillmentsCount[0]) == null ? void 0 : _g.count) || 0);
-  const pendingTopups = Number(((_h = pendingTopupsCount[0]) == null ? void 0 : _h.count) || 0);
+  const topPages = traffic.pages.map((page) => ({ path: page.path, views: page.views, visitors: page.visitors, percentage: toPct(page.views, totalTrackedPageViews) })).sort((a, b) => b.views - a.views || b.visitors - a.visitors || a.path.localeCompare(b.path)).slice(0, 6);
+  const topCountries = [...countryCounts.entries()].map(([country, count]) => ({ country, count, percentage: toPct(count, insightTotal) })).sort((a, b) => b.count - a.count || a.country.localeCompare(b.country)).slice(0, 5);
+  const devices = [...deviceCounts.entries()].map(([deviceType, count]) => ({ deviceType, count, percentage: toPct(count, insightTotal) })).sort((a, b) => b.count - a.count || a.deviceType.localeCompare(b.deviceType));
   const isCommerceActive = activeProductsCount > 0 || totalOrdersCount > 0 || activeSubsCount > 0;
-  const [
-    activePaymentMethodsCount,
-    activeEmailProvidersCount,
-    recentErrorLogs,
-    recentPaymentFailures,
-    recentFailedEmails,
-    creditFailedTopups
-  ] = await Promise.all([
-    safeCount(db.select({ count: sql`count(*)` }).from(paymentMethods).where(eq(paymentMethods.isActive, true))),
-    safeCount(db.select({ count: sql`count(*)` }).from(emailProviders).where(eq(emailProviders.isActive, true))),
-    errorLogs24hCount > 0 ? safeRows(
-      db.select({ id: logs.id, message: logs.message, source: logs.source, createdAt: logs.createdAt }).from(logs).where(and(eq(logs.level, "error"), gte(logs.createdAt, since24h))).orderBy(desc(logs.createdAt)).limit(20)
-    ) : Promise.resolve([]),
-    paymentFailures24hCount > 0 ? safeRows(
-      db.select({
-        id: paymentFailures.id,
-        orderId: paymentFailures.orderId,
-        reason: paymentFailures.reason,
-        payMethod: paymentFailures.payMethod,
-        createdAt: paymentFailures.createdAt
-      }).from(paymentFailures).where(gte(paymentFailures.createdAt, since24h)).orderBy(desc(paymentFailures.createdAt)).limit(20)
-    ) : Promise.resolve([]),
-    failedEmails24hCount > 0 ? safeRows(
-      db.select({
-        id: emailLogs.id,
-        provider: emailLogs.provider,
-        error: emailLogs.error,
-        createdAt: emailLogs.createdAt
-      }).from(emailLogs).where(and(eq(emailLogs.status, "failed"), gte(emailLogs.createdAt, since24h))).orderBy(desc(emailLogs.createdAt)).limit(15)
-    ) : Promise.resolve([]),
-    pendingTopups > 0 ? safeRows(
-      db.select({
-        id: topups.id,
-        orderId: topups.orderId,
-        status: topups.status,
-        lastError: topups.lastError,
-        updatedAt: topups.updatedAt,
-        createdAt: topups.createdAt
-      }).from(topups).where(inArray(topups.status, ["credit_failed", "review_required"])).orderBy(desc(topups.updatedAt)).limit(10)
-    ) : Promise.resolve([])
-  ]);
   const telemetry = buildApayDashboardTelemetry({
     latencyMs: Date.now() - startedAtMs,
     isCommerceActive,
@@ -432,7 +370,6 @@ const dashboard_get = defineEventHandler(async (event) => {
       periodLoginVisitors,
       periodAuthVisitors,
       periodExternalVisitors,
-      // 保持 today 字段别名以向后兼容
       todayOrders: periodOrderRows.length,
       todayPaidOrders: periodPaidOrdersCount,
       todayRevenue: periodRevenueAmount,
@@ -445,7 +382,7 @@ const dashboard_get = defineEventHandler(async (event) => {
       totalOrders: totalOrdersCount,
       totalRevenue: getCurrencyTotal(totalRevenueByCurrency, baseCurrency),
       totalRevenueByCurrency,
-      totalUsers: Number(((_i = totalUsersCount[0]) == null ? void 0 : _i.count) || 0),
+      totalUsers: totalUsersCount,
       activeProducts: activeProductsCount,
       activeSubscriptions: activeSubsCount,
       activeNewsletterSubscribers: activeNewsletterCount,
@@ -457,7 +394,7 @@ const dashboard_get = defineEventHandler(async (event) => {
       pendingFulfillments,
       lowStockCards: lowStockCardsCount,
       pendingTopups,
-      pendingTickets: Number(((_j = pendingTicketsCount[0]) == null ? void 0 : _j.count) || 0),
+      pendingTickets,
       pendingComments: pendingCommentsCount,
       pendingPromoApplications: pendingPromoAppsCount,
       failedEmails24h: failedEmails24hCount,
@@ -472,7 +409,7 @@ const dashboard_get = defineEventHandler(async (event) => {
       topPages,
       topCountries,
       devices,
-      recentVisitors,
+      recentVisitors: traffic.recentVisitors,
       rollup: traffic.rollup
     },
     recentOrders: recentOrdersResult,

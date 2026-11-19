@@ -1,13 +1,12 @@
-import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, r as readBody, b as db, a0 as paymentMethods } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, f as getRouterParam, e as createError, r as readBody, b as db, $ as paymentMethods, b4 as normalizePaymentPluginOverrides } from '../../../../nitro/nitro.mjs';
 import { eq } from 'drizzle-orm';
+import 'node:crypto';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
-import 'node:crypto';
+import 'node:http2';
+import 'node:fs';
 import 'zod';
 import 'crypto';
-import 'fs';
-import 'path';
-import 'node:fs';
 import 'node:path';
 import '@nuxthub/blob';
 import 'node:http';
@@ -27,6 +26,8 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:fs/promises';
+import 'fs';
+import 'path';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
@@ -37,9 +38,11 @@ import 'node:dns/promises';
 import 'node:net';
 
 const _id_ = defineEventHandler(async (event) => {
+  var _a;
   const locale = getRequestLocale(event);
   const id = getRouterParam(event, "id");
   if (!id) throw createError({ statusCode: 400, message: locale === "zh" ? "\u7F3A\u5C11 ID" : "Missing id" });
+  const numericId = parseInt(id, 10);
   if (event.method === "PUT") {
     const body = await readBody(event);
     const updateData = { ...body };
@@ -47,12 +50,21 @@ const _id_ = defineEventHandler(async (event) => {
     delete updateData.createdAt;
     delete updateData.isLocalOnly;
     delete updateData.hasLocalFiles;
-    if (updateData.info === void 0) updateData.info = null;
-    if (updateData.create === void 0) updateData.create = null;
-    if (updateData.callback === void 0) updateData.callback = null;
-    updateData.supportedLocales = String(updateData.supportedLocales || "").trim() || null;
+    if (Object.hasOwn(updateData, "supportedLocales")) {
+      updateData.supportedLocales = String(updateData.supportedLocales || "").trim() || null;
+    }
+    const hasTemplateField = ["info", "create", "callback"].some((field) => Object.hasOwn(updateData, field));
+    let normalizedData = updateData;
+    if (hasTemplateField) {
+      let methodCode = String(updateData.code || "").trim();
+      if (!methodCode) {
+        const existing = await db.select({ code: paymentMethods.code }).from(paymentMethods).where(eq(paymentMethods.id, numericId));
+        methodCode = String(((_a = existing[0]) == null ? void 0 : _a.code) || "").trim();
+      }
+      normalizedData = normalizePaymentPluginOverrides(methodCode, updateData);
+    }
     try {
-      return await db.update(paymentMethods).set(updateData).where(eq(paymentMethods.id, parseInt(id))).returning();
+      return await db.update(paymentMethods).set(normalizedData).where(eq(paymentMethods.id, numericId)).returning();
     } catch (e) {
       console.error("Database update error:", e);
       throw createError({
@@ -62,7 +74,7 @@ const _id_ = defineEventHandler(async (event) => {
     }
   }
   if (event.method === "DELETE") {
-    await db.delete(paymentMethods).where(eq(paymentMethods.id, parseInt(id)));
+    await db.delete(paymentMethods).where(eq(paymentMethods.id, numericId));
     return { success: true };
   }
 });

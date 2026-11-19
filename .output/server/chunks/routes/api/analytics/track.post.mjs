@@ -1,13 +1,12 @@
-import { d as defineEventHandler, c as getRequestLocale, r as readBody, e as createError, de as isTrackableVisitorPath, b8 as getUserSession, df as trackVisitorEvent } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, e as createError, dE as isTrackableVisitorPath, dF as isBotRequest, aP as getUserSession, dG as trackVisitorEvent } from '../../../nitro/nitro.mjs';
+import 'drizzle-orm';
+import 'node:crypto';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
-import 'node:crypto';
-import 'drizzle-orm';
+import 'node:http2';
+import 'node:fs';
 import 'zod';
 import 'crypto';
-import 'fs';
-import 'path';
-import 'node:fs';
 import 'node:path';
 import '@nuxthub/blob';
 import 'node:http';
@@ -27,6 +26,8 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:fs/promises';
+import 'fs';
+import 'path';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
@@ -38,7 +39,7 @@ import 'node:net';
 
 const allowedEvents = /* @__PURE__ */ new Set(["page_view", "product_view"]);
 const track_post = defineEventHandler(async (event) => {
-  var _a;
+  var _a, _b, _c;
   const locale = getRequestLocale(event);
   const body = await readBody(event);
   if (!body || typeof body !== "object") {
@@ -53,6 +54,9 @@ const track_post = defineEventHandler(async (event) => {
       statusMessage: locale === "zh" ? "\u65E0\u6548\u7684\u57CB\u70B9\u4E8B\u4EF6\u6216\u9875\u9762\u8DEF\u5F84" : "Invalid analytics event or page path"
     });
   }
+  if (isBotRequest(event)) {
+    return { success: false };
+  }
   const session = await getUserSession(event);
   const sessionUserId = session.user && "id" in session.user ? session.user.id : null;
   const success = await trackVisitorEvent(event, {
@@ -65,7 +69,7 @@ const track_post = defineEventHandler(async (event) => {
   }, {
     // 浏览事件攒批写入,见 server/utils/visitorAnalytics.ts。Cloudflare isolate 之间
     // 不共享内存、请求外的定时器也不可靠,保持逐条写入。
-    deferred: !(event.context.cloudflare || ((_a = event.context._platform) == null ? void 0 : _a.cloudflare))
+    deferred: !(((_a = event.context) == null ? void 0 : _a.cloudflare) || ((_c = (_b = event.context) == null ? void 0 : _b._platform) == null ? void 0 : _c.cloudflare))
   });
   return { success };
 });

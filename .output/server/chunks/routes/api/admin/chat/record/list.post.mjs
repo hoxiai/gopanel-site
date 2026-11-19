@@ -1,13 +1,12 @@
-import { d as defineEventHandler, r as readBody, g as getQuery, e as createError, b as db, u as tickets, x as ticketMessages, y as normalizeTicketAttachments } from '../../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, r as readBody, g as getQuery, e as createError, b as db, v as tickets, y as ticketMessages, z as normalizeTicketAttachments, C as ticketReadSnapshot } from '../../../../../nitro/nitro.mjs';
 import { eq, asc } from 'drizzle-orm';
+import 'node:crypto';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
-import 'node:crypto';
+import 'node:http2';
+import 'node:fs';
 import 'zod';
 import 'crypto';
-import 'fs';
-import 'path';
-import 'node:fs';
 import 'node:path';
 import '@nuxthub/blob';
 import 'node:http';
@@ -27,6 +26,8 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:fs/promises';
+import 'fs';
+import 'path';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
@@ -51,7 +52,8 @@ const list_post = defineEventHandler(async (event) => {
   const messages = await db.select().from(ticketMessages).where(eq(ticketMessages.ticketId, chatId)).orderBy(asc(ticketMessages.createdAt));
   const list = messages.map((msg) => {
     const senderType = msg.senderType === "admin" ? "store" : msg.senderType === "bot" ? "ai" : msg.senderType === "user" ? "visitor" : msg.senderType;
-    const createdAt = msg.createdAt instanceof Date ? msg.createdAt.toISOString() : String(msg.createdAt || "");
+    const storedTime = msg.createdAt;
+    const createdAt = storedTime instanceof Date ? storedTime.toISOString() : String(storedTime || "");
     const attachments = normalizeTicketAttachments(msg.attachments);
     const isImageOnly = Boolean(
       (attachments == null ? void 0 : attachments.length) && (!msg.content || msg.content === "[\u56FE\u7247\u9644\u4EF6]")
@@ -68,12 +70,14 @@ const list_post = defineEventHandler(async (event) => {
       createdAt
     };
   });
+  const receipt = await ticketReadSnapshot(chatId, "admin");
   return {
     code: 200,
     data: {
       list,
       ticketNo: ticket.ticketNo,
-      status: ticket.status
+      status: ticket.status,
+      ...receipt
     }
   };
 });

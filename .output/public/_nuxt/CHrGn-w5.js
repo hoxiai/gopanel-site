@@ -1,0 +1,1 @@
+import{w as o}from"./Xx0Qe2H0.js";import{a as r}from"./BalTViiK.js";const p=(t={})=>{const{data:e,status:a,refresh:s}=o("/api/post-categories",{key:t.key||"post-categories",default:()=>({data:[]})},"$_IHlDImZXw");return{categories:r(()=>e.value?.data||[]),status:a,refresh:s}};export{p as u};

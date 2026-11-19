@@ -1,13 +1,12 @@
-import { d as defineEventHandler, c as getRequestLocale, aj as resolveClientIp, ak as checkIpRateLimit, e as createError, r as readBody, d3 as validateEmail, b as db, v as users, l as hashPassword, aD as emitEvent, dq as getIntegrationToken, w as settings } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, an as resolveClientIp, ao as checkIpRateLimit, e as createError, r as readBody, dq as validateEmail, b as db, w as users, dQ as isUserStatusActive, dR as createAccountUnavailableError, l as hashPassword, aK as emitEvent, dS as getIntegrationToken, x as settings } from '../../../nitro/nitro.mjs';
 import { timingSafeEqual } from 'node:crypto';
 import { eq, like } from 'drizzle-orm';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
+import 'node:http2';
+import 'node:fs';
 import 'zod';
 import 'crypto';
-import 'fs';
-import 'path';
-import 'node:fs';
 import 'node:path';
 import '@nuxthub/blob';
 import 'node:http';
@@ -27,6 +26,8 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:fs/promises';
+import 'fs';
+import 'path';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
@@ -113,6 +114,9 @@ const findOrCreate_post = defineEventHandler(async (event) => {
   const existingUsers = await db.select().from(users).where(eq(users.email, email)).limit(1);
   if (existingUsers.length > 0) {
     user = existingUsers[0];
+    if (!isUserStatusActive(user.status)) {
+      throw createAccountUnavailableError(user.status, locale, 403);
+    }
     created = false;
   } else {
     let passwordHash = null;
@@ -134,6 +138,9 @@ const findOrCreate_post = defineEventHandler(async (event) => {
       }
       console.warn(`[find-or-create] concurrent insert for ${email}, resolved to existing user #${racedUsers[0].id}`);
       user = racedUsers[0];
+      if (!isUserStatusActive(user.status)) {
+        throw createAccountUnavailableError(user.status, locale, 403);
+      }
       created = false;
     }
   }

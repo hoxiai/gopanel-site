@@ -1,13 +1,12 @@
-import { d as defineEventHandler, c as getRequestLocale, g as getQuery, a3 as getRequestHost, L as getConfiguredTimezone, cm as parseStatsRange, cv as clampStatsPage, cw as clampStatsPageSize, ct as visitorEvents, b as db, cx as toIsoTimestampOrEpoch, cy as isExternalReferrer, cz as formatSourceBrand } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, g as getQuery, S as getRequestHost, P as getConfiguredTimezone, cx as parseStatsRange, cH as clampStatsPage, cI as clampStatsPageSize, cF as visitorEvents, cJ as toIsoTimestampOrEpoch, cK as isExternalReferrer, cL as formatSourceBrand, b as db } from '../../../../nitro/nitro.mjs';
 import { or, sql, and, gte, lt, count, desc } from 'drizzle-orm';
+import 'node:crypto';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
-import 'node:crypto';
+import 'node:http2';
+import 'node:fs';
 import 'zod';
 import 'crypto';
-import 'fs';
-import 'path';
-import 'node:fs';
 import 'node:path';
 import '@nuxthub/blob';
 import 'node:http';
@@ -27,6 +26,8 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:fs/promises';
+import 'fs';
+import 'path';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
@@ -37,11 +38,10 @@ import 'node:dns/promises';
 import 'node:net';
 
 const events_get = defineEventHandler(async (event) => {
-  var _a;
   const locale = getRequestLocale(event);
   const unknownLabel = locale === "zh" ? "\u672A\u77E5" : "Unknown";
   const query = getQuery(event);
-  const host = typeof getRequestHost === "function" ? getRequestHost(event) : null;
+  const host = typeof getRequestHost === "function" ? getRequestHost(event, { xForwardedHost: true }) : null;
   const cleanHost = host ? host.toLowerCase().replace(/^www\./, "").split(":")[0] : "";
   const tz = await getConfiguredTimezone();
   const { preset, days, rangeStart, rangeEnd } = parseStatsRange(query, tz);
@@ -71,12 +71,7 @@ const events_get = defineEventHandler(async (event) => {
     lt(visitorEvents.createdAt, rangeEnd),
     searchFilter
   );
-  const totalRows = await db.select({
-    value: sql`COUNT(DISTINCT ${visitorEvents.ip})
-        + COALESCE(MAX(CASE WHEN ${visitorEvents.ip} IS NULL THEN 1 ELSE 0 END), 0)`
-  }).from(visitorEvents).where(timeFilter);
-  const totalItems = ((_a = totalRows[0]) == null ? void 0 : _a.value) || 0;
-  const items = await db.select({
+  const queryItems = () => db.select({
     ip: visitorEvents.ip,
     visitCount: count(),
     visitorId: sql`MAX(${visitorEvents.visitorId})`,
@@ -99,6 +94,22 @@ const events_get = defineEventHandler(async (event) => {
     firstSeenAt: sql`MIN(${visitorEvents.createdAt})`,
     lastSeenAt: sql`MAX(${visitorEvents.createdAt})`
   }).from(visitorEvents).where(timeFilter).groupBy(visitorEvents.ip).orderBy(desc(sql`MAX(${visitorEvents.createdAt})`)).limit(pageSize).offset(offset);
+  const queryTotal = async () => {
+    var _a;
+    const totalRows = await db.select({
+      value: sql`COUNT(DISTINCT ${visitorEvents.ip})
+          + COALESCE(MAX(CASE WHEN ${visitorEvents.ip} IS NULL THEN 1 ELSE 0 END), 0)`
+    }).from(visitorEvents).where(timeFilter);
+    return Number(((_a = totalRows[0]) == null ? void 0 : _a.value) || 0);
+  };
+  let items;
+  let totalItems;
+  if (offset === 0) {
+    items = await queryItems();
+    totalItems = items.length < pageSize ? items.length : await queryTotal();
+  } else {
+    [totalItems, items] = await Promise.all([queryTotal(), queryItems()]);
+  }
   return {
     range: {
       preset,
@@ -109,8 +120,8 @@ const events_get = defineEventHandler(async (event) => {
     pagination: {
       page,
       pageSize,
-      totalItems: Number(totalItems || 0),
-      totalPages: Math.max(1, Math.ceil(Number(totalItems || 0) / pageSize))
+      totalItems,
+      totalPages: Math.max(1, Math.ceil(totalItems / pageSize))
     },
     items: items.map((item) => ({
       ip: item.ip,
@@ -133,8 +144,6 @@ const events_get = defineEventHandler(async (event) => {
       deviceType: item.deviceType || unknownLabel,
       browser: item.browser || null,
       os: item.os || null,
-      // MIN/MAX are raw sql`` fragments, so no drizzle column mapper runs and
-      // the value arrives dialect-shaped (Postgres string / SQLite seconds).
       firstSeenAt: toIsoTimestampOrEpoch(item.firstSeenAt),
       lastSeenAt: toIsoTimestampOrEpoch(item.lastSeenAt)
     }))

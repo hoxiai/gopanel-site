@@ -1,13 +1,12 @@
-import { d as defineEventHandler, c as getRequestLocale, r as readBody, L as getConfiguredTimezone, a5 as resolveRollupSiteHost, a3 as getRequestHost, e as createError, cD as zonedDayBounds, cf as zonedDateKeysBetween, cE as loadRawEventsCompleteSince, cF as isRawDayComplete, cG as computeRollupDay, cg as ensureRollupDays } from '../../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, r as readBody, P as getConfiguredTimezone, a9 as resolveRollupSiteHost, S as getRequestHost, e as createError, cP as zonedDayBounds, cq as zonedDateKeysBetween, cQ as loadRawEventsCompleteSince, cR as isRawDayComplete, cS as computeRollupDay, cr as ensureRollupDays } from '../../../../nitro/nitro.mjs';
+import 'drizzle-orm';
+import 'node:crypto';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
-import 'node:crypto';
-import 'drizzle-orm';
+import 'node:http2';
+import 'node:fs';
 import 'zod';
 import 'crypto';
-import 'fs';
-import 'path';
-import 'node:fs';
 import 'node:path';
 import '@nuxthub/blob';
 import 'node:http';
@@ -27,6 +26,8 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:fs/promises';
+import 'fs';
+import 'path';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
@@ -42,7 +43,7 @@ const rollup_post = defineEventHandler(async (event) => {
   const locale = getRequestLocale(event);
   const body = await readBody(event).catch(() => null);
   const timezone = await getConfiguredTimezone();
-  const siteHost = await resolveRollupSiteHost(getRequestHost(event));
+  const siteHost = await resolveRollupSiteHost(getRequestHost(event, { xForwardedHost: true }));
   if (!siteHost) {
     throw createError({ statusCode: 409, statusMessage: locale === "zh" ? "\u65E0\u6CD5\u786E\u5B9A\u672C\u7AD9\u57DF\u540D,\u8BF7\u5148\u914D\u7F6E site_url" : "Unable to resolve the site host; configure site_url" });
   }

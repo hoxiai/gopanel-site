@@ -1,13 +1,12 @@
-import { d as defineEventHandler, c as getRequestLocale, L as getConfiguredTimezone, cm as parseStatsRange, g as getQuery, a3 as getRequestHost, P as buildLocaleCurrencyQuote, a4 as isVisitorRollupEnabled, a5 as resolveRollupSiteHost, cf as zonedDateKeysBetween, cg as ensureRollupDays, ch as loadRollupAggregates, ci as loadRollupPaidOverlay, cn as loadRollupTrafficSummary, co as assembleStatsResponse, cp as buildRollupStatsInput, a9 as loadVisitorReport, cq as loadVisitorTrafficSummary, cr as buildRawStatsInput, aa as createRollupBackgroundScheduler } from '../../../nitro/nitro.mjs';
+import { d as defineEventHandler, c as getRequestLocale, P as getConfiguredTimezone, cx as parseStatsRange, g as getQuery, S as getRequestHost, a1 as buildLocaleCurrencyQuote, a8 as isVisitorRollupEnabled, a9 as resolveRollupSiteHost, cq as zonedDateKeysBetween, cr as ensureRollupDays, cs as loadRollupAggregates, ct as loadRollupPaidOverlay, cy as loadRollupTrafficSummary, cz as assembleStatsResponse, cA as buildRollupStatsInput, ad as loadVisitorReport, cB as loadVisitorTrafficSummary, cC as buildRawStatsInput, cD as loadCachedVisitorTrafficSummary, ae as createRollupBackgroundScheduler } from '../../../nitro/nitro.mjs';
+import 'drizzle-orm';
+import 'node:crypto';
 import '@adonisjs/hash';
 import '@adonisjs/hash/drivers/scrypt';
-import 'node:crypto';
-import 'drizzle-orm';
+import 'node:http2';
+import 'node:fs';
 import 'zod';
 import 'crypto';
-import 'fs';
-import 'path';
-import 'node:fs';
 import 'node:path';
 import '@nuxthub/blob';
 import 'node:http';
@@ -27,6 +26,8 @@ import 'drizzle-orm/mysql-core';
 import 'maxmind';
 import 'node:os';
 import 'node:fs/promises';
+import 'fs';
+import 'path';
 import 'node:url';
 import '@iconify/utils';
 import 'consola';
@@ -51,7 +52,7 @@ const stats_get = defineEventHandler(async (event) => {
     fullYesterdayStart,
     fullYesterdayEnd
   } = parseStatsRange(getQuery(event), timezone);
-  const host = getRequestHost(event);
+  const host = getRequestHost(event, { xForwardedHost: true });
   const quote = await buildLocaleCurrencyQuote(0);
   const base = {
     locale,
@@ -81,7 +82,7 @@ const stats_get = defineEventHandler(async (event) => {
     const [aggregates, overlay, previousTraffic2, fullYesterdayTraffic2] = await Promise.all([
       loadRollupAggregates(currentKeys, { hours: days === 1 }),
       loadRollupPaidOverlay(rangeStart, rangeEnd, currentKeys, timezone),
-      comparisonMode === "yesterday_same_time" ? loadVisitorTrafficSummary(previousStart, previousEnd) : loadRollupTrafficSummary(previousStart, previousEnd, previousKeys, timezone),
+      comparisonMode === "yesterday_same_time" ? loadCachedVisitorTrafficSummary(previousStart, previousEnd, { cacheToken: ensured.computedDays.join(",") }) : loadRollupTrafficSummary(previousStart, previousEnd, previousKeys, timezone),
       fullYesterdayStart && fullYesterdayEnd ? loadRollupTrafficSummary(fullYesterdayStart, fullYesterdayEnd, fullYesterdayKeys, timezone) : Promise.resolve(null)
     ]);
     return assembleStatsResponse(buildRollupStatsInput(aggregates, overlay, {
@@ -101,7 +102,7 @@ const stats_get = defineEventHandler(async (event) => {
   }
   const [report, previousTraffic, fullYesterdayTraffic] = await Promise.all([
     loadVisitorReport(rangeStart, rangeEnd, host),
-    loadVisitorTrafficSummary(previousStart, previousEnd),
+    comparisonMode === "yesterday_same_time" ? loadCachedVisitorTrafficSummary(previousStart, previousEnd) : loadVisitorTrafficSummary(previousStart, previousEnd),
     fullYesterdayStart && fullYesterdayEnd ? loadVisitorTrafficSummary(fullYesterdayStart, fullYesterdayEnd) : Promise.resolve(null)
   ]);
   return assembleStatsResponse(buildRawStatsInput(report, {

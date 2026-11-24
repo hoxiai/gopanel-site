@@ -1,4 +1,4 @@
-import { gu as ensurePanelCollectorScheduler, gv as evaluateMonitors } from '../nitro/nitro.mjs';
+import { gq as ensurePanelCollectorScheduler, gr as evaluateMonitors } from '../nitro/nitro.mjs';
 import 'drizzle-orm';
 import 'node:crypto';
 import '@adonisjs/hash';

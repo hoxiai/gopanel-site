@@ -1,6 +1,6 @@
 import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import * as vue from 'vue';
 import { useSlots, useId as useId$1, useAttrs, computed, unref, mergeProps, withCtx, openBlock, createBlock, createVNode, resolveDynamicComponent, renderSlot, createTextVNode, toDisplayString as toDisplayString$1, createCommentVNode, hasInjectionContext, inject, getCurrentInstance, ref, watch, nextTick, toValue, defineComponent, h, createElementBlock, Fragment, renderList, provide, customRef, shallowRef, toRefs, watchPostEffect, watchEffect, toRef as toRef$1, camelize as camelize$1, reactive, normalizeStyle, mergeDefaults, Teleport, useModel, mergeModels, markRaw, toHandlerKey, getCurrentScope, onScopeDispose, shallowReadonly, cloneVNode, isRef, toHandlers, normalizeProps, guardReactiveProps, readonly, useTemplateRef, withKeys, withModifiers, resolveComponent, Comment, withAsyncContext, onServerPrefetch, defineAsyncComponent, createSlots, resolveDirective, createElementVNode, effectScope, withDirectives, vModelCheckbox, useSSRContext, toRaw, shallowReactive, Suspense, createApp, Text, onErrorCaptured, isReadonly, isShallow, isReactive } from 'vue';
-import { gw as serialize, gx as createPricingContext, eC as setResponseStatus$1, gy as defu, E as getRequestURL, gz as isEqual$1, e as createError$1, gA as SEO_LOCALE_LANGUAGE, cd as normalizeGeoKeySpecs, ce as normalizeGeoFaqs, gB as getErrorRequestId, gC as resolveActiveTheme, gD as upperFirst, f4 as quoteProductPrice, gE as defuFn, gF as REFUND_EFFECTS_COMPLETE, gG as appendResponseHeader, gH as resolveLocalizedSetting, gI as parse$1, eq as getRequestHeader, gJ as errorRecord, gK as errorData, gL as htmlToCleanMarkdown, gM as sanitizeStatusCode, gN as getContext, dZ as setCookie, dW as getCookie, dX as deleteCookie, cf as normalizeGeoRelatedLinks, ft as getRequestHeaders, gO as $fetch$1, gP as baseURL, gQ as hash, gR as createHooks, gS as executeAsync, gT as normalizeSiteOrigin, gU as filterSeoLocales, gV as stripLocalePrefix$1, ci as classifySeoRoute, cj as seoRouteRegistry, gW as localePathForSeo, gX as isMarkdownMirrorPath, gY as safeJsonLd, gZ as localeDomainUrl, g_ as getRequestProtocol, g$ as themeHostConfigs } from '../nitro/nitro.mjs';
+import { gs as serialize, gt as createPricingContext, eA as setResponseStatus$1, gu as defu, E as getRequestURL, gv as isEqual$1, e as createError$1, gw as SEO_LOCALE_LANGUAGE, cd as normalizeGeoKeySpecs, ce as normalizeGeoFaqs, gx as getErrorRequestId, gy as resolveActiveTheme, gz as upperFirst, f2 as quoteProductPrice, gA as defuFn, gB as REFUND_EFFECTS_COMPLETE, gC as htmlToCleanMarkdown, gD as appendResponseHeader, gE as resolveLocalizedSetting, gF as parse$1, eo as getRequestHeader, gG as errorRecord, gH as errorData, gI as sanitizeStatusCode, gJ as getContext, dX as setCookie, dU as getCookie, dV as deleteCookie, cf as normalizeGeoRelatedLinks, fr as getRequestHeaders, gK as $fetch$1, gL as baseURL, gM as hash, gN as createHooks, gO as executeAsync, gP as normalizeSiteOrigin, gQ as filterSeoLocales, gR as stripLocalePrefix$1, ci as classifySeoRoute, cj as seoRouteRegistry, gS as localePathForSeo, gT as isMarkdownMirrorPath, gU as safeJsonLd, gV as localeDomainUrl, gW as getRequestProtocol, gX as themeHostConfigs } from '../nitro/nitro.mjs';
 import { useRoute as useRoute$1, useRouter as useRouter$1, RouterView, isNavigationFailure, createMemoryHistory, createRouter, START_LOCATION } from 'vue-router';
 import { Icon, getIcon, loadIcon as loadIcon$1, _api, addAPIProvider, setCustomIconsLoader } from '@iconify/vue';
 import { getIconCSS } from '@iconify/utils/lib/css/icon';
@@ -899,279 +899,279 @@ const _routes = [
     name: "admin-posts-categories",
     path: "/admin/posts/categories",
     meta: __nuxt_page_meta$v || {},
-    component: () => import('./categories-DOdkeL74.mjs')
+    component: () => import('./categories-BymnXwU5.mjs')
   },
   {
     name: "admin-posts-create",
     path: "/admin/posts/create",
     meta: __nuxt_page_meta$u || {},
-    component: () => import('./create-D5dVsN6-.mjs')
+    component: () => import('./create-C4wPZBJS.mjs')
   },
   {
     name: "admin-products-create",
     path: "/admin/products/create",
     meta: __nuxt_page_meta$t || {},
-    component: () => import('./create-B9WY0BmD.mjs')
+    component: () => import('./create-kHz03pJN.mjs')
   },
   {
     name: "admin-settings-authorization",
     path: "/admin/settings/authorization",
     meta: __nuxt_page_meta$s || {},
-    component: () => import('./authorization-PSHwsFgy.mjs')
+    component: () => import('./authorization-Bqdd_rlX.mjs')
   },
   {
     name: "admin-settings-extensions",
     path: "/admin/settings/extensions",
     meta: __nuxt_page_meta$r || {},
-    component: () => import('./extensions-gh1FWwQa.mjs')
+    component: () => import('./extensions-Bwqt8r99.mjs')
   },
   {
     name: "admin-settings-manages",
     path: "/admin/settings/manages",
     meta: __nuxt_page_meta$q || {},
-    component: () => import('./manages-CK4fgbo0.mjs')
+    component: () => import('./manages-C5UCGKSl.mjs')
   },
   {
     name: "admin-settings-product-presets",
     path: "/admin/settings/product-presets",
     meta: __nuxt_page_meta$p || {},
-    component: () => import('./product-presets-DUhUZXZh.mjs')
+    component: () => import('./product-presets-BTL5WXKu.mjs')
   },
   {
     name: "admin-settings-releases",
     path: "/admin/settings/releases",
     meta: __nuxt_page_meta$o || {},
-    component: () => import('./releases-C0wOBY2k.mjs')
+    component: () => import('./releases-_66lOxFc.mjs')
   },
   {
     name: "admin-settings-themes",
     path: "/admin/settings/themes",
     meta: __nuxt_page_meta$n || {},
-    component: () => import('./themes-B6Z0kUNv.mjs')
+    component: () => import('./themes-kEZ7opFw.mjs')
   },
   {
     name: "admin-posts-id",
     path: "/admin/posts/:id()",
     meta: __nuxt_page_meta$m || {},
-    component: () => import('./_id_-75Tm6K07.mjs')
+    component: () => import('./_id_-B2MCv0mC.mjs')
   },
   {
     name: "admin-products-id",
     path: "/admin/products/:id()",
     meta: __nuxt_page_meta$l || {},
-    component: () => import('./_id_-oorZ3Grn.mjs')
+    component: () => import('./_id_-CwkGw5IF.mjs')
   },
   {
     name: "admin-extensions-slug",
     path: "/admin/extensions/:slug(.*)*",
     meta: __nuxt_page_meta$k || {},
-    component: () => import('./_...slug_-BNm8ojOl.mjs')
+    component: () => import('./_...slug_-BkYWqDYF.mjs')
   },
   {
     name: "admin-plugins-slug",
     path: "/admin/plugins/:slug(.*)*",
     meta: __nuxt_page_meta$j || {},
-    component: () => import('./_...slug_-DdlFs8Zw.mjs')
+    component: () => import('./_...slug_-Wklk6tA2.mjs')
   },
   {
     name: "user-plugins-slug___en",
     path: "/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-B5F0j7du.mjs')
+    component: () => import('./_...slug_-CFjZEaTA.mjs')
   },
   {
     name: "user-plugins-slug___zh___default",
     path: "/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-B5F0j7du.mjs')
+    component: () => import('./_...slug_-CFjZEaTA.mjs')
   },
   {
     name: "user-plugins-slug___zh",
     path: "/zh/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-B5F0j7du.mjs')
+    component: () => import('./_...slug_-CFjZEaTA.mjs')
   },
   {
     name: "user-plugins-slug___zh-HK___default",
     path: "/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-B5F0j7du.mjs')
+    component: () => import('./_...slug_-CFjZEaTA.mjs')
   },
   {
     name: "user-plugins-slug___zh-HK",
     path: "/zh-HK/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-B5F0j7du.mjs')
+    component: () => import('./_...slug_-CFjZEaTA.mjs')
   },
   {
     name: "user-plugins-slug___ja___default",
     path: "/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-B5F0j7du.mjs')
+    component: () => import('./_...slug_-CFjZEaTA.mjs')
   },
   {
     name: "user-plugins-slug___ja",
     path: "/ja/user/plugins/:slug(.*)*",
-    component: () => import('./_...slug_-B5F0j7du.mjs')
+    component: () => import('./_...slug_-CFjZEaTA.mjs')
   },
   {
     name: "admin-cards",
     path: "/admin/cards",
-    component: () => import('./cards-vMw9rbVU.mjs')
+    component: () => import('./cards--oEi3YZW.mjs')
   },
   {
     name: "admin-comments",
     path: "/admin/comments",
     meta: __nuxt_page_meta$i || {},
-    component: () => import('./comments-11CBLwqE.mjs')
+    component: () => import('./comments-hCumYT2T.mjs')
   },
   {
     name: "admin-customers",
     path: "/admin/customers",
     meta: __nuxt_page_meta$h || {},
-    component: () => import('./customers-BN4fgg88.mjs')
+    component: () => import('./customers-DQFb69j6.mjs')
   },
   {
     name: "admin-dashboard",
     path: "/admin/dashboard",
     meta: __nuxt_page_meta$g || {},
-    component: () => import('./dashboard-CpmdIU4-.mjs')
+    component: () => import('./dashboard-BfGQYS6a.mjs')
   },
   {
     name: "admin-login",
     path: "/admin/login",
     meta: __nuxt_page_meta$f || {},
-    component: () => import('./login-o1QvSgbV.mjs')
+    component: () => import('./login-C8FzS98G.mjs')
   },
   {
     name: "admin-logs",
     path: "/admin/logs",
     meta: __nuxt_page_meta$e || {},
-    component: () => import('./logs-NMpKHh7o.mjs')
+    component: () => import('./logs-C3mBvRGY.mjs')
   },
   {
     name: "admin-newsletter",
     path: "/admin/newsletter",
     meta: __nuxt_page_meta$d || {},
-    component: () => import('./newsletter-BSbrRXTc.mjs')
+    component: () => import('./newsletter-BCVJGmam.mjs')
   },
   {
     name: "admin-orders",
     path: "/admin/orders",
     meta: __nuxt_page_meta$c || {},
-    component: () => import('./orders-CX6dGhxW.mjs')
+    component: () => import('./orders-CoVAI7W3.mjs')
   },
   {
     name: "admin-payments",
     path: "/admin/payments",
     meta: __nuxt_page_meta$b || {},
-    component: () => import('./payments-B8cdXaif.mjs')
+    component: () => import('./payments-CRQYx9ox.mjs')
   },
   {
     name: "admin-posts",
     path: "/admin/posts",
     meta: __nuxt_page_meta$a || {},
-    component: () => import('./index-xTbRkWI0.mjs')
+    component: () => import('./index-DylUkV-s.mjs')
   },
   {
     name: "admin-products",
     path: "/admin/products",
     meta: __nuxt_page_meta$9 || {},
-    component: () => import('./index-ug_SP-oh.mjs')
+    component: () => import('./index-CoK7v3mI.mjs')
   },
   {
     name: "admin-profile",
     path: "/admin/profile",
     meta: __nuxt_page_meta$8 || {},
-    component: () => import('./profile-CfoP0i0q.mjs')
+    component: () => import('./profile-BQL-vT8J.mjs')
   },
   {
     name: "admin-promo",
     path: "/admin/promo",
     meta: __nuxt_page_meta$7 || {},
-    component: () => import('./promo-CIswqSEo.mjs')
+    component: () => import('./promo-BQwJLhCL.mjs')
   },
   {
     name: "admin-releases",
     path: "/admin/releases",
     meta: __nuxt_page_meta$6 || {},
-    component: () => import('./releases-DXyneUE0.mjs')
+    component: () => import('./releases-Jq3vBNjn.mjs')
   },
   {
     name: "admin-settings",
     path: "/admin/settings",
     meta: __nuxt_page_meta$5 || {},
-    component: () => import('./index-Cw8aq1v5.mjs')
+    component: () => import('./index-BpjKwobo.mjs')
   },
   {
     name: "admin-setup",
     path: "/admin/setup",
     meta: __nuxt_page_meta$4 || {},
-    component: () => import('./setup-DbwxwzJp.mjs')
+    component: () => import('./setup-DG2HDtTw.mjs')
   },
   {
     name: "admin-stats",
     path: "/admin/stats",
     meta: __nuxt_page_meta$3 || {},
-    component: () => import('./stats-C58ia3Xj.mjs')
+    component: () => import('./stats-6bihiJ7T.mjs')
   },
   {
     name: "admin-subscriptions",
     path: "/admin/subscriptions",
-    component: () => import('./subscriptions-DAp8eJTE.mjs')
+    component: () => import('./subscriptions-DiCO1NNL.mjs')
   },
   {
     name: "admin-tickets",
     path: "/admin/tickets",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./tickets-rpULsDSj.mjs')
+    component: () => import('./tickets-IEqUh9wk.mjs')
   },
   {
     name: "admin-topups",
     path: "/admin/topups",
-    component: () => import('./topups-Ds9onwQF.mjs')
+    component: () => import('./topups-Cd3THBLQ.mjs')
   },
   {
     name: "admin-visitors",
     path: "/admin/stats/visitors",
     meta: __nuxt_page_meta$1 || {},
     alias: ["/admin/visitors"],
-    component: () => import('./visitors-BY-JUSa4.mjs')
+    component: () => import('./visitors-16BlJgXQ.mjs')
   },
   {
     name: "admin",
     path: "/admin",
     meta: __nuxt_page_meta || {},
-    component: () => import('./index-BhFAak56.mjs')
+    component: () => import('./index-CJR4IOkR.mjs')
   },
   {
     name: "slug___en",
     path: "/:slug(.*)*",
-    component: () => import('./_...slug_-DW-xArpI.mjs')
+    component: () => import('./_...slug_-AZX0Fnfm.mjs')
   },
   {
     name: "slug___zh___default",
     path: "/:slug(.*)*",
-    component: () => import('./_...slug_-DW-xArpI.mjs')
+    component: () => import('./_...slug_-AZX0Fnfm.mjs')
   },
   {
     name: "slug___zh",
     path: "/zh/:slug(.*)*",
-    component: () => import('./_...slug_-DW-xArpI.mjs')
+    component: () => import('./_...slug_-AZX0Fnfm.mjs')
   },
   {
     name: "slug___zh-HK___default",
     path: "/:slug(.*)*",
-    component: () => import('./_...slug_-DW-xArpI.mjs')
+    component: () => import('./_...slug_-AZX0Fnfm.mjs')
   },
   {
     name: "slug___zh-HK",
     path: "/zh-HK/:slug(.*)*",
-    component: () => import('./_...slug_-DW-xArpI.mjs')
+    component: () => import('./_...slug_-AZX0Fnfm.mjs')
   },
   {
     name: "slug___ja___default",
     path: "/:slug(.*)*",
-    component: () => import('./_...slug_-DW-xArpI.mjs')
+    component: () => import('./_...slug_-AZX0Fnfm.mjs')
   },
   {
     name: "slug___ja",
     path: "/ja/:slug(.*)*",
-    component: () => import('./_...slug_-DW-xArpI.mjs')
+    component: () => import('./_...slug_-AZX0Fnfm.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -5659,7 +5659,7 @@ const cfg0 = defineAppConfig({
   }
 });
 const inlineConfig = {
-  "appVersion": "1.1.11",
+  "appVersion": "1.1.12",
   "nuxt": {},
   "ui": {
     "colors": {
@@ -14616,72 +14616,72 @@ const localeCodes = [
 const localeLoaders = {
   en: [
     {
-      key: "locale_common_46json_7035a586",
+      key: "locale_common_46json_d9ff944b",
       load: () => import(
         './common-CwWEomJY.mjs'
-        /* webpackChunkName: "locale_common_46json_7035a586" */
+        /* webpackChunkName: "locale_common_46json_d9ff944b" */
       ),
       cache: true
     },
     {
-      key: "locale_site_46json_06a3ee16",
+      key: "locale_site_46json_28d78c77",
       load: () => import(
         './site-CotAxWow.mjs'
-        /* webpackChunkName: "locale_site_46json_06a3ee16" */
+        /* webpackChunkName: "locale_site_46json_28d78c77" */
       ),
       cache: true
     }
   ],
   zh: [
     {
-      key: "locale_common_46json_dc25f49f",
+      key: "locale_common_46json_a17ebeb8",
       load: () => import(
         './common-BJmwMvwu.mjs'
-        /* webpackChunkName: "locale_common_46json_dc25f49f" */
+        /* webpackChunkName: "locale_common_46json_a17ebeb8" */
       ),
       cache: true
     },
     {
-      key: "locale_site_46json_13dfeaa3",
+      key: "locale_site_46json_3077d684",
       load: () => import(
         './site-sEvoiAml.mjs'
-        /* webpackChunkName: "locale_site_46json_13dfeaa3" */
+        /* webpackChunkName: "locale_site_46json_3077d684" */
       ),
       cache: true
     }
   ],
   "zh-HK": [
     {
-      key: "locale_common_46json_8f56212a",
+      key: "locale_common_46json_f71e1f73",
       load: () => import(
         './common-C_WujmcQ.mjs'
-        /* webpackChunkName: "locale_common_46json_8f56212a" */
+        /* webpackChunkName: "locale_common_46json_f71e1f73" */
       ),
       cache: true
     },
     {
-      key: "locale_site_46json_6f04575f",
+      key: "locale_site_46json_3e67f01a",
       load: () => import(
         './site-DmHw1A-e.mjs'
-        /* webpackChunkName: "locale_site_46json_6f04575f" */
+        /* webpackChunkName: "locale_site_46json_3e67f01a" */
       ),
       cache: true
     }
   ],
   ja: [
     {
-      key: "locale_common_46json_da25b5f1",
+      key: "locale_common_46json_f27ff91c",
       load: () => import(
         './common-BQOHkU-t.mjs'
-        /* webpackChunkName: "locale_common_46json_da25b5f1" */
+        /* webpackChunkName: "locale_common_46json_f27ff91c" */
       ),
       cache: true
     },
     {
-      key: "locale_site_46json_925a7683",
+      key: "locale_site_46json_88fb82cf",
       load: () => import(
         './site-CTFgQ-4W.mjs'
-        /* webpackChunkName: "locale_site_46json_925a7683" */
+        /* webpackChunkName: "locale_site_46json_88fb82cf" */
       ),
       cache: true
     }
@@ -14694,11 +14694,11 @@ const normalizedLocales = [
     iso: "en-US",
     files: [
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/en/common.json",
+        path: "/Users/hugh/code/hoxi/apay/locales/en/common.json",
         cache: void 0
       },
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/en/site.json",
+        path: "/Users/hugh/code/hoxi/apay/locales/en/site.json",
         cache: void 0
       }
     ],
@@ -14717,11 +14717,11 @@ const normalizedLocales = [
     iso: "zh-CN",
     files: [
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/zh/common.json",
+        path: "/Users/hugh/code/hoxi/apay/locales/zh/common.json",
         cache: void 0
       },
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/zh/site.json",
+        path: "/Users/hugh/code/hoxi/apay/locales/zh/site.json",
         cache: void 0
       }
     ],
@@ -14740,11 +14740,11 @@ const normalizedLocales = [
     iso: "zh-HK",
     files: [
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/zh-HK/common.json",
+        path: "/Users/hugh/code/hoxi/apay/locales/zh-HK/common.json",
         cache: void 0
       },
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/zh-HK/site.json",
+        path: "/Users/hugh/code/hoxi/apay/locales/zh-HK/site.json",
         cache: void 0
       }
     ],
@@ -14761,11 +14761,11 @@ const normalizedLocales = [
     iso: "ja-JP",
     files: [
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/ja/common.json",
+        path: "/Users/hugh/code/hoxi/apay/locales/ja/common.json",
         cache: void 0
       },
       {
-        path: "/private/tmp/gopanel-site-v1.1.11-final/locales/ja/site.json",
+        path: "/Users/hugh/code/hoxi/apay/locales/ja/site.json",
         cache: void 0
       }
     ],
@@ -16721,7 +16721,7 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
       {
         key: "homepage-products"
       },
-      "$YFGoI0q320"
+      "$4dgFQntf6Z"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const products = computed(() => {
@@ -18159,7 +18159,7 @@ const _sfc_main$P = /* @__PURE__ */ defineComponent({
         lazy: true,
         query: { orderId }
       },
-      "$4gzABYUxYI"
+      "$Ew-Rd7HrTp"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const pending = computed(() => status.value === "pending");
@@ -18819,39 +18819,70 @@ const useProductJsonLd = (key, product) => {
     if (!item?.name) return null;
     const slug = String(item.slug || route.params.slug || "");
     const path = localePath2(`/products/${slug}`);
-    const images = [item.imageUrl, ...Array.isArray(item.images) ? item.images : [], ...Array.isArray(item.imageUrls) ? item.imageUrls : []].map((value) => String(value || "").trim()).filter(Boolean);
+    const fallbackImage = String(getLocalizedSetting("site_logo") || "").trim();
+    const images = [
+      item.imageUrl,
+      ...Array.isArray(item.images) ? item.images : [],
+      ...Array.isArray(item.imageUrls) ? item.imageUrls : [],
+      ...fallbackImage ? [fallbackImage] : []
+    ].map((value) => String(value || "").trim()).filter(Boolean);
+    const uniqueImages = [...new Set(images)];
     const name2 = String(item.name);
     const quote = productQuote({ price: item.price, metaData: item.metaData });
+    const availability = item.isActive === false ? "https://schema.org/OutOfStock" : "https://schema.org/InStock";
     const inLanguage = SEO_LOCALE_LANGUAGE[locale.value] || locale.value;
     const meta = resolveEntityMeta(item.metaData, locale.value);
     const keySpecs = normalizeGeoKeySpecs(meta.keySpecs);
     const faqs = normalizeGeoFaqs(meta.faqs);
+    const description2 = String(meta.tldr || item.description || item.content || "").replace(/<[^>]+>/g, " ").trim() || void 0;
+    const isSoftware = meta.schemaType === "SoftwareApplication" || ["subscription", "saas", "software"].includes(String(item.type || "").toLowerCase());
+    const siteName = getLocalizedSetting("site_name", "APay");
+    const primaryNode = isSoftware ? {
+      "@type": "SoftwareApplication",
+      "@id": `${path}#software`,
+      url: path,
+      name: name2,
+      description: description2,
+      applicationCategory: cleanPlainText(meta.applicationCategory) || "BusinessApplication",
+      operatingSystem: cleanPlainText(meta.operatingSystem) || "Web",
+      image: uniqueImages.length ? uniqueImages : void 0,
+      inLanguage,
+      offers: {
+        "@type": "Offer",
+        url: path,
+        price: quote.amount,
+        priceCurrency: quote.currency,
+        availability
+      }
+    } : {
+      "@type": "Product",
+      "@id": `${path}#product`,
+      name: name2,
+      description: description2,
+      image: uniqueImages.length ? uniqueImages : void 0,
+      brand: { "@type": "Brand", name: siteName },
+      inLanguage,
+      ...keySpecs.length ? {
+        additionalProperty: keySpecs.map((spec) => ({
+          "@type": "PropertyValue",
+          name: spec.label,
+          value: spec.value
+        }))
+      } : {},
+      offers: {
+        "@type": "Offer",
+        url: path,
+        price: quote.amount,
+        priceCurrency: quote.currency,
+        availability
+      }
+    };
     const nodes = [
-      {
-        "@type": "Product",
-        "@id": `${path}#product`,
-        name: name2,
-        description: String(meta.tldr || item.description || item.content || "").replace(/<[^>]+>/g, " ").trim() || void 0,
-        image: [...new Set(images)].length ? [...new Set(images)] : void 0,
-        inLanguage,
-        ...keySpecs.length ? {
-          additionalProperty: keySpecs.map((spec) => ({
-            "@type": "PropertyValue",
-            name: spec.label,
-            value: spec.value
-          }))
-        } : {},
-        offers: {
-          "@type": "Offer",
-          url: path,
-          price: quote.amount,
-          priceCurrency: quote.currency
-        }
-      },
+      primaryNode,
       {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: getLocalizedSetting("site_name", "APay"), item: localePath2("/") },
+          { "@type": "ListItem", position: 1, name: siteName, item: localePath2("/") },
           { "@type": "ListItem", position: 2, name: name2, item: path }
         ]
       }
@@ -18984,7 +19015,7 @@ const _sfc_main$O = /* @__PURE__ */ defineComponent({
       {
         query: { limit: 100 }
       },
-      "$sNiVlIqYrT"
+      "$aX-Js4G2c7"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const plans = computed(() => {
@@ -21192,7 +21223,7 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
           return data;
         }
       },
-      "$HQI9_M-II0"
+      "$9o_oWQ69Tr"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const { pending, requestFailed } = usePageResourceState(productData, status, error);
@@ -21593,7 +21624,7 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
     const { getLocalizedProduct } = useLocalizedProduct();
     const { data: productsData, status } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       "/api/products",
-      "$hVqD0J4ibH"
+      "$YBDH_o94tM"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const pending = computed(() => status.value === "pending");
@@ -23887,7 +23918,7 @@ const _sfc_main$A = /* @__PURE__ */ defineComponent({
       {
         query: inspectQuery
       },
-      "$yZU-ydRlZH"
+      "$pPXMBKFvwq"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const errorMessage = computed(() => {
@@ -24731,7 +24762,7 @@ const _sfc_main$y = /* @__PURE__ */ defineComponent({
     const url = computed(() => `/api/${props.admin ? "admin" : "users"}/orders/${encodeURIComponent(props.orderId)}/refund`);
     const { data, error, status, refresh } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       url,
-      "$n6vkgEiH5E"
+      "$4oRhP53neQ"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const refund = computed(() => data.value?.data);
@@ -24986,7 +25017,7 @@ const _sfc_main$x = /* @__PURE__ */ defineComponent({
           }
         }
       },
-      "$PC0FjXRcRp"
+      "$adhb_KOdy4"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const pending = computed(() => status.value === "pending");
@@ -25983,7 +26014,7 @@ const _sfc_main$v = /* @__PURE__ */ defineComponent({
           }
         }
       },
-      "$BJ6n8zCa67"
+      "$x-p2w6sV05"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const orders = computed(() => ordersData.value?.data || []);
@@ -26233,8 +26264,7 @@ const _sfc_main$v = /* @__PURE__ */ defineComponent({
       if (totalPages.value > 1) {
         _push(`<div class="mt-10 flex justify-center">`);
         _push(ssrRenderComponent(_component_UPagination, {
-          modelValue: unref(page),
-          "onUpdate:modelValue": ($event) => isRef(page) ? page.value = $event : null,
+          page: unref(page),
           "items-per-page": unref(pageSize2),
           total: totalItems.value,
           "onUpdate:page": (val) => unref(onPageChange)(val, () => unref(refresh)())
@@ -27874,7 +27904,7 @@ const _sfc_main$t = /* @__PURE__ */ defineComponent({
           }
         }
       },
-      "$Q2GN9IZxKw"
+      "$AuQQrL_UyF"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const tokens = computed(() => tokensData.value?.data || []);
@@ -28660,7 +28690,7 @@ const corePageModules = Object.fromEntries(Object.entries(/* @__PURE__ */ Object
   "/core/pages/user/tokens/index.vue": __vite_glob_0_12
 })).map(([file, module]) => [file.replace("/", "../"), module]));
 const themePageModules = {
-  ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({ "/themes/panel/pages/auth/login.vue": () => import('./login-C36jNUna.mjs'), "/themes/panel/pages/auth/register.vue": () => import('./register-D0CGQDtn.mjs'), "/themes/panel/pages/blog/[slug].vue": () => import('./_slug_-Bg3EZRzM.mjs'), "/themes/panel/pages/blog/category/[slug].vue": () => import('./_slug_-Dj9ETjcQ.mjs'), "/themes/panel/pages/blog/index.vue": () => import('./index-DqYtAZHE.mjs'), "/themes/panel/pages/changelog.vue": () => import('./changelog-RCOhDuy-.mjs'), "/themes/panel/pages/docs/[slug].vue": () => import('./_slug_-sD6n_4nC.mjs'), "/themes/panel/pages/docs/index.vue": () => import('./index-CKDN25OI.mjs'), "/themes/panel/pages/features.vue": () => import('./features-BbUSBFRp.mjs'), "/themes/panel/pages/index.vue": () => import('./index-DBt5gAXh.mjs'), "/themes/panel/pages/licenses.vue": () => import('./licenses-Bthqzd32.mjs'), "/themes/panel/pages/products/[slug].vue": () => import('./_slug_-DirELIb2.mjs'), "/themes/panel/pages/products/index.vue": () => import('./index-Dt-7vYLR.mjs'), "/themes/panel/pages/user/dashboard.vue": () => import('./dashboard-C0H3ArIn.mjs'), "/themes/panel/pages/user/index.vue": () => import('./index-xcTmlCeE.mjs'), "/themes/panel/pages/user/layout.vue": () => import('./layout-Cdedow7W.mjs'), "/themes/panel/pages/user/monitors.vue": () => import('./monitors-zYf5XPOZ.mjs'), "/themes/panel/pages/user/notify.vue": () => import('./notify-CMBh4ZAz.mjs') })).map(([file, module]) => [file.replace("/", "../"), module]))
+  ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({ "/themes/panel/pages/auth/login.vue": () => import('./login-C7vTX_Lm.mjs'), "/themes/panel/pages/auth/register.vue": () => import('./register-sAZ4810H.mjs'), "/themes/panel/pages/blog/[slug].vue": () => import('./_slug_-DbylWb1U.mjs'), "/themes/panel/pages/blog/category/[slug].vue": () => import('./_slug_-ulmkUCN3.mjs'), "/themes/panel/pages/blog/index.vue": () => import('./index-DrrJD_kP.mjs'), "/themes/panel/pages/changelog.vue": () => import('./changelog-CQy2yqDX.mjs'), "/themes/panel/pages/docs/[slug].vue": () => import('./_slug_-BVD6o1LH.mjs'), "/themes/panel/pages/docs/index.vue": () => import('./index-D2TaoQ3A.mjs'), "/themes/panel/pages/features.vue": () => import('./features-BOH8VIXG.mjs'), "/themes/panel/pages/index.vue": () => import('./index-CIIOEcQe.mjs'), "/themes/panel/pages/licenses.vue": () => import('./licenses-B3Ac4px-.mjs'), "/themes/panel/pages/products/[slug].vue": () => import('./_slug_-Cz4hB2ac.mjs'), "/themes/panel/pages/products/index.vue": () => import('./index-CGnwFW_z.mjs'), "/themes/panel/pages/user/dashboard.vue": () => import('./dashboard-Cpuns5FV.mjs'), "/themes/panel/pages/user/index.vue": () => import('./index-Bc7w5bPH.mjs'), "/themes/panel/pages/user/layout.vue": () => import('./layout-DVinW12u.mjs'), "/themes/panel/pages/user/monitors.vue": () => import('./monitors-EMzfyAi0.mjs'), "/themes/panel/pages/user/notify.vue": () => import('./notify-B0DWKsBT.mjs') })).map(([file, module]) => [file.replace("/", "../"), module]))
 };
 const themeAdminManifestModules = {
   ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({
@@ -28668,7 +28698,7 @@ const themeAdminManifestModules = {
   })).map(([file, module]) => [file.replace("/", "../"), module]))
 };
 const themeAdminPageModules = {
-  ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({ "/themes/panel/admin/pages/appstore.vue": () => import('./appstore-DJq7JYc-.mjs'), "/themes/panel/admin/pages/install-stats.vue": () => import('./install-stats-BDO15h-O.mjs'), "/themes/panel/admin/pages/monitors.vue": () => import('./monitors-BU7DmN9D.mjs') })).map(([file, module]) => [file.replace("/", "../"), module]))
+  ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({ "/themes/panel/admin/pages/appstore.vue": () => import('./appstore-CX5sDbEF.mjs'), "/themes/panel/admin/pages/install-stats.vue": () => import('./install-stats-35vntZhe.mjs'), "/themes/panel/admin/pages/monitors.vue": () => import('./monitors-BtfKfdwz.mjs') })).map(([file, module]) => [file.replace("/", "../"), module]))
 };
 const themeAdminLocaleEnModules = {
   ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({})).map(([file, module]) => [file.replace("/", "../"), module]))
@@ -28677,7 +28707,7 @@ const themeAdminLocaleZhModules = {
   ...Object.fromEntries(Object.entries(/* @__PURE__ */ Object.assign({})).map(([file, module]) => [file.replace("/", "../"), module]))
 };
 const themeLayoutLoaders = {
-  "panel": () => import('./default-CPFYdBLn.mjs')
+  "panel": () => import('./default-CU4VTA3s.mjs')
 };
 const pageLayoutMeta = { "../core/pages/payment/[order_id].vue": { "layout": false }, "../core/pages/user/mcp-authorize/index.vue": { "directoryLayout": false } };
 const useActiveTheme = (options = {}) => {
@@ -28708,7 +28738,7 @@ const database$2 = { "migrations": [{ "id": "0001-create-catalog", "sqlite": "sq
 const capabilities$2 = [{ "key": "catalog", "label": "App Catalog", "labelZh": "应用管理", "editable": true }];
 const adminPages$2 = [{ "key": "catalog", "title": "Apps", "titleZh": "应用管理", "description": "Manage app packages, releases, and marketplace metadata.", "descriptionZh": "管理应用包、版本和市场元数据。", "component": "catalog.vue", "capability": "catalog", "icon": "ph:app-window", "order": 40 }, { "key": "telemetry", "title": "Client telemetry", "titleZh": "客户端观测", "description": "Anonymous install, activation and version mix reported by installed apps.", "descriptionZh": "已安装应用上报的匿名安装、活跃与版本分布。", "component": "telemetry.vue", "capability": "catalog", "icon": "ph:chart-line-up", "order": 41 }];
 const adminApis$2 = [{ "method": "get", "path": "catalog/list", "handler": "catalog/list.get.ts", "capability": "catalog" }, { "method": "get", "path": "catalog/detail", "handler": "catalog/detail.get.ts", "capability": "catalog" }, { "method": "post", "path": "catalog/create", "handler": "catalog/create.post.ts", "capability": "catalog" }, { "method": "patch", "path": "catalog/update", "handler": "catalog/update.patch.ts", "capability": "catalog" }, { "method": "delete", "path": "catalog/delete", "handler": "catalog/delete.delete.ts", "capability": "catalog" }, { "method": "get", "path": "catalog/releases", "handler": "catalog/releases.get.ts", "capability": "catalog" }, { "method": "post", "path": "catalog/release", "handler": "catalog/release.post.ts", "capability": "catalog" }, { "method": "post", "path": "catalog/withdraw", "handler": "catalog/withdraw.post.ts", "capability": "catalog" }, { "method": "get", "path": "catalog/telemetry", "handler": "catalog/telemetry.get.ts", "capability": "catalog" }];
-const publicApis$1 = [{ "method": "post", "path": "list", "handler": "list.post.ts" }, { "method": "post", "path": "package", "handler": "package.post.ts" }, { "method": "post", "path": "telemetry", "handler": "telemetry.post.ts" }];
+const publicApis$1 = [{ "method": "get", "path": "list", "handler": "list.get.ts" }, { "method": "get", "path": "detail", "handler": "detail.get.ts" }, { "method": "post", "path": "list", "handler": "list.post.ts" }, { "method": "post", "path": "package", "handler": "package.post.ts" }, { "method": "post", "path": "telemetry", "handler": "telemetry.post.ts" }];
 const __vite_glob_0_0 = {
   schemaVersion: schemaVersion$2,
   id: id$2,
@@ -28758,7 +28788,7 @@ const database = { "migrations": [{ "id": "0001-create-catalog", "sqlite": "sqli
 const capabilities = [{ "key": "catalog", "label": "Theme Catalog", "labelZh": "主题管理", "editable": true }];
 const adminPages = [{ "key": "catalog", "title": "Themes", "titleZh": "主题管理", "description": "Manage storefront theme packages, demos, and marketplace metadata.", "descriptionZh": "管理店铺主题包、演示地址和市场元数据。", "component": "catalog.vue", "capability": "catalog", "icon": "ph:paint-brush-broad", "order": 41 }];
 const adminApis = [{ "method": "get", "path": "catalog/list", "handler": "catalog/list.get.ts", "capability": "catalog" }, { "method": "get", "path": "catalog/detail", "handler": "catalog/detail.get.ts", "capability": "catalog" }, { "method": "post", "path": "catalog/create", "handler": "catalog/create.post.ts", "capability": "catalog" }, { "method": "patch", "path": "catalog/update", "handler": "catalog/update.patch.ts", "capability": "catalog" }, { "method": "delete", "path": "catalog/delete", "handler": "catalog/delete.delete.ts", "capability": "catalog" }, { "method": "get", "path": "catalog/releases", "handler": "catalog/releases.get.ts", "capability": "catalog" }, { "method": "post", "path": "catalog/release", "handler": "catalog/release.post.ts", "capability": "catalog" }, { "method": "post", "path": "catalog/withdraw", "handler": "catalog/withdraw.post.ts", "capability": "catalog" }];
-const publicApis = [{ "method": "post", "path": "list", "handler": "list.post.ts" }, { "method": "post", "path": "package", "handler": "package.post.ts" }];
+const publicApis = [{ "method": "get", "path": "list", "handler": "list.get.ts" }, { "method": "get", "path": "detail", "handler": "detail.get.ts" }, { "method": "post", "path": "list", "handler": "list.post.ts" }, { "method": "post", "path": "package", "handler": "package.post.ts" }];
 const __vite_glob_0_2 = {
   schemaVersion,
   id,
@@ -29699,7 +29729,7 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
   __ssrInlineRender: true,
   async setup(__props) {
     let __temp, __restore;
-    const RichEditor = defineAsyncComponent(() => import('./RichEditor-Dhkd-y-l.mjs'));
+    const RichEditor = defineAsyncComponent(() => import('./RichEditor-BPF1ayqo.mjs'));
     const copyItem = (item) => ({
       id: item?.id || "",
       name: item?.name || "",
@@ -29932,7 +29962,7 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
         query: { page, pageSize: pageSize2, keyword, status },
         watch: [page]
       },
-      "$W1MF22BUXo"
+      "$ojh5-4eTVU"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const rows = computed(() => data.value?.data || []);
@@ -32197,7 +32227,7 @@ const _sfc_main$p = /* @__PURE__ */ defineComponent({
           errorMsg.value = "";
         }
       },
-      "$mUI__1h0Tz"
+      "$YybSFpNyT3"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const apps = computed(() => telemetry.value?.apps || []);
@@ -33376,7 +33406,7 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
     const canEdit = computed(() => hasPerm(`plugin:shopark:${props.kind}:edit`));
     const { data: response, pending, error, refresh } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       `/api/admin/plugins/shopark/${props.kind}/list`,
-      "$sYV45jN8ea"
+      "$WDxUA-yKV2"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const keyword = ref("");
@@ -34434,13 +34464,13 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
     const settingUpScheduler = ref(false);
     const { data: connectionRes, pending, error, refresh } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       "/api/admin/plugins/shopark/connection/status",
-      "$Xs_Btgr8tZ"
+      "$qVtDTTj1j6"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const connection = computed(() => connectionRes.value?.data);
     const { data: readinessRes, pending: readinessPending, error: readinessError, refresh: refreshReadiness } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       "/api/admin/plugins/shopark/readiness/status",
-      "$1Iv6HcdOYu"
+      "$kVfV9mTrQH"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const readiness = computed(() => readinessRes.value?.data);
@@ -37331,7 +37361,7 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
           filter: customerFilter.value
         }))
       },
-      "$hbC94beu1l"
+      "$a0WqTvQhTE"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const customerRows = computed(() => customersRes.value?.data?.list || []);
@@ -37365,7 +37395,7 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
           status: selectedStatus.value === "all" ? "" : selectedStatus.value
         }))
       },
-      "$DRQWzX_txy"
+      "$-Iyd7uGV1q"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const rows = computed(() => res.value?.data?.list || []);
@@ -37726,16 +37756,16 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
           const csvLines = [
             headers.map(escapeCsvCell).join(","),
             ...items.map((r) => [
-              r.id,
+              r.subscriptionId || r.id || "",
               r.userId,
               r.userEmail || "",
               r.userNickname || "",
               r.productName || "",
-              r.planCode || "",
+              r.shoparkPlanCode || r.planCode || "",
               r.status || "",
               r.amount ?? 0,
               r.currency || "CNY",
-              `${r.intervalCount || 1} ${r.interval || ""}`.trim(),
+              r.interval ? `${r.intervalCount || 1} ${r.interval}`.trim() : "",
               r.isManual ? "yes" : "no",
               r.manualReason || "",
               r.currentPeriodEnd || "",
@@ -39980,7 +40010,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
     const canEdit = computed(() => hasPerm("plugin:shopark:settings:edit"));
     const { data: response, pending, error, refresh } = ([__temp, __restore] = withAsyncContext(() => useFetch(
       "/api/admin/plugins/shopark/settings/status",
-      "$wED899j8Ib"
+      "$RVzSWEa1eJ"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const defaultTheme = ref("");
@@ -40539,7 +40569,7 @@ const _sfc_main$d = /* @__PURE__ */ defineComponent({
           currency: selectedCurrency.value === "all" ? void 0 : selectedCurrency.value
         }))
       },
-      "$uanHtz8CWa"
+      "$sqeENRsMix"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const summary = computed(() => res.value?.data?.summary || {
@@ -41797,7 +41827,7 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
   __ssrInlineRender: true,
   async setup(__props) {
     let __temp, __restore;
-    const RichEditor = defineAsyncComponent(() => import('./RichEditor-Dhkd-y-l.mjs'));
+    const RichEditor = defineAsyncComponent(() => import('./RichEditor-BPF1ayqo.mjs'));
     const copyItem = (item) => ({
       id: item?.id || "",
       name: item?.name || "",
@@ -42023,7 +42053,7 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
         query: { page, pageSize: pageSize2, keyword, status },
         watch: [page]
       },
-      "$HMbsQ4PiHO"
+      "$dVbPXednsQ"
       /* nuxt-injected */
     )), __temp = await __temp, __restore(), __temp);
     const rows = computed(() => data.value?.data || []);
@@ -45134,54 +45164,54 @@ const plugin_MeUvTuoKUi51yb_kBguab6hdcExVXeTtZtTg9TZZBB8 = /* @__PURE__ */ defin
   // For type portability
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 });
-const LazyProseA = defineAsyncComponent(() => import('./A-DJqRoTMR.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseAccordion = defineAsyncComponent(() => import('./Accordion-CZMGMVdq.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseAccordionItem = defineAsyncComponent(() => import('./AccordionItem-DdIx7gwk.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseBadge = defineAsyncComponent(() => import('./Badge-DqChliho.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseBlockquote = defineAsyncComponent(() => import('./Blockquote-DpacNaj4.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCallout = defineAsyncComponent(() => import('./Callout-xboKo31M.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCard = defineAsyncComponent(() => import('./Card-DUnIyQAp.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCardGroup = defineAsyncComponent(() => import('./CardGroup-CBnx9-CX.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCode = defineAsyncComponent(() => import('./Code-DA86G8zs.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCodeCollapse = defineAsyncComponent(() => import('./CodeCollapse-BgVf9nSY.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCodeGroup = defineAsyncComponent(() => import('./CodeGroup-B0u5uqGn.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCodeIcon = defineAsyncComponent(() => import('./CodeIcon-DPE_le2q.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCodePreview = defineAsyncComponent(() => import('./CodePreview-DDzjR_nw.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCodeTree = defineAsyncComponent(() => import('./CodeTree-C0Ace0Tr.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCollapsible = defineAsyncComponent(() => import('./Collapsible-C2r9EVCp.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseEm = defineAsyncComponent(() => import('./Em-Bwg_7NDU.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseField = defineAsyncComponent(() => import('./Field-CTJklE0v.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseFieldGroup = defineAsyncComponent(() => import('./FieldGroup-0orfTwje.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseH1 = defineAsyncComponent(() => import('./H1-CJAF2Al7.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseH2 = defineAsyncComponent(() => import('./H2-C4wH2RED.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseH3 = defineAsyncComponent(() => import('./H3-BgpJ0iI2.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseH4 = defineAsyncComponent(() => import('./H4-DYQ9F9JI.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseHr = defineAsyncComponent(() => import('./Hr-Ca7UBPfc.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseIcon = defineAsyncComponent(() => import('./Icon-D8AoBHbh.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseImg = defineAsyncComponent(() => import('./Img-BzJ0hfD8.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseKbd = defineAsyncComponent(() => import('./Kbd-DkA9iFTQ.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseLi = defineAsyncComponent(() => import('./Li-Fvn4rjJN.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseOl = defineAsyncComponent(() => import('./Ol-cEZOsLjE.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseP = defineAsyncComponent(() => import('./P-Cc_AI6IE.mjs').then((r) => r["default"] || r.default || r));
-const LazyProsePre = defineAsyncComponent(() => import('./Pre-DGlFT3SV.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseA = defineAsyncComponent(() => import('./A-CK6r5kN7.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseAccordion = defineAsyncComponent(() => import('./Accordion-C65QM2kD.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseAccordionItem = defineAsyncComponent(() => import('./AccordionItem-tg7BEcax.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseBadge = defineAsyncComponent(() => import('./Badge-DoPIs3M8.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseBlockquote = defineAsyncComponent(() => import('./Blockquote-DazTp0VX.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCallout = defineAsyncComponent(() => import('./Callout-8L6QO38c.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCard = defineAsyncComponent(() => import('./Card-C6g1pKr1.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCardGroup = defineAsyncComponent(() => import('./CardGroup-CgIeP-Sr.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCode = defineAsyncComponent(() => import('./Code-7QSH3MW_.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCodeCollapse = defineAsyncComponent(() => import('./CodeCollapse-Duo81LCy.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCodeGroup = defineAsyncComponent(() => import('./CodeGroup-Bfsju2WY.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCodeIcon = defineAsyncComponent(() => import('./CodeIcon-1CXHrNYm.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCodePreview = defineAsyncComponent(() => import('./CodePreview-D_22wEtt.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCodeTree = defineAsyncComponent(() => import('./CodeTree-CMFCdzXq.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCollapsible = defineAsyncComponent(() => import('./Collapsible-QU7HklVf.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseEm = defineAsyncComponent(() => import('./Em-ladn81ah.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseField = defineAsyncComponent(() => import('./Field-CqSecUjp.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseFieldGroup = defineAsyncComponent(() => import('./FieldGroup-C7UlJZP5.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseH1 = defineAsyncComponent(() => import('./H1-DH5kbhss.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseH2 = defineAsyncComponent(() => import('./H2-D3FK_OeB.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseH3 = defineAsyncComponent(() => import('./H3-CwqZFt3u.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseH4 = defineAsyncComponent(() => import('./H4-B5nvh7uu.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseHr = defineAsyncComponent(() => import('./Hr-BGAhU-fn.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseIcon = defineAsyncComponent(() => import('./Icon-foVJT8ZV.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseImg = defineAsyncComponent(() => import('./Img-EDIth32O.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseKbd = defineAsyncComponent(() => import('./Kbd-C163Z-Om.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseLi = defineAsyncComponent(() => import('./Li-BB87qsuK.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseOl = defineAsyncComponent(() => import('./Ol-BMDUsycL.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseP = defineAsyncComponent(() => import('./P-06nYUZh9.mjs').then((r) => r["default"] || r.default || r));
+const LazyProsePre = defineAsyncComponent(() => import('./Pre-BR0oU9zT.mjs').then((r) => r["default"] || r.default || r));
 const LazyProseScript = defineAsyncComponent(() => import('./Script-BOX32BRp.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseSteps = defineAsyncComponent(() => import('./Steps-aTftrUQ_.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseStrong = defineAsyncComponent(() => import('./Strong-BohSvZOP.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTable = defineAsyncComponent(() => import('./Table-D2Dmdyoq.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTabs = defineAsyncComponent(() => import('./Tabs-YX0CG-jk.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTabsItem = defineAsyncComponent(() => import('./TabsItem-CTFcffxG.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTbody = defineAsyncComponent(() => import('./Tbody-D1oyV6mJ.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTd = defineAsyncComponent(() => import('./Td-0oxnUqXN.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTh = defineAsyncComponent(() => import('./Th-Zw9lLALn.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseThead = defineAsyncComponent(() => import('./Thead-BxNyesFm.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTr = defineAsyncComponent(() => import('./Tr-DVg76Pmd.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseUl = defineAsyncComponent(() => import('./Ul-CMDikgoe.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseCaution = defineAsyncComponent(() => import('./Caution-B-VuKbcE.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseNote = defineAsyncComponent(() => import('./Note-D3l3rzDH.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseTip = defineAsyncComponent(() => import('./Tip-pIb61ORt.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseWarning = defineAsyncComponent(() => import('./Warning-C65L0jip.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseH5 = defineAsyncComponent(() => import('./ProseH5-zn8crr8b.mjs').then((r) => r["default"] || r.default || r));
-const LazyProseH6 = defineAsyncComponent(() => import('./ProseH6-GGxh4o22.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseSteps = defineAsyncComponent(() => import('./Steps-i-8hsG5P.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseStrong = defineAsyncComponent(() => import('./Strong-Do_BtiAY.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTable = defineAsyncComponent(() => import('./Table-76oTCnu5.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTabs = defineAsyncComponent(() => import('./Tabs-BcOSyMpg.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTabsItem = defineAsyncComponent(() => import('./TabsItem-B90Acit9.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTbody = defineAsyncComponent(() => import('./Tbody-CXiHtIGc.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTd = defineAsyncComponent(() => import('./Td-Cq2XMsv5.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTh = defineAsyncComponent(() => import('./Th-aeu29QXy.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseThead = defineAsyncComponent(() => import('./Thead-Cz3PUg1y.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTr = defineAsyncComponent(() => import('./Tr-C_knkxPc.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseUl = defineAsyncComponent(() => import('./Ul-gS9veEVA.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseCaution = defineAsyncComponent(() => import('./Caution-BPKqSZv9.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseNote = defineAsyncComponent(() => import('./Note-DjwHPji9.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseTip = defineAsyncComponent(() => import('./Tip-B2NnZqsC.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseWarning = defineAsyncComponent(() => import('./Warning-LhYmxf4U.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseH5 = defineAsyncComponent(() => import('./ProseH5-d1aa4avf.mjs').then((r) => r["default"] || r.default || r));
+const LazyProseH6 = defineAsyncComponent(() => import('./ProseH6-egV_n9gS.mjs').then((r) => r["default"] || r.default || r));
 const LazyIcon = defineAsyncComponent(() => Promise.resolve().then(() => index).then((r) => r["default"] || r.default || r));
 const lazyGlobalComponents = [
   ["ProseA", LazyProseA],
@@ -47370,8 +47400,6 @@ const site_favicon_p91YUrwwpKbpdoP959K8cxK8lht5CSKY8bby3FeBwmg = /* @__PURE__ */
   }));
 });
 const visitor_bzYqoTgfgdiFBpsUB9FnVMsOmhbiNiZgAlaB_Te76l4 = /* @__PURE__ */ defineNuxtPlugin((nuxtApp) => {
-  const visitorId = useCookie("visitor_id", { maxAge: 31536e3, path: "/", sameSite: "lax" });
-  if (!visitorId.value) visitorId.value = crypto.randomUUID();
   return;
 });
 const prerender_server_sqIxOBipVr4FbVMA9kqWL0wT8FPop6sKAXLVfifsJzk = /* @__PURE__ */ defineNuxtPlugin(async () => {
@@ -48973,9 +49001,9 @@ const __nuxt_component_1 = defineComponent({
   }
 });
 const layouts = {
-  admin: defineAsyncComponent(() => import('./admin-Bp9moRZh.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-D6KdRm2F.mjs').then((m) => m.default || m)),
-  empty: defineAsyncComponent(() => import('./empty-DDMlDKd6.mjs').then((m) => m.default || m))
+  admin: defineAsyncComponent(() => import('./admin-BXq4-tfp.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-D6Fg3Qw0.mjs').then((m) => m.default || m)),
+  empty: defineAsyncComponent(() => import('./empty-LXGN-TMV.mjs').then((m) => m.default || m))
 };
 const routeRulesMatcher = _routeRulesMatcher;
 const LayoutLoader = defineComponent({
